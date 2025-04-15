@@ -55,7 +55,7 @@ This project aims to enhance the gameplay experience in multiple dimensions.
 
 ## ⚠️ Disclaimer
 
-Please take a look at the [Legal Notice](LEGAL_NOTICE.md) and [Disclaimer](DISCLAIMER.md) for important information about this project's relationship to the original game.
+Please take a look at the [Legal Notice](<LEGAL NOTICE.md>) and [Disclaimer](DISCLAIMER.md) for important information about this project's relationship to the original game.
 
 ## 📄 License
 
