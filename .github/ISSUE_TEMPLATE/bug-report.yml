@@ -1,0 +1,90 @@
+name: 🐞 Bug Report
+description: Report a confirmed defect or unexpected behavior
+title: "[BUG] - Short description of the bug"
+labels:
+  - bug
+  - "status: new"
+assignees:
+  - Neonsy
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to submit a bug report!
+  - type: textarea
+    id: describe-bug
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of the bug, including what is happening and what part of the app it affects.
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Provide a step-by-step guide to reproduce the behavior
+      placeholder: |
+        1. Go to '...' (e.g., Mixer Page)
+        2. Select a specific base product and substances (if applicable)
+        3. Click on '....' (the button or action that triggers the bug)
+        4. Observe the incorrect result or error.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What result or behavior did you expect? Be specific.
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What was the actual result or behavior that you observed?
+    validations:
+      required: true
+  - type: textarea
+    id: relevant-calculations
+    attributes:
+      label: Relevant Calculations (if applicable)
+      description: If the bug involves incorrect calculations in the Mixer or Reverse Mixer, please provide
+      placeholder: |
+        - The base product and substances used.
+        - The expected calculated values.
+        - The actual calculated values.
+  - type: input
+    id: screenshots
+    attributes:
+      label: Screenshots/GIFs (if applicable)
+      description: Provide links to screenshots or GIFs to illustrate the bug, if possible.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        - Browser: [e.g., Chrome, Firefox, Safari]
+        - Version: [e.g., 22]
+        - Operating System: [e.g., Windows 11, macOS 10.15, Ubuntu 20.04]
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other information or context that you think might be helpful in diagnosing the bug.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before Submitting
+      options:
+        - label: I have searched the issue tracker and this is not a duplicate issue.
+          required: true
+        - label: I have provided all the necessary information to reproduce the bug.
+          required: true
+        - label: I have provided the necessary environment information.
+          required: true
+        - label: I have provided screenshots or GIFs to illustrate the bug, if applicable.
+        - label: I am willing to create a pull request to fix the bug.
+
+

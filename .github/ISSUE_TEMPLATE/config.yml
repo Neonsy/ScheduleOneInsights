@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+    - name: 💡 Request a new Feature
+      url: https://github.com/Neonsy/ScheduleOneInsights/discussions/new?category=feature-request
+      about: Suggest a new feature or improvement to an existing feature
+    - name: 🔧 Suggest an improvement (QoL)
+      url: https://github.com/Neonsy/ScheduleOneInsights/discussions/new?category=suggest-qol-enhancements
+      about: Suggest improvements to current features
+    - name: ❔ Ask a Question
+      url: https://github.com/Neonsy/ScheduleOneInsights/discussions/new?category=q-a
+      about: Ask a question about the project
