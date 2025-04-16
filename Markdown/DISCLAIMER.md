@@ -13,7 +13,7 @@ Features, functionality, and user interface are subject to change without prior 
 While the project maintainers strive for accuracy in all calculations and game-related information, they cannot guarantee that all data is 100% accurate or up-to-date with the latest version of Schedule One.
 The game mechanics may change with updates, potentially affecting the accuracy of the calculations.
 
-You may feel free to contribute to the accuracy by [submitting an issue](https://github.com/Neonsy/ScheduleOneInsights/issues/new?assignees=&labels=&template=bug-report.yml).
+You can feel free to contribute to the accuracy by [submitting an issue](https://github.com/Neonsy/ScheduleOneInsights/issues/new?assignees=&labels=&template=bug-report.yml).
 
 ## No Official Relationship
 
@@ -26,13 +26,13 @@ This project is:
 
 ## Inspiration and Respect
 
-ScheduleOneInsights was inspired by the existing [Schedule One Calculator](https://schedule1-calculator.com).
-Neonsy has a deep respect for their work and are not attempting to compete with them.
+ScheduleOneInsights was inspired by the existing [Schedule One Calculator](https://schedule1-calculator.com), as well as several steam guides.
+Neonsy has a deep respect for their work and is not attempting to compete with them.
 Rather, the project maintainers aim to offer an alternative approach with different features and a different user experience.
 
 > [!NOTE]
-> I (as is Neonsy) did just find out about the existence of [the new version](https://schedule1.tools).
-> It does make me question, whether this project is still necessary, but I think I'll keep it going for now.
+> I (as in Neonsy) did just find out about the existence of [the new version](https://schedule1.tools).
+> It does make me question, whether this project is still necessary, but I'll keep it going for now.
 
 ## Use at Your Own Risk
 
