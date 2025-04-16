@@ -30,6 +30,10 @@ ScheduleOneInsights was inspired by the existing [Schedule One Calculator](https
 Neonsy has a deep respect for their work and are not attempting to compete with them.
 Rather, the project maintainers aim to offer an alternative approach with different features and a different user experience.
 
+> [!NOTE]
+> I (as is Neonsy) did just find out about the existence of [the new version](https://schedule1.tools).
+> It does make me question, whether this project is still necessary, but I think I'll keep it going for now.
+
 ## Use at Your Own Risk
 
 Users should be aware that:
@@ -46,9 +50,3 @@ This project is open-sourced from the beginning to emphasize its community-drive
 
 The project maintainers may update this disclaimer from time to time.
 They encourage users to check back regularly to stay informed about any changes.
-
----
-
-<p align="center">
-  Last updated: April 15, 2025
-</p>

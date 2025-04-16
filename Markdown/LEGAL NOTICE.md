@@ -28,9 +28,3 @@ The project maintainers will promptly address your concerns and, if necessary, m
 ## Open Source Commitment
 
 This project is open-sourced from its inception to demonstrate transparency and to emphasize its non-commercial, community-driven nature.
-
----
-
-<p align="center">
-  Last updated: April 15, 2025
-</p>

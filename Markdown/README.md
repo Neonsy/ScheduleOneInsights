@@ -45,7 +45,7 @@ Under the hood, the project's powerful library ensures:
 I've recently discovered [Schedule One](https://www.scheduleonegame.com) and have come to enjoy the unique combination of silliness and casual relaxation, alongside the product management aspects and efficiency optimization.
 
 While there is an existing [calculator website](https://schedule1-calculator.com), I wanted to create a more comprehensive experience with modern solutions.
-This project aims to enhance the gameplay experience in multiple dimensions.
+This project aims to enhance the gameplay experience in multiple dimensions, while also allowing me to learn and practice various skills, on something I'm motivated and passionate about.
 
 ## 🌟 Roadmap
 
