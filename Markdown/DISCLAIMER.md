@@ -13,7 +13,7 @@ Features, functionality, and user interface are subject to change without prior 
 While the project maintainers strive for accuracy in all calculations and game-related information, they cannot guarantee that all data is 100% accurate or up-to-date with the latest version of Schedule One.
 The game mechanics may change with updates, potentially affecting the accuracy of the calculations.
 
-You may feel free to contribute to the accuracy by [submitting an issue](https://github.com/NeonSy/ScheduleOneInsights/issues).
+You may feel free to contribute to the accuracy by [submitting an issue](https://github.com/Neonsy/ScheduleOneInsights/issues/new?assignees=&labels=&template=bug-report.yml).
 
 ## No Official Relationship
 
