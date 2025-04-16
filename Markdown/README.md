@@ -57,9 +57,9 @@ This project aims to enhance the gameplay experience in multiple dimensions, whi
 
 ## ⚠️ More Information
 
-Please take a look at the [Legal Notice](<LEGAL NOTICE.md>) and [Disclaimer](DISCLAIMER.md) for important information about this project's relationship to the original game.
+Please take a look at the [Legal Notice](</Markdown/LEGAL NOTICE.md>) and [Disclaimer](/Markdown/DISCLAIMER.md) for important information about this project's relationship to the original game.
 
-For information on how to contribute, please refer to the [Contribution Guidelines](CONTRIBUTING.md).
+For information on how to contribute, please refer to the [Contribution Guidelines](/Markdown/CONTRIBUTING.md).
 
 ## 📄 License
 
