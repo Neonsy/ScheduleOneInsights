@@ -12,9 +12,6 @@
 ScheduleOneInsights is a fan-made project designed to enhance your [Schedule One](https://www.scheduleonegame.com) gaming experience.
 Whether you're a casual player enjoying the silliness or a strategic mastermind optimizing your production chain, this toolkit provides everything you need to excel.
 
-> [!NOTE]
-> This project is currently under active development. Features are being added regularly!
-
 > [!TIP]
 > Check out the [Roadmap](#-roadmap) to see what's coming next!
 
@@ -50,12 +47,19 @@ I've recently discovered [Schedule One](https://www.scheduleonegame.com) and hav
 While there is an existing [calculator website](https://schedule1-calculator.com), I wanted to create a more comprehensive experience with modern solutions.
 This project aims to enhance the gameplay experience in multiple dimensions.
 
+## 🌟 Roadmap
+
+> [!NOTE]
+> W.I.P
+
 > [!WARNING]
 > This project may cause extreme optimization satisfaction and potentially addictive gameplay sessions!
 
-## ⚠️ Disclaimer
+## ⚠️ More Information
 
 Please take a look at the [Legal Notice](<LEGAL NOTICE.md>) and [Disclaimer](DISCLAIMER.md) for important information about this project's relationship to the original game.
+
+For information on how to contribute, please refer to the [Contribution Guidelines](CONTRIBUTING.md).
 
 ## 📄 License
 
