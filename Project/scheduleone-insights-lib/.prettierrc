@@ -1,5 +1,4 @@
 {
-    "jsxBracketSameLine": false,
     "quoteProps": "as-needed",
     "arrowParens": "always",
     "bracketSameLine": true,
