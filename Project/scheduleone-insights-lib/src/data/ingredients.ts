@@ -1,6 +1,4 @@
-import type { Ingredient, IngredientCode } from '../types';
-
-export const ingredients: Record<IngredientCode, Ingredient> = {
+export const ingredients = {
     Ad: {
         name: 'Addy',
         price: 9,
@@ -97,7 +95,10 @@ export const ingredients: Record<IngredientCode, Ingredient> = {
         unlockLevel: 2, // Hoodlum II
         defaultEffect: 'TT',
     },
-};
+} as const;
+
+// Derive the IngredientCode type from the keys of the ingredients object
+export type IngredientCode = keyof typeof ingredients;
 
 // Map from ingredient names to codes for easier lookup
 export const ingredientNameToCode: Record<string, IngredientCode> = {

@@ -1,8 +1,8 @@
-import type { Customer, CustomerCode, EffectCode } from '../types';
+import type { EffectCode } from './effects';
 
 // Customer data with code as key and customer details as value
 // Using Partial<Record> since we don't have all customers implemented yet
-export const customers: Partial<Record<CustomerCode, Customer>> = {
+export const customers = {
     // Northtown Customers
     KC: {
         code: 'KC',
@@ -1082,11 +1082,14 @@ export const customers: Partial<Record<CustomerCode, Customer>> = {
             { entryNumber: 8, location: 'Church', startTime: '7:30pm' },
         ],
     },
-};
+} as const;
+
+// Derive the CustomerCode type from the keys of the customers object
+export type CustomerCode = keyof typeof customers;
 
 // Helper function to get customers by preference
-export function getCustomersByPreference(effectCode: EffectCode): Customer[] {
+export function getCustomersByPreference(effectCode: EffectCode) {
     return Object.values(customers).filter((customer) => {
-        return customer.preferences.includes(effectCode);
+        return (customer.preferences as readonly EffectCode[]).includes(effectCode);
     });
 }

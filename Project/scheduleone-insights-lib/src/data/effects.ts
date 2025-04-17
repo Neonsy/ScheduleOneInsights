@@ -1,7 +1,7 @@
-import type { Effect, EffectCode } from '../types';
+import type { Effect } from '../types';
 
 // Effect data with code as key and effect details as value
-export const effects: Record<EffectCode, Effect> = {
+export const effects = {
     AG: {
         name: 'Anti-Gravity',
         description: 'Weakens the effects of gravity on the user.',
@@ -247,7 +247,10 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 5,
         addictiveness: 0.598,
     },
-};
+} as const;
+
+// Derive the EffectCode type from the keys of the effects object
+export type EffectCode = keyof typeof effects;
 
 // Map from effect codes to names for easier display
 export const effectCodeToName: Record<EffectCode, string> = Object.entries(effects).reduce(

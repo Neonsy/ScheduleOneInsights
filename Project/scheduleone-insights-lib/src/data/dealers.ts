@@ -1,7 +1,5 @@
-import type { Dealer, DealerCode } from '../types';
-
 // Dealer data with code as key and dealer details as value
-export const dealers: Record<DealerCode, Dealer> = {
+export const dealers = {
     BC: {
         name: 'Benji Coleman',
         location: 'Northtown',
@@ -38,7 +36,10 @@ export const dealers: Record<DealerCode, Dealer> = {
         unlockCost: 5000,
         cut: 0.2, // 20%
     },
-};
+} as const;
+
+// Derive the DealerCode type from the keys of the dealers object
+export type DealerCode = keyof typeof dealers;
 
 // Map from dealer names to codes for easier lookup
 export const dealerNameToCode: Record<string, DealerCode> = {

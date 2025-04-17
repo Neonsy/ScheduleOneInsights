@@ -1,6 +1,4 @@
-import type { Product, ProductCode } from '../types';
-
-export const products: Record<ProductCode, Product> = {
+export const products = {
     OK: {
         name: 'OG Kush',
         price: 35,
@@ -37,7 +35,10 @@ export const products: Record<ProductCode, Product> = {
         unlockLevel: 15, // Higher level
         defaultEffect: 'Epc', // Euphoric (placeholder, adjust as needed)
     },
-};
+} as const;
+
+// Derive the ProductCode type from the keys of the products object
+export type ProductCode = keyof typeof products;
 
 // Map from product names to codes for easier lookup
 export const productNameToCode: Record<string, ProductCode> = {
