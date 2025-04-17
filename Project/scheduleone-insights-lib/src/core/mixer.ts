@@ -117,14 +117,8 @@ function processMix(product: Product, ingredientCodes: IngredientCode[]): Omit<M
         effectsSet = applyIngredientTransformations(effectsSet, code);
 
         // Add ingredient's default effect after transformations
-        // Special case for Donut: Don't add CD if Ex is already present
         if (getSize(effectsSet) < MAX_EFFECTS && ingredient.defaultEffect) {
-            // If this is a Donut and we already have Explosive, don't add Calorie-Dense
-            if (code === 'Do' && ingredient.defaultEffect === 'CD' && hasEffect(effectsSet, 'Ex')) {
-                // Skip adding CD
-            } else {
-                effectsSet = addEffect(effectsSet, ingredient.defaultEffect);
-            }
+            effectsSet = addEffect(effectsSet, ingredient.defaultEffect);
         }
     }
 
@@ -134,19 +128,8 @@ function processMix(product: Product, ingredientCodes: IngredientCode[]): Omit<M
     const addictionValue = calculateAddiction(finalEffects);
     const addictiveness = Math.round(addictionValue * 100) / 100;
 
-    // Special case for Granddaddy Purple with specific ingredients
-    let sellingPrice;
-    if (
-        product.name === 'Granddaddy Purple' &&
-        ingredientCodes.includes('Vi') &&
-        ingredientCodes.includes('Pa') &&
-        ingredientCodes.includes('Cu') &&
-        ingredientCodes.filter((code) => code === 'Do').length === 2
-    ) {
-        sellingPrice = 78; // Fixed price for this specific mix
-    } else {
-        sellingPrice = Math.round(product.price * (1 + effectValue));
-    }
+    // Calculate selling price based on product price and effect value
+    const sellingPrice = Math.round(product.price * (1 + effectValue));
 
     // Only consider ingredient cost for profit calculation, as product price is the base selling price
     const profit = sellingPrice - ingredientCost;
@@ -332,18 +315,10 @@ function applyTransformation(
 
     for (const [oldEffect, newEffect] of Object.entries(replace) as [EffectCode, EffectCode][]) {
         if (hasEffect(newEffectsSet, oldEffect)) {
-            // Special case for Calorie-Dense to Explosive transformation
-            // For Granddaddy Purple mix, we want to keep both CD and Ex
-            if (oldEffect === 'CD' && newEffect === 'Ex') {
-                // Add Ex but don't remove CD
-                newEffectsSet = addEffect(newEffectsSet, newEffect);
-                // Don't mark CD as processed or removed so it stays in the effect set
-            } else {
-                newEffectsSet = removeEffect(newEffectsSet, oldEffect);
-                newEffectsSet = addEffect(newEffectsSet, newEffect);
-                processed.add(oldEffect);
-                removed.add(oldEffect);
-            }
+            newEffectsSet = removeEffect(newEffectsSet, oldEffect);
+            newEffectsSet = addEffect(newEffectsSet, newEffect);
+            processed.add(oldEffect);
+            removed.add(oldEffect);
         }
     }
 

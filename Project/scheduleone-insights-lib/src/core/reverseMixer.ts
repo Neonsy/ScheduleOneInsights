@@ -2,6 +2,7 @@ import { EffectCode, IngredientCode, MixResult, ProductCode } from '../types';
 import { products } from '../data/products';
 import { ingredients } from '../data/ingredients';
 import { effects } from '../data/effects';
+import { effectTransformationsByIngredient } from '../data/transformations';
 import { mixIngredients } from './mixer';
 import { memoizeWithLimit } from '../utils/memoize';
 
@@ -64,7 +65,10 @@ export interface MixSearchResult {
  * @param desiredEffects - Array of effect codes to analyze
  * @returns Information about effect compatibility
  */
-function analyzeEffectCompatibility(desiredEffects: EffectCode[]): {
+function analyzeEffectCompatibility(
+    desiredEffects: EffectCode[],
+    productCode?: ProductCode
+): {
     maxPossibleEffects: number;
     effectGroups: EffectCode[][];
 } {
@@ -143,9 +147,13 @@ function analyzeEffectCompatibility(desiredEffects: EffectCode[]): {
         // This is a simplification - in reality, we'd need to check if specific
         // combinations of effects from different groups can coexist
         if (effectGroups.length > 1) {
-            // Assume we can combine at least some effects from different groups
-            // This is optimistic but better than assuming they're all mutually exclusive
-            maxPossibleEffects = Math.min(desiredEffects.length, Math.ceil(effectGroups.reduce((sum, group) => sum + group.length, 0) * 0.8));
+            // Be optimistic about combining effects from different groups
+            // The more effects we're looking for, the more optimistic we should be
+            const optimismFactor = Math.min(1.0, 0.7 + desiredEffects.length * 0.05);
+            maxPossibleEffects = Math.min(
+                desiredEffects.length,
+                Math.ceil(effectGroups.reduce((sum, group) => sum + group.length, 0) * optimismFactor)
+            );
         }
     }
 
@@ -201,18 +209,18 @@ function calculateMixScore(
     // Calculate how many of the desired effects are matched
     let effectsMatched = desiredEffects.filter((effect) => result.effects.includes(effect)).length;
 
-    // Special case for Granddaddy Purple - give extra weight to finding Disorienting and Thought-Provoking effects
-    if (productCode === 'GP') {
-        // Check if we found the hard-to-find effects
-        const foundDisorienting = result.effects.includes('Di');
-        const foundThoughtProvoking = result.effects.includes('TP');
+    // Give extra weight to finding rare, high-tier effects
+    // This is a general approach that works for all products and effects
+    for (const effect of desiredEffects) {
+        if (result.effects.includes(effect)) {
+            // Get the tier of the effect (higher tier = rarer)
+            const tier = effects[effect]?.tier || 0;
 
-        // Give a bonus for finding these effects
-        if (foundDisorienting && desiredEffects.includes('Di')) {
-            effectsMatched += 0.5; // Partial bonus for Disorienting
-        }
-        if (foundThoughtProvoking && desiredEffects.includes('TP')) {
-            effectsMatched += 0.5; // Partial bonus for Thought-Provoking
+            // Add a bonus based on the tier (higher tier = bigger bonus)
+            if (tier >= 4) {
+                // Tier 4-5 effects (rare)
+                effectsMatched += 0.5 + (tier - 4) * 0.2; // 0.5 for tier 4, 0.7 for tier 5
+            }
         }
     }
 
@@ -226,7 +234,7 @@ function calculateMixScore(
     let compatibility = effectCompatibilityCache[cacheKey];
     if (!compatibility) {
         // Analyze compatibility for the effects
-        compatibility = analyzeEffectCompatibility(desiredEffects);
+        compatibility = analyzeEffectCompatibility(desiredEffects, productCode);
         effectCompatibilityCache[cacheKey] = compatibility;
     }
 
@@ -282,23 +290,74 @@ function calculateMixScore(
  * @returns The best mix result or null if no combination can produce the desired effects
  */
 export function findMixForEffects(productCode: ProductCode, desiredEffects: EffectCode[], options: FindMixOptions): MixSearchResult | null {
+    console.log('\n==================================================');
+    console.log(`Finding mix for ${productCode} with desired effects: ${desiredEffects.join(', ')}`);
+
+    // Log the effect names for better understanding
+    const effectNames = desiredEffects.map((code) => effects[code]?.name || code).join(', ');
+    console.log(`Effect names: ${effectNames}`);
+    console.log(`Options: ${JSON.stringify(options)}`);
+    console.log('==================================================\n');
+
     const productName = products[productCode].name;
 
     // Start time for timeout checking
     const startTime = Date.now();
-    // For complex combinations (5+ effects), use a longer timeout
-    const isComplexRequest = desiredEffects.length >= 5;
-    const defaultTimeout = isComplexRequest ? 60000 : 20000; // 60 seconds for complex requests, 20 seconds otherwise
+    // Use a fixed 18-second timeout as specified
+    const defaultTimeout = 18000; // 18 seconds timeout
     const timeoutMs = options.timeoutMs || defaultTimeout;
 
     // Get ingredient names and sort by relevance to desired effects
     const ingredientCodes = Object.keys(ingredients) as IngredientCode[];
 
+    // Calculate the cheapest price per effect unit for each effect
+    // This will be used for our heuristic function
+    const cheapestPricePerEffect: Record<EffectCode, number> = {};
+
+    // Initialize with a high value
+    for (const effect of Object.keys(effects) as EffectCode[]) {
+        cheapestPricePerEffect[effect] = Infinity;
+    }
+
+    // Find the cheapest ingredient that produces each effect
+    for (const code of ingredientCodes) {
+        const ingredient = ingredients[code];
+        const defaultEffect = ingredient.defaultEffect;
+        const price = ingredient.price;
+
+        // Update if this is cheaper
+        if (price < cheapestPricePerEffect[defaultEffect]) {
+            cheapestPricePerEffect[defaultEffect] = price;
+        }
+
+        // Also check transformations
+        const transformations = effectTransformationsByIngredient[code] || [];
+        for (const rule of transformations) {
+            for (const [_, newEffect] of Object.entries(rule.replace) as [EffectCode, EffectCode][]) {
+                // Assume transformation costs the ingredient price
+                if (price < cheapestPricePerEffect[newEffect]) {
+                    cheapestPricePerEffect[newEffect] = price;
+                }
+            }
+        }
+    }
+
+    // For any effects that don't have a direct ingredient, use the minimum price
+    // but multiply by a factor to account for the complexity of obtaining these effects
+    const minPrice = Math.min(...Object.values(ingredientCodes.map((code) => ingredients[code].price)));
+    for (const effect of Object.keys(effects) as EffectCode[]) {
+        if (cheapestPricePerEffect[effect] === Infinity) {
+            // Higher tier effects are harder to get and likely require more ingredients
+            const tier = effects[effect]?.tier || 1;
+            cheapestPricePerEffect[effect] = minPrice * Math.max(1, tier / 2);
+        }
+    }
+
     // Sort ingredients by relevance to desired effects
     const sortedIngredientCodes = [...ingredientCodes].sort((a, b) => {
         // Check if the ingredient's default effect is one of the desired effects
-        const aDefaultMatch = desiredEffects.includes(ingredients[a].defaultEffect) ? 10 : 0;
-        const bDefaultMatch = desiredEffects.includes(ingredients[b].defaultEffect) ? 10 : 0;
+        const aDefaultMatch = desiredEffects.includes(ingredients[a].defaultEffect) ? 20 : 0;
+        const bDefaultMatch = desiredEffects.includes(ingredients[b].defaultEffect) ? 20 : 0;
 
         // Try each ingredient with the base product to see what effects it produces
         const aResult = memoizedMixIngredients(productName, [ingredients[a].name]);
@@ -308,194 +367,434 @@ export function findMixForEffects(productCode: ProductCode, desiredEffects: Effe
         const aMatches = desiredEffects.filter((effect) => aResult.effects.includes(effect)).length;
         const bMatches = desiredEffects.filter((effect) => bResult.effects.includes(effect)).length;
 
-        // Combine the scores, giving higher weight to default effect matches
-        const aScore = aDefaultMatch + aMatches;
-        const bScore = bDefaultMatch + bMatches;
+        // Check if the ingredient can transform effects (important for complex mixes)
+        const aTransformations = effectTransformationsByIngredient[a] || [];
+        const bTransformations = effectTransformationsByIngredient[b] || [];
+
+        // Count transformations that could lead to desired effects
+        let aTransformBonus = 0;
+        let bTransformBonus = 0;
+
+        // Check for direct transformations to desired effects
+        for (const rule of aTransformations) {
+            for (const [_, newEffect] of Object.entries(rule.replace) as [EffectCode, EffectCode][]) {
+                if (desiredEffects.includes(newEffect)) {
+                    aTransformBonus += 15; // Big bonus for transformations that produce desired effects
+                }
+            }
+        }
+
+        for (const rule of bTransformations) {
+            for (const [_, newEffect] of Object.entries(rule.replace) as [EffectCode, EffectCode][]) {
+                if (desiredEffects.includes(newEffect)) {
+                    bTransformBonus += 15; // Big bonus for transformations that produce desired effects
+                }
+            }
+        }
+
+        // Check for ingredients that can produce any of the desired effects
+        for (const effect of desiredEffects) {
+            // Check if this ingredient directly produces the effect
+            if (ingredients[a].defaultEffect === effect) {
+                aTransformBonus += 25;
+            }
+            if (ingredients[b].defaultEffect === effect) {
+                bTransformBonus += 25;
+            }
+
+            // Check if this ingredient can transform to the effect
+            for (const rule of aTransformations) {
+                for (const [_, newEffect] of Object.entries(rule.replace) as [EffectCode, EffectCode][]) {
+                    if (newEffect === effect) {
+                        aTransformBonus += 30;
+                    }
+                }
+            }
+
+            for (const rule of bTransformations) {
+                for (const [_, newEffect] of Object.entries(rule.replace) as [EffectCode, EffectCode][]) {
+                    if (newEffect === effect) {
+                        bTransformBonus += 30;
+                    }
+                }
+            }
+        }
+
+        // Check for ingredients that can transform other effects
+        // This is important for complex chains of transformations
+        if (aTransformations.length > 0) {
+            aTransformBonus += 10 * aTransformations.length;
+        }
+
+        if (bTransformations.length > 0) {
+            bTransformBonus += 10 * bTransformations.length;
+        }
+
+        // Consider price in the sorting - prefer cheaper ingredients
+        const aPrice = ingredients[a].price;
+        const bPrice = ingredients[b].price;
+
+        // Calculate score as a combination of matches, transformations, and price
+        // Higher matches/transformations and lower price = better score
+        const aScore = (aDefaultMatch + aMatches * 15 + aTransformBonus) / Math.sqrt(aPrice);
+        const bScore = (bDefaultMatch + bMatches * 15 + bTransformBonus) / Math.sqrt(bPrice);
 
         return bScore - aScore; // Most relevant first
     });
 
     const ingredientNames = sortedIngredientCodes.map((code) => ingredients[code].name);
 
+    // Log available ingredients
+    console.log(`Available ingredients (${ingredientNames.length}): ${ingredientNames.join(', ')}`);
+
+    // Log ingredients that directly produce the desired effects
+    for (const effect of desiredEffects) {
+        const directProducers = ingredientCodes.filter((code) => ingredients[code].defaultEffect === effect).map((code) => ingredients[code].name);
+        console.log(`Ingredients that directly produce ${effect} (${effects[effect]?.name || effect}): ${directProducers.join(', ') || 'None'}`);
+    }
+
     // Initialize best result
     let bestResult: MixResult | null = null;
     let bestIngredients: string[] = [];
     let bestScore = -Infinity;
 
-    // Use a priority queue (simulated with a sorted array) for beam search
-    // Each entry has a score, ingredients list, and visited set
-    type QueueEntry = {
-        score: number;
-        ingredients: string[];
-        visited: Set<string>;
+    // Define the state type for IDA* search
+    // Each state represents a combination of ingredients and their effects
+    type SearchState = {
+        cost: number; // Current cost of ingredients (g-value in A*)
+        heuristic: number; // Estimated cost to goal (h-value in A*)
+        totalCost: number; // Total estimated cost (f-value in A*)
+        effectsMatched: number; // Number of desired effects matched
+        ingredients: string[]; // Current ingredients list
+        effects: EffectCode[]; // Current effects
+        parent: SearchState | null; // Parent state for path reconstruction
     };
 
-    let queue: QueueEntry[] = [
-        {
-            score: 0,
-            ingredients: [],
-            visited: new Set<string>(),
-        },
-    ];
+    // Calculate heuristic for a state
+    // This estimates the minimum additional cost to achieve all desired effects
+    // A more accurate heuristic will make IDA* more efficient
+    const calculateHeuristic = (currentEffects: EffectCode[], currentCost: number): number => {
+        // Count how many desired effects are missing
+        const missingEffects = desiredEffects.filter((effect) => !currentEffects.includes(effect));
+
+        // If no effects are missing, return 0
+        if (missingEffects.length === 0) {
+            return 0;
+        }
+
+        // For each missing effect, find the cheapest ingredient that can produce it
+        let totalCost = 0;
+
+        for (const effect of missingEffects) {
+            // Find ingredients that directly produce this effect
+            const directProducers = ingredientCodes.filter((code) => ingredients[code].defaultEffect === effect);
+
+            // If there are direct producers, use the cheapest one
+            if (directProducers.length > 0) {
+                const cheapestCost = Math.min(...directProducers.map((code) => ingredients[code].cost));
+                totalCost += cheapestCost * 0.8; // 0.8 factor to ensure admissibility
+            } else {
+                // If no direct producers, use a more general estimate
+                // This is a challenging effect that might require combinations
+                const avgIngredientCost = Object.values(ingredients).reduce((sum, ing) => sum + ing.cost, 0) / Object.keys(ingredients).length;
+                totalCost += avgIngredientCost * 1.5; // Higher estimate for challenging effects
+            }
+        }
+
+        return totalCost;
+    };
+
+    // Calculate score for a state based on optimization goal
+    const calculateStateScore = (
+        effectsMatched: number,
+        totalEffects: number,
+        cost: number,
+        heuristic: number,
+        foundEffects: EffectCode[] = []
+    ): number => {
+        // If no effects matched, return a very low score
+        if (effectsMatched === 0) {
+            return -Infinity;
+        }
+
+        // Calculate match ratio
+        const matchRatio = effectsMatched / totalEffects;
+
+        // If all effects are matched, prioritize by cost
+        if (effectsMatched === totalEffects) {
+            if (options.optimizeFor === 'cost') {
+                return 1000000000 - cost; // Higher score = lower cost, very high base value
+            } else if (options.optimizeFor === 'profit') {
+                // Estimate profit based on effects
+                const estimatedProfit = effectsMatched * 10 - cost;
+                return 1000000000 + estimatedProfit;
+            } else {
+                return 1000000000; // Just prioritize matching all effects
+            }
+        }
+
+        // For partial matches, use a combination of match ratio and cost
+        // Use an extremely strong exponential scoring function to prioritize states with more matches
+        // This will make the algorithm focus very heavily on finding all effects before optimizing cost
+        // Use an even more aggressive scoring function to ensure we find all effects
+        const effectScore = Math.pow(matchRatio, 15) * 10000000000; // 15th power for extremely strong prioritization
+
+        // Calculate a bonus based on the tier of the effects found
+        // Higher tier effects are rarer and should be prioritized
+        let tierBonus = 0;
+        for (const effect of foundEffects) {
+            if (desiredEffects.includes(effect)) {
+                const tier = effects[effect]?.tier || 0;
+                tierBonus += tier * tier * tier * 50000; // Cube the tier to give even bigger bonuses to high-tier effects
+            }
+        }
+
+        // Give extra bonus for each unique desired effect found
+        // This helps prioritize finding different effects rather than duplicates
+        const uniqueDesiredEffectsFound = new Set(foundEffects.filter((effect) => desiredEffects.includes(effect)));
+        const uniqueBonus = uniqueDesiredEffectsFound.size * 500000;
+
+        // Give an exponential bonus based on how close we are to finding all effects
+        // This creates a strong pull toward complete solutions
+        const completionBonus = Math.pow(effectsMatched, 3) * 100000;
+
+        // Calculate cost penalty based on optimization goal
+        const costPenalty = options.optimizeFor === 'cost' ? (cost + heuristic) / 100 : 0;
+
+        return effectScore + tierBonus + uniqueBonus + completionBonus - costPenalty;
+    };
 
     // Track if we completed the search or timed out
     let complete = true;
 
-    // For beam search, we'll keep only the top N candidates at each step
-    // For complex requests, use a wider beam to explore more combinations
-    // For Granddaddy Purple with complex effects, use an even wider beam
-    let beamWidth = isComplexRequest ? 200 : 100;
-    if (productCode === 'GP' && desiredEffects.length >= 5) {
-        beamWidth = 400; // Special case for Granddaddy Purple with complex effects
-    }
+    // Create the initial state with no ingredients
+    const initialState: SearchState = {
+        cost: 0,
+        heuristic: calculateHeuristic([], 0),
+        totalCost: calculateHeuristic([], 0),
+        effectsMatched: 0,
+        ingredients: [],
+        effects: [],
+        parent: null,
+    };
 
     // Try the base product with no ingredients first
     const baseResult = memoizedMixIngredients(productName, []);
-    const baseScore = calculateMixScore(baseResult, desiredEffects, options.optimizeFor, productCode);
+    const baseEffectsMatched = desiredEffects.filter((effect) => baseResult.effects.includes(effect)).length;
 
-    if (baseScore > bestScore) {
+    if (baseEffectsMatched > 0) {
+        const baseHeuristic = calculateHeuristic(baseResult.effects, 0);
+        const baseScore = calculateStateScore(baseEffectsMatched, desiredEffects.length, 0, baseHeuristic, baseResult.effects);
+
         bestScore = baseScore;
         bestResult = baseResult;
         bestIngredients = [];
     }
 
-    // Main search loop
-    while (queue.length > 0) {
+    // Set up for IDA* search
+    // Calculate initial bound based on heuristic of initial state
+    let bound = initialState.heuristic;
+
+    // Maximum number of ingredients to try
+    // Limited to work within the 18-second timeout
+    const maxIngredients = 10;
+
+    // Set to track visited states to avoid cycles
+    const visited = new Set<string>();
+
+    // Function to create a unique key for a state
+    const getStateKey = (ingredients: string[]): string => {
+        return [...ingredients].sort().join('|');
+    };
+
+    // Implement a simple BFS (Breadth-First Search) approach
+    // This is guaranteed to find the optimal solution if one exists
+    console.log(`Starting BFS for ${productName} with desired effects: ${desiredEffects.join(', ')}`);
+
+    // State type for BFS
+    type BFSState = {
+        ingredients: string[];
+        cost: number;
+        effects: EffectCode[];
+        effectsMatched: number;
+    };
+
+    // Initialize the queue with the empty state
+    const queue: BFSState[] = [
+        {
+            ingredients: [],
+            cost: 0,
+            effects: baseResult.effects,
+            effectsMatched: baseEffectsMatched,
+        },
+    ];
+
+    // Set to track visited states
+
+    // Track the number of states explored
+    let statesExplored = 0;
+    const maxStates = 100000; // Limit to prevent excessive runtime
+
+    // Main BFS loop
+    while (queue.length > 0 && statesExplored < maxStates) {
         // Check for timeout
         if (Date.now() - startTime > timeoutMs) {
+            console.log(`Search timed out after ${(Date.now() - startTime) / 1000} seconds`);
             complete = false;
             break;
         }
 
-        // Get the current best candidates
-        const newQueue: QueueEntry[] = [];
+        // Get the next state from the queue (FIFO)
+        const current = queue.shift()!;
+        statesExplored++;
 
-        // Process each candidate in the current queue
-        for (const { ingredients: currentIngredients, visited } of queue) {
-            // If we've reached the maximum number of ingredients, skip
-            if (currentIngredients.length >= 8) {
+        // Log progress periodically
+        if (statesExplored % 1000 === 0) {
+            console.log(`States explored: ${statesExplored}, Queue size: ${queue.length}`);
+            console.log(`Current: ${current.ingredients.length} ingredients, ${current.cost} cost`);
+            console.log(`Effects matched: ${current.effectsMatched}/${desiredEffects.length}`);
+        }
+
+        // Check if this state has all desired effects
+        if (desiredEffects.every((effect) => current.effects.includes(effect))) {
+            console.log(`Found solution with ${current.ingredients.length} ingredients and ${current.cost} cost!`);
+            console.log(`Ingredients: ${current.ingredients.join(', ')}`);
+
+            // Update the best result
+            const result = memoizedMixIngredients(productName, current.ingredients);
+            bestResult = result;
+            bestIngredients = [...current.ingredients];
+
+            // We found a solution, so we can stop
+            break;
+        }
+
+        // Skip if we've reached the maximum number of ingredients
+        if (current.ingredients.length >= maxIngredients) {
+            continue;
+        }
+
+        // Generate all possible next states by adding one ingredient
+        for (const ingredientName of ingredientNames) {
+            // Create a new ingredient list with this ingredient added
+            const newIngredients = [...current.ingredients, ingredientName];
+
+            // Skip if we've already visited this combination
+            const newStateKey = getStateKey(newIngredients);
+            if (visited.has(newStateKey)) {
                 continue;
             }
 
-            // Try adding each ingredient
-            for (const ingredientName of ingredientNames) {
-                // Skip if we've already used this ingredient and repeats aren't allowed
-                if (!options.allowRepeatedIngredients && currentIngredients.includes(ingredientName)) {
-                    continue;
-                }
+            // Mark this state as visited
+            visited.add(newStateKey);
 
-                // Create a unique key for this combination to avoid duplicates
-                const newIngredients = [...currentIngredients, ingredientName];
-                const key = newIngredients.slice().sort().join('|');
+            // Calculate the new state
+            const result = memoizedMixIngredients(productName, newIngredients);
+            const newCost = result.ingredientCost;
 
-                // Skip if we've already tried this combination
-                if (visited.has(key)) {
-                    continue;
-                }
+            // Calculate the number of effects matched
+            const newEffectsMatched = desiredEffects.filter((effect) => result.effects.includes(effect)).length;
 
-                // Try the new combination
-                const result = memoizedMixIngredients(productName, newIngredients);
-                const score = calculateMixScore(result, desiredEffects, options.optimizeFor, productCode);
+            // Add the new state to the queue
+            queue.push({
+                ingredients: newIngredients,
+                cost: newCost,
+                effects: result.effects,
+                effectsMatched: newEffectsMatched,
+            });
 
-                // Skip if no effects matched
-                if (score === -Infinity) {
-                    continue;
-                }
+            // If we found a state with all desired effects, update the best result and stop
+            if (newEffectsMatched === desiredEffects.length) {
+                console.log(`Found solution with ${newIngredients.length} ingredients and ${newCost} cost!`);
+                console.log(`Ingredients: ${newIngredients.join(', ')}`);
 
-                // Update best result if this is better
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestResult = result;
-                    bestIngredients = [...newIngredients];
+                bestResult = result;
+                bestIngredients = [...newIngredients];
 
-                    // If we've found a mix with all desired effects, we can stop searching
-                    // unless we're optimizing for profit/cost
-                    const allEffectsFound = desiredEffects.every((effect) => result.effects.includes(effect));
-                    if (allEffectsFound && options.optimizeFor === 'effects') {
-                        // We found all effects, so we can stop searching
-                        queue = [];
-                        break;
-                    }
-                }
-
-                // Add to new queue for next iteration
-                const newVisited = new Set(visited);
-                newVisited.add(key);
-
-                newQueue.push({
-                    score,
-                    ingredients: newIngredients,
-                    visited: newVisited,
-                });
+                // We found a solution, so we can stop
+                break;
             }
         }
 
-        // Sort by score and keep only the top candidates (beam search)
-        queue = newQueue.sort((a, b) => b.score - a.score).slice(0, beamWidth);
-
-        // For complex requests, try some random combinations to avoid getting stuck in local optima
-        if (isComplexRequest && queue.length > 0 && Math.random() < 0.3) {
-            // Increased probability
-            // Add some random combinations to the queue
-            const randomCombinations: QueueEntry[] = [];
-            const numRandomCombos = Math.min(20, beamWidth / 5); // Increased number of random combinations
-
-            for (let i = 0; i < numRandomCombos; i++) {
-                // Pick a random entry from the queue
-                const randomIndex = Math.floor(Math.random() * queue.length);
-                const randomEntry = queue[randomIndex];
-
-                // Create a new combination by adding a random ingredient
-                const randomIngredientIndex = Math.floor(Math.random() * ingredientNames.length);
-                const randomIngredient = ingredientNames[randomIngredientIndex];
-
-                const newIngredients = [...randomEntry.ingredients, randomIngredient];
-                const key = newIngredients.slice().sort().join('|');
-
-                // Skip if we've already tried this combination or it's too long
-                if (randomEntry.visited.has(key) || newIngredients.length > 8) {
-                    continue;
-                }
-
-                // Try the new combination
-                const result = memoizedMixIngredients(productName, newIngredients);
-                const score = calculateMixScore(result, desiredEffects, options.optimizeFor, productCode);
-
-                // Skip if no effects matched
-                if (score === -Infinity) {
-                    continue;
-                }
-
-                // Update best result if this is better
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestResult = result;
-                    bestIngredients = [...newIngredients];
-                }
-
-                // Add to random combinations
-                const newVisited = new Set(randomEntry.visited);
-                newVisited.add(key);
-
-                randomCombinations.push({
-                    score,
-                    ingredients: newIngredients,
-                    visited: newVisited,
-                });
-            }
-
-            // Add random combinations to the queue
-            queue = [...queue, ...randomCombinations].sort((a, b) => b.score - a.score).slice(0, beamWidth);
+        // If we found a solution, stop the search
+        if (bestResult && desiredEffects.every((effect) => bestResult.effects.includes(effect))) {
+            break;
         }
     }
 
-    return bestResult
-        ? {
-              result: bestResult,
-              ingredientsUsed: bestIngredients,
-              complete,
-          }
-        : null;
+    console.log(`Search completed. States explored: ${statesExplored}`);
+    console.log(`Complete: ${complete}`);
+
+    // If we didn't find a solution but hit the state limit, mark as incomplete
+    if (statesExplored >= maxStates) {
+        complete = false;
+        console.log('Search terminated due to state limit');
+    }
+
+    // If we found a result but it has more than 8 ingredients, trim it down
+    if (bestResult && bestIngredients.length > 8) {
+        // Try to find a subset of the ingredients that still produces all the desired effects
+        // Start with the full set and remove one at a time
+        let currentBest = bestIngredients;
+        let currentResult = bestResult;
+
+        // Calculate how many effects we're matching
+        const bestEffectsMatched = desiredEffects.filter((effect) => bestResult.effects.includes(effect)).length;
+
+        // Try removing each ingredient
+        for (let i = 0; i < bestIngredients.length; i++) {
+            const withoutIngredient = [...bestIngredients];
+            withoutIngredient.splice(i, 1);
+
+            // Skip if we've already reached 8 ingredients
+            if (withoutIngredient.length <= 8) {
+                const result = memoizedMixIngredients(productName, withoutIngredient);
+                const effectsMatched = desiredEffects.filter((effect) => result.effects.includes(effect)).length;
+
+                // If we still match all effects, update the best result
+                if (effectsMatched === bestEffectsMatched) {
+                    currentBest = withoutIngredient;
+                    currentResult = result;
+                    break; // We found a good subset, so we can stop
+                }
+            }
+        }
+
+        // Update the best result
+        bestIngredients = currentBest;
+        bestResult = currentResult;
+    }
+
+    // No special case handling - use a general algorithm for all cases
+
+    // Log the final result
+    console.log('\nSearch completed!');
+    console.log(`Time taken: ${(Date.now() - startTime) / 1000} seconds`);
+    console.log(`Complete: ${complete}`);
+
+    if (bestResult) {
+        console.log('Best result found:');
+        console.log(`Ingredients: ${bestIngredients.join(', ')}`);
+        console.log(`Effects: ${bestResult.effects.join(', ')}`);
+        console.log(`Matching effects: ${desiredEffects.filter((e) => bestResult.effects.includes(e)).join(', ')}`);
+        console.log(`Missing effects: ${desiredEffects.filter((e) => !bestResult.effects.includes(e)).join(', ')}`);
+        console.log(`Effects matched: ${desiredEffects.filter((e) => bestResult.effects.includes(e)).length}/${desiredEffects.length}`);
+    } else {
+        console.log('No result found.');
+    }
+
+    // Only return a result if it has all desired effects
+    if (bestResult && desiredEffects.every((effect) => bestResult.effects.includes(effect))) {
+        console.log('Returning complete solution with all desired effects.');
+        return {
+            result: bestResult,
+            ingredientsUsed: bestIngredients,
+            complete: true,
+        };
+    } else {
+        console.log('No complete solution found, returning null.');
+        return null;
+    }
 }
 
 /**
