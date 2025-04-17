@@ -9,11 +9,9 @@ import type { EffectCode, IngredientCode, MixState, ProductCode } from '../types
 export function generateSeed(mixState: MixState, effects: EffectCode[]): string {
     const { product, ingredients } = mixState;
 
-    // Sort effects to ensure consistent seed generation
-    const sortedEffects = [...effects].sort();
-
     // Create a string format with product, effects, and ingredients
-    return `${product}|${sortedEffects.join(',')}|${ingredients.join(',')}`;
+    // Do not sort effects or ingredients to preserve the original order
+    return `${product}|${effects.join(',')}|${ingredients.join(',')}`;
 }
 
 /**

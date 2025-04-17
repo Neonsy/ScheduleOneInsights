@@ -362,7 +362,7 @@ const calculateEffectValue = memoizeWithLimit(
         }, 0);
     },
     200,
-    (effectCodes) => effectCodes.sort().join(',')
+    (effectCodes) => effectCodes.join(',')
 );
 
 /**
@@ -377,7 +377,7 @@ const calculateAddiction = memoizeWithLimit(
         }, 0);
     },
     200,
-    (effectCodes) => effectCodes.sort().join(',')
+    (effectCodes) => effectCodes.join(',')
 );
 
 // Create memoized versions of the exported functions
