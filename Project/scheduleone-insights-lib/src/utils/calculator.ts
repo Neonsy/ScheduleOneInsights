@@ -72,6 +72,19 @@ export function calculateProfitMargin(profit: number, sellingPrice: number): num
 }
 
 /**
+ * Calculate the total value multiplier from effects
+ * @param effectCodes - The effects to calculate the value for
+ * @returns The total value multiplier
+ */
+export function calculateEffectValue(effectCodes: EffectCode[]): number {
+    let value = 0;
+    for (const code of effectCodes) {
+        value += effects[code]?.valueMultiplier || 0;
+    }
+    return value;
+}
+
+/**
  * Calculate the addiction value of a mix
  * @param effectCodes - The effects in the mix
  * @returns The addiction value

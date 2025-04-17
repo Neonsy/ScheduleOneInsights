@@ -1,15 +1,13 @@
 import type { EffectCode, IngredientCode, MixResult, MixState, Product, ProductCode, ReplacementRule } from '../types';
 
-import { effects } from '../data/effects';
 import { ingredients, ingredientNameToCode } from '../data/ingredients';
 import { products, productNameToCode } from '../data/products';
 import { effectTransformationsByIngredient } from '../data/transformations';
 import { createEffectSet, addEffect, removeEffect, hasEffect, toArray, getSize, cloneSet } from './effectSet';
 import { generateSeed, parseSeed } from './seedManager';
-import { memoizeWithLimit } from '../utils/memoize';
+import { calculateEffectValue, calculateAddiction } from '../utils/calculator';
 
 const MAX_EFFECTS = 8;
-const CACHE_SIZE = 100; // Maximum number of mix results to cache
 
 /**
  * Calculate the result of mixing ingredients with a product
@@ -17,7 +15,7 @@ const CACHE_SIZE = 100; // Maximum number of mix results to cache
  * @param ingredientNames - The ingredients to mix
  * @returns The result of the mix
  */
-function _mixIngredients(productName: string, ingredientNames: string[]): MixResult {
+function mixIngredientsInternal(productName: string, ingredientNames: string[]): MixResult {
     // Convert product name to code
     const productCode = productNameToCode[productName];
     if (!productCode || !products[productCode]) {
@@ -57,7 +55,7 @@ function _mixIngredients(productName: string, ingredientNames: string[]): MixRes
  * @param seed - The seed to recreate from
  * @returns The result of the mix
  */
-function _mixFromSeed(seed: string): MixResult {
+function mixFromSeedInternal(seed: string): MixResult {
     const mixState = parseSeed(seed);
     if (!mixState) {
         throw new Error(`Invalid seed: ${seed}`);
@@ -85,22 +83,8 @@ function _mixFromSeed(seed: string): MixResult {
  * @returns The result of the mix without the seed
  */
 function processMix(product: Product, ingredientCodes: IngredientCode[]): Omit<MixResult, 'seed'> {
-    let initialEffects: EffectCode[] = [];
-
-    // Add initial effects based on product type
-    if (product.name === 'OG Kush') {
-        // OG Kush
-        initialEffects = ['Ca']; // Calming
-    } else if (product.name === 'Sour Diesel') {
-        // Sour Diesel
-        initialEffects = ['Re']; // Refreshing
-    } else if (product.name === 'Green Crack') {
-        // Green Crack
-        initialEffects = ['En']; // Energizing
-    } else if (product.name === 'Granddaddy Purple') {
-        // Granddaddy Purple
-        initialEffects = ['Se']; // Sedating
-    }
+    // Use the product's default effect as the initial effect
+    const initialEffects: EffectCode[] = [product.defaultEffect];
 
     // Create a new effect set to handle the mix
     let effectsSet = createEffectSet(initialEffects);
@@ -189,14 +173,10 @@ function applyPrimaryTransformations(
     removed: Set<EffectCode>
 ): Set<EffectCode> {
     let newEffectsSet = effectsSet;
-    const appliedRules = new Set<number>();
 
-    for (let i = 0; i < transformations.length; i++) {
-        const rule = transformations[i];
-
+    for (const rule of transformations) {
         if (checkPrimaryConditions(rule, snapshot)) {
             newEffectsSet = applyTransformation(newEffectsSet, rule.replace, processed, removed);
-            appliedRules.add(i);
         }
     }
 
@@ -325,41 +305,6 @@ function applyTransformation(
     return newEffectsSet;
 }
 
-/**
- * Calculate the total value multiplier from effects
- * @param effectCodes - The effects to calculate the value for
- * @returns The total value multiplier
- */
-const calculateEffectValue = memoizeWithLimit(
-    (effectCodes: EffectCode[]): number => {
-        return effectCodes.reduce((value, code) => {
-            return value + (effects[code]?.valueMultiplier || 0);
-        }, 0);
-    },
-    200,
-    (effectCodes) => effectCodes.join(',')
-);
-
-/**
- * Calculate the total addiction value from effects
- * @param effectCodes - The effects to calculate the value for
- * @returns The total addiction value
- */
-const calculateAddiction = memoizeWithLimit(
-    (effectCodes: EffectCode[]): number => {
-        return effectCodes.reduce((value, code) => {
-            return value + (effects[code]?.addictiveness || 0);
-        }, 0);
-    },
-    200,
-    (effectCodes) => effectCodes.join(',')
-);
-
-// Create memoized versions of the exported functions
-export const mixIngredients = memoizeWithLimit(
-    _mixIngredients,
-    CACHE_SIZE,
-    (productName, ingredientNames) => `${productName}|${ingredientNames.join(',')}`
-);
-
-export const mixFromSeed = memoizeWithLimit(_mixFromSeed, CACHE_SIZE);
+// Export the functions directly
+export const mixIngredients = mixIngredientsInternal;
+export const mixFromSeed = mixFromSeedInternal;

@@ -5,31 +5,37 @@ export const products: Record<ProductCode, Product> = {
         name: 'OG Kush',
         price: 35,
         unlockLevel: 0, // Available at game start
+        defaultEffect: 'Ca', // Calming
     },
     SD: {
         name: 'Sour Diesel',
         price: 35,
         unlockLevel: 4, // Street Rat IV
+        defaultEffect: 'Re', // Refreshing
     },
     GC: {
         name: 'Green Crack',
         price: 35,
         unlockLevel: 2, // Hoodlum II
+        defaultEffect: 'En', // Energizing
     },
     GP: {
         name: 'Granddaddy Purple',
         price: 35,
         unlockLevel: 4, // Hoodlum IV
+        defaultEffect: 'Se', // Sedating
     },
     Me: {
         name: 'Methamphetamine',
         price: 70,
         unlockLevel: 10, // Higher level
+        defaultEffect: 'Fo', // Focused (placeholder, adjust as needed)
     },
     Co: {
         name: 'Cocaine',
         price: 150,
         unlockLevel: 15, // Higher level
+        defaultEffect: 'Eu', // Euphoric (placeholder, adjust as needed)
     },
 };
 

@@ -11,6 +11,7 @@ export type Product = {
     name: string;
     price: number;
     unlockLevel: number;
+    defaultEffect: EffectCode;
 };
 
 // Ingredient types
