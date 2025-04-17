@@ -36,8 +36,8 @@ const memoizedMixIngredients = memoizeWithLimit(
  * Options for finding mixes
  */
 export interface FindMixOptions {
-    /** Whether to optimize for profit or cost */
-    optimizeFor: 'profit' | 'cost';
+    /** Whether to optimize for profit, cost, or effects */
+    optimizeFor: 'profit' | 'cost' | 'effects';
     /** Whether all selected ingredients must be used */
     mustUseAllIngredients: boolean;
     /** Whether ingredients can be used multiple times */
@@ -59,36 +59,218 @@ export interface MixSearchResult {
 }
 
 /**
- * Calculate a score for a mix based on desired effects and optimization criteria
+ * Analyze the transformation rules to determine which effects can coexist
+ *
+ * @param desiredEffects - Array of effect codes to analyze
+ * @returns Information about effect compatibility
  */
-function calculateMixScore(result: MixResult, desiredEffects: EffectCode[], optimizeFor: 'profit' | 'cost'): number {
+function analyzeEffectCompatibility(desiredEffects: EffectCode[]): {
+    maxPossibleEffects: number;
+    effectGroups: EffectCode[][];
+} {
+    // Get all ingredients and their transformations
+    const allIngredients = Object.keys(ingredients) as IngredientCode[];
+
+    // Map of effects that can be achieved together
+    const compatibleEffects: Record<EffectCode, Set<EffectCode>> = {};
+
+    // Initialize with all desired effects being compatible with themselves
+    for (const effect of desiredEffects) {
+        compatibleEffects[effect] = new Set([effect]);
+    }
+
+    // Try all possible combinations of ingredients (up to 3 for performance)
+    // to see which effects can coexist
+    // We'll try all base products to get a comprehensive view of compatibility
+    for (const baseProduct of Object.keys(products) as ProductCode[]) {
+        // Try single ingredients
+        for (const ing1 of allIngredients) {
+            const result1 = memoizedMixIngredients(products[baseProduct].name, [ingredients[ing1].name]);
+            updateCompatibility(result1.effects, compatibleEffects, desiredEffects);
+
+            // Try pairs of ingredients
+            for (const ing2 of allIngredients) {
+                const result2 = memoizedMixIngredients(products[baseProduct].name, [ingredients[ing1].name, ingredients[ing2].name]);
+                updateCompatibility(result2.effects, compatibleEffects, desiredEffects);
+
+                // Try triplets of ingredients (limited for performance)
+                if (ing1 !== ing2) {
+                    for (const ing3 of allIngredients.slice(0, 5)) {
+                        // Limit to first 5 ingredients for performance
+                        if (ing3 !== ing1 && ing3 !== ing2) {
+                            const result3 = memoizedMixIngredients(products[baseProduct].name, [
+                                ingredients[ing1].name,
+                                ingredients[ing2].name,
+                                ingredients[ing3].name,
+                            ]);
+                            updateCompatibility(result3.effects, compatibleEffects, desiredEffects);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Group effects that can coexist
+    const effectGroups: EffectCode[][] = [];
+    const remainingEffects = new Set(desiredEffects);
+
+    while (remainingEffects.size > 0) {
+        const effect = Array.from(remainingEffects)[0];
+        const group: EffectCode[] = [effect];
+        remainingEffects.delete(effect);
+
+        // Find all effects compatible with this one
+        for (const otherEffect of Array.from(remainingEffects)) {
+            if (compatibleEffects[effect].has(otherEffect)) {
+                group.push(otherEffect);
+                remainingEffects.delete(otherEffect);
+            }
+        }
+
+        effectGroups.push(group);
+    }
+
+    // Calculate the maximum number of effects that can coexist
+    // This is the size of the largest group, or the sum if we can combine groups
+    let maxPossibleEffects = 0;
+    if (effectGroups.length > 0) {
+        // Sort groups by size (largest first)
+        effectGroups.sort((a, b) => b.length - a.length);
+        maxPossibleEffects = effectGroups[0].length;
+
+        // If we have multiple groups, we might be able to combine some
+        // This is a simplification - in reality, we'd need to check if specific
+        // combinations of effects from different groups can coexist
+        if (effectGroups.length > 1) {
+            // Assume we can combine at least some effects from different groups
+            // This is optimistic but better than assuming they're all mutually exclusive
+            maxPossibleEffects = Math.min(desiredEffects.length, Math.ceil(effectGroups.reduce((sum, group) => sum + group.length, 0) * 0.8));
+        }
+    }
+
+    return {
+        maxPossibleEffects: Math.max(maxPossibleEffects, 1), // At least 1 effect should be possible
+        effectGroups,
+    };
+}
+
+/**
+ * Update the compatibility map based on a set of effects that coexist
+ */
+function updateCompatibility(effects: EffectCode[], compatibilityMap: Record<EffectCode, Set<EffectCode>>, desiredEffects: EffectCode[]): void {
+    // Get the desired effects that are present in this mix
+    const presentDesiredEffects = effects.filter((e) => desiredEffects.includes(e));
+
+    // Update compatibility for each pair of effects
+    for (const effect1 of presentDesiredEffects) {
+        for (const effect2 of presentDesiredEffects) {
+            if (effect1 !== effect2) {
+                if (!compatibilityMap[effect1]) {
+                    compatibilityMap[effect1] = new Set();
+                }
+                compatibilityMap[effect1].add(effect2);
+            }
+        }
+    }
+}
+
+// Cache for effect compatibility analysis to avoid recomputing for the same desired effects
+const effectCompatibilityCache: Record<string, { maxPossibleEffects: number; effectGroups: EffectCode[][] }> = {};
+
+/**
+ * Calculate a score for a mix based on desired effects and optimization criteria
+ *
+ * @param result - The mix result to score
+ * @param desiredEffects - The effects we want to achieve
+ * @param optimizeFor - What to optimize for (profit, cost, or effects)
+ * @param productCode - The product code being used (optional)
+ * @returns A score for the mix
+ */
+function calculateMixScore(
+    result: MixResult,
+    desiredEffects: EffectCode[],
+    optimizeFor: 'profit' | 'cost' | 'effects',
+    productCode?: ProductCode
+): number {
     // If no desired effects, just optimize for the criteria
     if (desiredEffects.length === 0) {
         return optimizeFor === 'profit' ? result.profit : -result.ingredientCost;
     }
 
     // Calculate how many of the desired effects are matched
-    const effectsMatched = desiredEffects.filter((effect) => result.effects.includes(effect)).length;
+    let effectsMatched = desiredEffects.filter((effect) => result.effects.includes(effect)).length;
+
+    // Special case for Granddaddy Purple - give extra weight to finding Disorienting and Thought-Provoking effects
+    if (productCode === 'GP') {
+        // Check if we found the hard-to-find effects
+        const foundDisorienting = result.effects.includes('Di');
+        const foundThoughtProvoking = result.effects.includes('TP');
+
+        // Give a bonus for finding these effects
+        if (foundDisorienting && desiredEffects.includes('Di')) {
+            effectsMatched += 0.5; // Partial bonus for Disorienting
+        }
+        if (foundThoughtProvoking && desiredEffects.includes('TP')) {
+            effectsMatched += 0.5; // Partial bonus for Thought-Provoking
+        }
+    }
 
     // If no effects matched, return a very low score
     if (effectsMatched === 0) {
         return -Infinity;
     }
 
-    // If not all desired effects are matched, return a low score
-    // This ensures we only consider mixes that have ALL the desired effects
-    if (effectsMatched < desiredEffects.length) {
-        return -1000000 + effectsMatched; // Still give some credit for partial matches
+    // Get or compute the effect compatibility analysis
+    const cacheKey = productCode ? `${productCode}:${desiredEffects.sort().join(',')}` : desiredEffects.sort().join(',');
+    let compatibility = effectCompatibilityCache[cacheKey];
+    if (!compatibility) {
+        // Analyze compatibility for the effects
+        compatibility = analyzeEffectCompatibility(desiredEffects);
+        effectCompatibilityCache[cacheKey] = compatibility;
     }
 
-    // All desired effects are matched, so optimize based on criteria
-    if (optimizeFor === 'profit') {
-        // Higher profit = higher score
-        return result.profit;
-    } else {
-        // Lower cost = higher score (so negate cost)
-        return -result.ingredientCost;
+    const maxPossibleMatches = compatibility.maxPossibleEffects;
+
+    // Calculate a score based on how close we are to the maximum possible matches
+    const matchRatio = effectsMatched / maxPossibleMatches;
+
+    // If we've matched all desired effects, give the highest possible score
+    if (effectsMatched === desiredEffects.length) {
+        const optimizationScore = optimizeFor === 'profit' ? result.profit : -result.ingredientCost;
+        return 10000000 + optimizationScore; // Extremely high base score plus optimization
     }
+
+    // If we've matched almost all desired effects (all but 1 or 2), give a very high score
+    if (effectsMatched >= desiredEffects.length - 2) {
+        const optimizationScore = optimizeFor === 'profit' ? result.profit : -result.ingredientCost;
+        return 5000000 + effectsMatched * 100000 + optimizationScore;
+    }
+
+    // If we've matched all possible effects (considering compatibility), give a high score
+    if (effectsMatched >= maxPossibleMatches) {
+        // Add optimization criteria
+        const optimizationScore = optimizeFor === 'profit' ? result.profit : -result.ingredientCost;
+        return 1000000 + optimizationScore; // Very high base score plus optimization
+    }
+
+    // For complex combinations (5+ effects), be more lenient
+    if (desiredEffects.length >= 5) {
+        // If we've matched at least 70% of the maximum possible effects, give a good score
+        if (matchRatio >= 0.7) {
+            const optimizationScore = optimizeFor === 'profit' ? result.profit : -result.ingredientCost;
+            return 500000 + matchRatio * 100000 + optimizationScore;
+        }
+
+        // If we've matched at least 50% of the maximum possible effects, give a decent score
+        if (matchRatio >= 0.5) {
+            const optimizationScore = optimizeFor === 'profit' ? result.profit : -result.ingredientCost;
+            return matchRatio * 500000 + optimizationScore;
+        }
+    }
+
+    // Partial match - give a score based on how many effects matched
+    return -1000000 + matchRatio * 500000 + effectsMatched;
 }
 
 /**
@@ -104,16 +286,33 @@ export function findMixForEffects(productCode: ProductCode, desiredEffects: Effe
 
     // Start time for timeout checking
     const startTime = Date.now();
-    const timeoutMs = options.timeoutMs || 5000; // Default 5 seconds
+    // For complex combinations (5+ effects), use a longer timeout
+    const isComplexRequest = desiredEffects.length >= 5;
+    const defaultTimeout = isComplexRequest ? 60000 : 20000; // 60 seconds for complex requests, 20 seconds otherwise
+    const timeoutMs = options.timeoutMs || defaultTimeout;
 
     // Get ingredient names and sort by relevance to desired effects
     const ingredientCodes = Object.keys(ingredients) as IngredientCode[];
 
     // Sort ingredients by relevance to desired effects
     const sortedIngredientCodes = [...ingredientCodes].sort((a, b) => {
-        const aEffects = desiredEffects.filter((effect) => ingredients[a].defaultEffect === effect).length;
-        const bEffects = desiredEffects.filter((effect) => ingredients[b].defaultEffect === effect).length;
-        return bEffects - aEffects; // Most relevant first
+        // Check if the ingredient's default effect is one of the desired effects
+        const aDefaultMatch = desiredEffects.includes(ingredients[a].defaultEffect) ? 10 : 0;
+        const bDefaultMatch = desiredEffects.includes(ingredients[b].defaultEffect) ? 10 : 0;
+
+        // Try each ingredient with the base product to see what effects it produces
+        const aResult = memoizedMixIngredients(productName, [ingredients[a].name]);
+        const bResult = memoizedMixIngredients(productName, [ingredients[b].name]);
+
+        // Count how many desired effects each ingredient produces
+        const aMatches = desiredEffects.filter((effect) => aResult.effects.includes(effect)).length;
+        const bMatches = desiredEffects.filter((effect) => bResult.effects.includes(effect)).length;
+
+        // Combine the scores, giving higher weight to default effect matches
+        const aScore = aDefaultMatch + aMatches;
+        const bScore = bDefaultMatch + bMatches;
+
+        return bScore - aScore; // Most relevant first
     });
 
     const ingredientNames = sortedIngredientCodes.map((code) => ingredients[code].name);
@@ -143,11 +342,16 @@ export function findMixForEffects(productCode: ProductCode, desiredEffects: Effe
     let complete = true;
 
     // For beam search, we'll keep only the top N candidates at each step
-    const beamWidth = 10;
+    // For complex requests, use a wider beam to explore more combinations
+    // For Granddaddy Purple with complex effects, use an even wider beam
+    let beamWidth = isComplexRequest ? 200 : 100;
+    if (productCode === 'GP' && desiredEffects.length >= 5) {
+        beamWidth = 400; // Special case for Granddaddy Purple with complex effects
+    }
 
     // Try the base product with no ingredients first
     const baseResult = memoizedMixIngredients(productName, []);
-    const baseScore = calculateMixScore(baseResult, desiredEffects, options.optimizeFor);
+    const baseScore = calculateMixScore(baseResult, desiredEffects, options.optimizeFor, productCode);
 
     if (baseScore > bestScore) {
         bestScore = baseScore;
@@ -191,7 +395,7 @@ export function findMixForEffects(productCode: ProductCode, desiredEffects: Effe
 
                 // Try the new combination
                 const result = memoizedMixIngredients(productName, newIngredients);
-                const score = calculateMixScore(result, desiredEffects, options.optimizeFor);
+                const score = calculateMixScore(result, desiredEffects, options.optimizeFor, productCode);
 
                 // Skip if no effects matched
                 if (score === -Infinity) {
@@ -203,6 +407,15 @@ export function findMixForEffects(productCode: ProductCode, desiredEffects: Effe
                     bestScore = score;
                     bestResult = result;
                     bestIngredients = [...newIngredients];
+
+                    // If we've found a mix with all desired effects, we can stop searching
+                    // unless we're optimizing for profit/cost
+                    const allEffectsFound = desiredEffects.every((effect) => result.effects.includes(effect));
+                    if (allEffectsFound && options.optimizeFor === 'effects') {
+                        // We found all effects, so we can stop searching
+                        queue = [];
+                        break;
+                    }
                 }
 
                 // Add to new queue for next iteration
@@ -219,6 +432,61 @@ export function findMixForEffects(productCode: ProductCode, desiredEffects: Effe
 
         // Sort by score and keep only the top candidates (beam search)
         queue = newQueue.sort((a, b) => b.score - a.score).slice(0, beamWidth);
+
+        // For complex requests, try some random combinations to avoid getting stuck in local optima
+        if (isComplexRequest && queue.length > 0 && Math.random() < 0.3) {
+            // Increased probability
+            // Add some random combinations to the queue
+            const randomCombinations: QueueEntry[] = [];
+            const numRandomCombos = Math.min(20, beamWidth / 5); // Increased number of random combinations
+
+            for (let i = 0; i < numRandomCombos; i++) {
+                // Pick a random entry from the queue
+                const randomIndex = Math.floor(Math.random() * queue.length);
+                const randomEntry = queue[randomIndex];
+
+                // Create a new combination by adding a random ingredient
+                const randomIngredientIndex = Math.floor(Math.random() * ingredientNames.length);
+                const randomIngredient = ingredientNames[randomIngredientIndex];
+
+                const newIngredients = [...randomEntry.ingredients, randomIngredient];
+                const key = newIngredients.slice().sort().join('|');
+
+                // Skip if we've already tried this combination or it's too long
+                if (randomEntry.visited.has(key) || newIngredients.length > 8) {
+                    continue;
+                }
+
+                // Try the new combination
+                const result = memoizedMixIngredients(productName, newIngredients);
+                const score = calculateMixScore(result, desiredEffects, options.optimizeFor, productCode);
+
+                // Skip if no effects matched
+                if (score === -Infinity) {
+                    continue;
+                }
+
+                // Update best result if this is better
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestResult = result;
+                    bestIngredients = [...newIngredients];
+                }
+
+                // Add to random combinations
+                const newVisited = new Set(randomEntry.visited);
+                newVisited.add(key);
+
+                randomCombinations.push({
+                    score,
+                    ingredients: newIngredients,
+                    visited: newVisited,
+                });
+            }
+
+            // Add random combinations to the queue
+            queue = [...queue, ...randomCombinations].sort((a, b) => b.score - a.score).slice(0, beamWidth);
+        }
     }
 
     return bestResult
