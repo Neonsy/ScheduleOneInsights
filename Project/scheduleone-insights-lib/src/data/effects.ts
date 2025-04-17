@@ -9,14 +9,14 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 5,
         addictiveness: 0.611,
     },
-    At: {
+    Al: {
         name: 'Athletic',
         description: 'After consumption, the user is only able to run.',
         valueMultiplier: 0.32,
         tier: 3,
         addictiveness: 0.607,
     },
-    Ba: {
+    Bd: {
         name: 'Balding',
         description: 'Causes balding in the user.',
         valueMultiplier: 0.3,
@@ -30,7 +30,7 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 4,
         addictiveness: 0.2,
     },
-    Ca: {
+    Cm: {
         name: 'Calming',
         description: 'Induces a slight calmness in the user.',
         valueMultiplier: 0.1,
@@ -44,49 +44,49 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 2,
         addictiveness: 0.1,
     },
-    Cy: {
+    Ccp: {
         name: 'Cyclopean',
         description: 'Causes the user to see with a single eye in the center of their forehead.',
         valueMultiplier: 0.56,
         tier: 5,
         addictiveness: 0.1,
     },
-    Di: {
+    Dor: {
         name: 'Disorienting',
         description: 'Causes unpredictable movement and slight visual impairment in the user.',
         valueMultiplier: 0.0,
         tier: 2,
         addictiveness: 0.0,
     },
-    El: {
+    Elf: {
         name: 'Electrifying',
         description: 'Electrifies the user, causing arcs of electricity to be emitted, zapping anyone nearby.',
         valueMultiplier: 0.5,
         tier: 5,
         addictiveness: 0.235,
     },
-    En: {
+    Egz: {
         name: 'Energizing',
         description: "Increases the user's energy.",
         valueMultiplier: 0.22,
         tier: 2,
         addictiveness: 0.34,
     },
-    Eu: {
+    Epc: {
         name: 'Euphoric',
         description: 'Induces mild euphoria in the user.',
         valueMultiplier: 0.18,
         tier: 1,
         addictiveness: 0.235,
     },
-    Ex: {
+    Eps: {
         name: 'Explosive',
         description: 'Causes the user to explode shortly after consumption.',
         valueMultiplier: 0.0,
         tier: 5,
         addictiveness: 0.0,
     },
-    Fo: {
+    Fcd: {
         name: 'Focused',
         description: "Focuses the user's mind.",
         valueMultiplier: 0.16,
@@ -100,28 +100,35 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 3,
         addictiveness: 0.1,
     },
-    Gi: {
+    Grs: {
         name: 'Gingeritis',
         description: 'After consumption, the user will become a ginger.',
         valueMultiplier: 0.2,
         tier: 2,
         addictiveness: 0.0,
     },
-    Gl: {
+    Gw: {
         name: 'Glowing',
         description: 'Imbues a bioluminescence on the user.',
         valueMultiplier: 0.48,
         tier: 4,
         addictiveness: 0.472,
     },
-    Je: {
+    Jrs: {
         name: 'Jennerising',
         description: "Inverts the user's gender.",
         valueMultiplier: 0.42,
         tier: 4,
         addictiveness: 0.343,
     },
-    La: {
+    Lt: {
+        name: 'Lethal',
+        description: 'Causes death shortly after consumption.',
+        valueMultiplier: 0.0,
+        tier: 5,
+        addictiveness: 0.0,
+    },
+    Lxt: {
         name: 'Laxative',
         description: 'Causes the user to fart and defecate uncontrollably.',
         valueMultiplier: 0.0,
@@ -135,35 +142,35 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 5,
         addictiveness: 0.607,
     },
-    Mu: {
+    Mcs: {
         name: 'Munchies',
         description: 'Makes the user hungry.',
         valueMultiplier: 0.12,
         tier: 1,
         addictiveness: 0.096,
     },
-    Pa: {
+    Pna: {
         name: 'Paranoia',
         description: 'Induces paranoia in the user.',
         valueMultiplier: 0.0,
         tier: 1,
         addictiveness: 0.0,
     },
-    Re: {
+    Rfs: {
         name: 'Refreshing',
         description: 'Slightly energizes the user.',
         valueMultiplier: 0.14,
         tier: 1,
         addictiveness: 0.104,
     },
-    Sc: {
+    Szp: {
         name: 'Schizophrenia',
         description: 'Induces hallucinations and unpredictable behaviour in the user.',
         valueMultiplier: 0.0,
         tier: 4,
         addictiveness: 0.0,
     },
-    Se: {
+    Sdt: {
         name: 'Sedating',
         description: 'Induces heavy sleepiness in the user.',
         valueMultiplier: 0.26,
@@ -177,14 +184,14 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 3,
         addictiveness: 0.0,
     },
-    Sh: {
+    Sk: {
         name: 'Shrinking',
         description: 'Shrinks the user.',
         valueMultiplier: 0.6,
         tier: 5,
         addictiveness: 0.336,
     },
-    Sl: {
+    Slp: {
         name: 'Slippery',
         description: "Reduces the user's ability to maintain traction on the ground.",
         valueMultiplier: 0.34,
@@ -205,7 +212,7 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 2,
         addictiveness: 0.327,
     },
-    Sp: {
+    Sc: {
         name: 'Spicy',
         description: "Consumption results in the user's eyes turning blue.",
         valueMultiplier: 0.38,
@@ -219,7 +226,7 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 4,
         addictiveness: 0.37,
     },
-    To: {
+    Tx: {
         name: 'Toxic',
         description: "Damages the user's liver and induces vomiting.",
         valueMultiplier: 0.0,
@@ -233,7 +240,7 @@ export const effects: Record<EffectCode, Effect> = {
         tier: 4,
         addictiveness: 0.803,
     },
-    Zo: {
+    Zbf: {
         name: 'Zombifying',
         description: 'Transforms the user into a zombie, causing them to walk with a limp and seek brains.',
         valueMultiplier: 0.58,

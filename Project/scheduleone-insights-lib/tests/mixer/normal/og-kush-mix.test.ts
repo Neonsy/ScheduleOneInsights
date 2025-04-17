@@ -21,12 +21,12 @@ describe('OG Kush Mix Test', () => {
         expect(result.effects).toHaveLength(8);
         expect(result.effects).toContain('LF'); // Long Faced
         expect(result.effects).toContain('SI'); // Seizure-Inducing
-        expect(result.effects).toContain('La'); // Laxative
-        expect(result.effects).toContain('Pa'); // Paranoia
-        expect(result.effects).toContain('Cy'); // Cyclopean
-        expect(result.effects).toContain('El'); // Electrifying
-        expect(result.effects).toContain('Sh'); // Shrinking
-        expect(result.effects).toContain('Di'); // Disorienting
+        expect(result.effects).toContain('Lxt'); // Laxative
+        expect(result.effects).toContain('Pna'); // Paranoia
+        expect(result.effects).toContain('Ccp'); // Cyclopean
+        expect(result.effects).toContain('Elf'); // Electrifying
+        expect(result.effects).toContain('Sk'); // Shrinking
+        expect(result.effects).toContain('Dor'); // Disorienting
 
         // Expected costs and prices
         expect(result.ingredientCost).toBe(59);

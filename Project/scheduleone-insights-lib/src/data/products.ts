@@ -5,37 +5,37 @@ export const products: Record<ProductCode, Product> = {
         name: 'OG Kush',
         price: 35,
         unlockLevel: 0, // Available at game start
-        defaultEffect: 'Ca', // Calming
+        defaultEffect: 'Cm', // Calming
     },
     SD: {
         name: 'Sour Diesel',
         price: 35,
         unlockLevel: 4, // Street Rat IV
-        defaultEffect: 'Re', // Refreshing
+        defaultEffect: 'Rfs', // Refreshing
     },
     GC: {
         name: 'Green Crack',
         price: 35,
         unlockLevel: 2, // Hoodlum II
-        defaultEffect: 'En', // Energizing
+        defaultEffect: 'Egz', // Energizing
     },
     GP: {
         name: 'Granddaddy Purple',
         price: 35,
         unlockLevel: 4, // Hoodlum IV
-        defaultEffect: 'Se', // Sedating
+        defaultEffect: 'Sdt', // Sedating
     },
-    Me: {
+    Mtp: {
         name: 'Methamphetamine',
         price: 70,
         unlockLevel: 10, // Higher level
-        defaultEffect: 'Fo', // Focused (placeholder, adjust as needed)
+        defaultEffect: 'Fcd', // Focused (placeholder, adjust as needed)
     },
-    Co: {
+    Cc: {
         name: 'Cocaine',
         price: 150,
         unlockLevel: 15, // Higher level
-        defaultEffect: 'Eu', // Euphoric (placeholder, adjust as needed)
+        defaultEffect: 'Epc', // Euphoric (placeholder, adjust as needed)
     },
 };
 
@@ -45,8 +45,8 @@ export const productNameToCode: Record<string, ProductCode> = {
     'Sour Diesel': 'SD',
     'Green Crack': 'GC',
     'Granddaddy Purple': 'GP',
-    Methamphetamine: 'Me',
-    Cocaine: 'Co',
+    Methamphetamine: 'Mtp',
+    Cocaine: 'Cc',
 };
 
 // Map from product codes to names for easier display

@@ -6,10 +6,10 @@ describe('Green Crack Mix Test', () => {
     it('should produce the expected effects when mixing Green Crack with Banana, Chili, Mouth Wash, Mega Bean, Mega Bean, and Horse Semen', () => {
         // Define the expected effects
         const expectedEffects: EffectCode[] = [
-            'Cy', // Cyclopean
-            'Re', // Refreshing
-            'Sp', // Spicy
-            'Ba', // Balding
+            'Ccp', // Cyclopean
+            'Rfs', // Refreshing
+            'Sc', // Spicy
+            'Bd', // Balding
             'Fg', // Foggy
             'LF', // Long Faced
         ];

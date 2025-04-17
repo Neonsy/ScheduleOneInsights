@@ -6,12 +6,12 @@ describe('Granddaddy Purple Mix Test', () => {
     it('should produce the expected effects when mixing Granddaddy Purple with Viagra, Paracetamol, Cuke, and two Donuts', () => {
         // Define the expected effects in the exact order shown in-game
         const expectedEffects: EffectCode[] = [
-            'Pa', // Paranoia
-            'Se', // Sedating
+            'Pna', // Paranoia
+            'Sdt', // Sedating
             'TT', // Tropic Thunder
-            'En', // Energizing
+            'Egz', // Energizing
             'CD', // Calorie-Dense
-            'Ex', // Explosive
+            'Eps', // Explosive
         ];
 
         // Mix the ingredients in the exact order specified

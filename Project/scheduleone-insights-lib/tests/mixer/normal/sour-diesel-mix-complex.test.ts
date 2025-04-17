@@ -6,28 +6,18 @@ describe('Sour Diesel Complex Mix Test', () => {
     it('should produce the expected effects when mixing Sour Diesel with multiple ingredients', () => {
         // Define the expected effects in the exact order shown in-game
         const expectedEffects: EffectCode[] = [
-            'Re', // Refreshing
-            'Ca', // Calming
-            'Se', // Sedating
-            'At', // Athletic
+            'Rfs', // Refreshing
+            'Cm', // Calming
+            'Sdt', // Sedating
+            'Al', // Athletic
             'TT', // Tropic Thunder
-            'Pa', // Paranoia
+            'Pna', // Paranoia
             'BE', // Bright-Eyed
-            'En'  // Energizing
+            'Egz', // Energizing
         ];
 
         // Mix the ingredients in the exact order specified
-        const result = mixIngredients('Sour Diesel', [
-            'Gasoline', 
-            'Cuke', 
-            'Cuke', 
-            'Motor Oil', 
-            'Gasoline', 
-            'Paracetamol', 
-            'Battery', 
-            'Cuke', 
-            'Cuke'
-        ]);
+        const result = mixIngredients('Sour Diesel', ['Gasoline', 'Cuke', 'Cuke', 'Motor Oil', 'Gasoline', 'Paracetamol', 'Battery', 'Cuke', 'Cuke']);
 
         // Verify the effects
         const matchingEffects = result.effects.filter((effect) => expectedEffects.includes(effect));
