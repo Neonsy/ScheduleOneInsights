@@ -1,71 +1,68 @@
-// Dealer data with code as key and dealer details as value
+// Dealer data with name as key and dealer details as value
 export const dealers = {
-    BC: {
-        name: 'Benji Coleman',
+    'Benji Coleman': {
+        code: 'BC',
         location: 'Northtown',
         unlockCost: 500,
         cut: 0.2, // 20%
     },
-    MP: {
-        name: 'Molly Presley',
+    'Molly Presley': {
+        code: 'MP',
         location: 'Westville',
         unlockCost: 1000,
         cut: 0.2, // 20%
     },
-    BR: {
-        name: 'Brad Crosby',
+    'Brad Crosby': {
+        code: 'BR',
         location: 'Downtown',
         unlockCost: 2000,
         cut: 0.2, // 20%
     },
-    JL: {
-        name: 'Jane Lucero',
+    'Jane Lucero': {
+        code: 'JL',
         location: 'Docks',
         unlockCost: 3000,
         cut: 0.2, // 20%
     },
-    WL: {
-        name: 'Wei Long',
+    'Wei Long': {
+        code: 'WL',
         location: 'Suburbia',
         unlockCost: 4000,
         cut: 0.2, // 20%
     },
-    LR: {
-        name: 'Leo Rivers',
+    'Leo Rivers': {
+        code: 'LR',
         location: 'Uptown',
         unlockCost: 5000,
         cut: 0.2, // 20%
     },
 } as const;
 
-// Derive the DealerCode type from the keys of the dealers object
-export type DealerCode = keyof typeof dealers;
+// Define the DealerCode type as the possible code values
+export type DealerCode = 'BC' | 'MP' | 'BR' | 'JL' | 'WL' | 'LR';
 
-// Map from dealer names to codes for easier lookup
-export const dealerNameToCode: Record<string, DealerCode> = {
-    'Benji Coleman': 'BC',
-    'Molly Presley': 'MP',
-    'Brad Crosby': 'BR',
-    'Jane Lucero': 'JL',
-    'Wei Long': 'WL',
-    'Leo Rivers': 'LR',
-};
+// Helper function to get dealer code by name
+export function getDealerCode(name: string): DealerCode | undefined {
+    const dealer = dealers[name as keyof typeof dealers];
+    return dealer ? (dealer.code as DealerCode) : undefined;
+}
 
-// Map from dealer codes to names for easier display
-export const dealerCodeToName: Record<DealerCode, string> = Object.entries(dealers).reduce(
-    (acc, [code, dealer]) => {
-        acc[code as DealerCode] = dealer.name;
-        return acc;
-    },
-    {} as Record<DealerCode, string>
-);
+// Helper function to get dealer name by code
+export function getDealerName(code: DealerCode): string | undefined {
+    for (const [name, dealer] of Object.entries(dealers)) {
+        if (dealer.code === code) {
+            return name;
+        }
+    }
+    return undefined;
+}
 
-// Map from locations to dealer codes for easier lookup
-export const locationToDealerCode: Record<string, DealerCode> = {
-    Northtown: 'BC',
-    Westville: 'MP',
-    Downtown: 'BR',
-    Docks: 'JL',
-    Suburbia: 'WL',
-    Uptown: 'LR',
-};
+// Helper function to get dealer code by location
+export function getDealerCodeByLocation(location: string): DealerCode | undefined {
+    for (const [_, dealer] of Object.entries(dealers)) {
+        if (dealer.location === location) {
+            return dealer.code as DealerCode;
+        }
+    }
+    return undefined;
+}

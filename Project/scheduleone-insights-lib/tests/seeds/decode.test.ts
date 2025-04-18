@@ -5,12 +5,12 @@ import { parseSeed } from '../../src/core/seedManager';
 describe('Seed Decoding Tests', () => {
     it('should correctly decode seeds back to their original ingredients', () => {
         // Seeds from the encode test
-        const seed1 = 'OK|TP,Pna,Egz,CD,BE|Bnn,Ck,Ck,Dn,Btr';
-        const seed2 = 'OK|TP,Pna,Egz,BE,CD|Bnn,Ck,Ck,Btr,Dn';
+        const seed1 = 'OK|Cm,TP,Enrg,CD,BE|Bnn,Ck,Ck,Dnt,Btry';
+        const seed2 = 'OK|Cm,TP,Enrg,BE,CD|Bnn,Ck,Ck,Btry,Dnt';
 
         // Expected ingredients for each seed
-        const ingredients1 = ['Bnn', 'Ck', 'Ck', 'Dn', 'Btr'];
-        const ingredients2 = ['Bnn', 'Ck', 'Ck', 'Btr', 'Dn'];
+        const ingredients1 = ['Bnn', 'Ck', 'Ck', 'Dnt', 'Btry'];
+        const ingredients2 = ['Bnn', 'Ck', 'Ck', 'Btry', 'Dnt'];
 
         // Parse the seeds
         const mixState1 = parseSeed(seed1);
@@ -33,8 +33,8 @@ describe('Seed Decoding Tests', () => {
         const mix2 = mixFromSeed(seed2);
 
         // Verify that the effects match the expected effects
-        expect(mix1.effects).toEqual(['TP', 'Pna', 'Egz', 'CD', 'BE']);
-        expect(mix2.effects).toEqual(['TP', 'Pna', 'Egz', 'BE', 'CD']);
+        expect(mix1.effects).toEqual(['Cm', 'TP', 'Eegz', 'CD', 'BE']);
+        expect(mix2.effects).toEqual(['Cm', 'TP', 'Eegz', 'BE', 'CD']);
 
         // Verify that the seeds match the original seeds
         expect(mix1.seed).toBe(seed1);

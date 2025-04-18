@@ -1,12 +1,24 @@
 // Utility exports
-export { 
-    calculateIngredientCost, 
-    calculateSellingPrice, 
-    calculateProfit, 
-    calculateProfitMargin, 
+export {
+    calculateIngredientCost,
+    calculateSellingPrice,
+    calculateProfit,
+    calculateProfitMargin,
     calculateAddiction,
-    calculateEffectValue
+    calculateEffectValue,
 } from '../utils/calculator';
+
+// Effect utilities
+export { getEffectCode, getEffectName } from '../utils/effects';
+
+// Ingredient utilities
+export { getIngredientCode, getIngredientName } from '../utils/ingredients';
+
+// Product utilities
+export { getProductCode, getProductName } from '../utils/products';
+
+// Effect code normalization
+export { normalizeEffectCode } from '../utils/effectCodes';
 
 /**
  * Format a number as currency

@@ -4,10 +4,9 @@ import type { EffectCode } from './effects';
 // Using Partial<Record> since we don't have all customers implemented yet
 export const customers = {
     // Northtown Customers
-    KC: {
+    'Kyle Cooley': {
         code: 'KC',
-        name: 'Kyle Cooley',
-        preferences: ['Cm', 'Mcs', 'Sm'],
+        preferences: ['Clmg', 'Mnch', 'Sml'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -19,10 +18,9 @@ export const customers = {
             { entryNumber: 5, location: 'Teleports to the yellow house with the yellow sh*tbox in front in Westville', startTime: '10:00pm' },
         ],
     },
-    AS: {
+    'Austin Steiner': {
         code: 'AS',
-        name: 'Austin Steiner',
-        preferences: ['CD', 'Epc', 'Mcs'],
+        preferences: ['CD', 'Ephr', 'Mnch'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -37,10 +35,9 @@ export const customers = {
             { entryNumber: 8, location: 'Yellow house with the yellow sh*tbox in front in Westville', startTime: '11:50pm' },
         ],
     },
-    JW: {
+    'Jessi Waters': {
         code: 'JW',
-        name: 'Jessi Waters',
-        preferences: ['Egz', 'Pna', 'Sn'],
+        preferences: ['Enrg', 'Prna', 'Snk'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Very Low', // From screenshot
         livingLocation: 'Northtown',
@@ -54,10 +51,9 @@ export const customers = {
             { entryNumber: 7, location: 'Motel Room #5', startTime: '11:00pm' },
         ],
     },
-    KH: {
+    'Kathy Henderson': {
         code: 'KH',
-        name: 'Kathy Henderson',
-        preferences: ['Al', 'Egz', 'Fcd'],
+        preferences: ['Athl', 'Enrg', 'Fcsd'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -73,10 +69,9 @@ export const customers = {
             { entryNumber: 9, location: 'Westville Apartment Building, Unit #2', startTime: '6:50pm' },
         ],
     },
-    ML: {
+    'Mick Lubbin': {
         code: 'ML',
-        name: 'Mick Lubbin',
-        preferences: ['Epc', 'BE', 'Sn'],
+        preferences: ['Ephr', 'BE', 'Snk'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -89,10 +84,9 @@ export const customers = {
             { entryNumber: 6, location: 'House behind Westville Gas Mart', startTime: '11:40pm' },
         ],
     },
-    ST: {
+    'Sam Thompson': {
         code: 'ST',
-        name: 'Sam Thompson',
-        preferences: ['Mcs', 'Al', 'Sm'],
+        preferences: ['Mnch', 'Athl', 'Sml'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -115,10 +109,9 @@ export const customers = {
             { entryNumber: 11, location: 'Drives back to light blue house in Suburbia', startTime: '11:15pm' },
         ],
     },
-    PF: {
+    'Peter File': {
         code: 'PF',
-        name: 'Peter File',
-        preferences: ['Fcd', 'Rfs', 'Sn'],
+        preferences: ['Fcsd', 'Rfrsh', 'Snk'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -136,10 +129,9 @@ export const customers = {
             { entryNumber: 11, location: 'Motel Room #3', startTime: '9:30pm' },
         ],
     },
-    DM: {
+    'Donna Martin': {
         code: 'DM',
-        name: 'Donna Martin',
-        preferences: ['Rfs', 'Lt', 'Mcs'],
+        preferences: ['Rfrsh', 'Lt', 'Mnch'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -153,10 +145,9 @@ export const customers = {
             { entryNumber: 7, location: 'Motel Office', startTime: '8:30pm' },
         ],
     },
-    GP: {
+    'Geraldine Poon': {
         code: 'GP',
-        name: 'Geraldine Poon',
-        preferences: ['Bd', 'LF', 'Sdt'],
+        preferences: ['Bldg', 'LF', 'Sdt'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Very Low', // From screenshot
         livingLocation: 'Northtown',
@@ -185,10 +176,9 @@ export const customers = {
             { entryNumber: 7, location: 'Teleports back to the pink building', startTime: '7:50pm' },
         ],
     },
-    CB: {
+    'Chloe Bowers': {
         code: 'CB',
-        name: 'Chloe Bowers',
-        preferences: ['Epc', 'Sk', 'Mcs'],
+        preferences: ['Ephr', 'Shrk', 'Mnch'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -198,10 +188,9 @@ export const customers = {
             { entryNumber: 3, location: 'Building south of the Parking Garage', startTime: '8:50pm' },
         ],
     },
-    PM: {
+    'Peggy Mayers': {
         code: 'PM',
-        name: 'Peggy Mayers',
-        preferences: ['BE', 'Rfs', 'Egz'],
+        preferences: ['BE', 'Rfrsh', 'Enrg'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -216,10 +205,9 @@ export const customers = {
             { entryNumber: 8, location: 'Teleports back to building behind the basketball court', startTime: '8:50pm' },
         ],
     },
-    LM: {
+    'Ludwig Meyer': {
         code: 'LM',
-        name: 'Ludwig Meyer',
-        preferences: ['Epc', 'Rfs', 'Egz'],
+        preferences: ['Ephr', 'Rfrsh', 'Enrg'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -232,9 +220,8 @@ export const customers = {
             { entryNumber: 6, location: 'Building behind Slop Shop', startTime: '9:00pm' },
         ],
     },
-    BP: {
+    'Beth Penn': {
         code: 'BP',
-        name: 'Beth Penn',
         preferences: ['Szp', 'Lt', 'SI'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
@@ -249,10 +236,9 @@ export const customers = {
             { entryNumber: 7, location: 'Motel Room #4', startTime: '8:25pm' },
         ],
     },
-    MM: {
+    'Mrs. Ming': {
         code: 'MM',
-        name: 'Mrs. Ming',
-        preferences: ['Grs', 'Sk', 'Elf'],
+        preferences: ['Gngr', 'Shrk', 'Elct'],
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Northtown',
@@ -260,10 +246,9 @@ export const customers = {
     },
 
     // Westville Customers
-    TS: {
+    'Trent Sherman': {
         code: 'TS',
-        name: 'Trent Sherman',
-        preferences: ['Al', 'Bd', 'CD'], // Athletic, Balding, Calorie-Dense (from screenshot)
+        preferences: ['Athl', 'Bldg', 'CD'], // Athletic, Balding, Calorie-Dense (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -283,10 +268,9 @@ export const customers = {
             { entryNumber: 8, location: 'At the blue house by the water in Westville', startTime: '9:50pm' },
         ],
     },
-    MC: {
+    'Meg Cooley': {
         code: 'MC',
-        name: 'Meg Cooley',
-        preferences: ['Sn', 'Slp', 'TP'], // Sneaky, Slippery, Thought-Provoking (from screenshot)
+        preferences: ['Snk', 'Slpr', 'TP'], // Sneaky, Slippery, Thought-Provoking (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -297,10 +281,9 @@ export const customers = {
             { entryNumber: 4, location: 'Yellow house with the yellow sh*tbox in front in Westville', startTime: '9:50pm' },
         ],
     },
-    JB: {
+    'Joyce Ball': {
         code: 'JB',
-        name: 'Joyce Ball',
-        preferences: ['Epc', 'TP', 'CD'], // Euphoric, Thought-Provoking, Calorie-Dense (from screenshot)
+        preferences: ['Ephr', 'TP', 'CD'], // Euphoric, Thought-Provoking, Calorie-Dense (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -319,19 +302,17 @@ export const customers = {
             { entryNumber: 7, location: 'In the travel trailer in the encampment next to the western Gas Mart', startTime: '8:10pm' },
         ],
     },
-    KW: {
+    'Keith Wagner': {
         code: 'KW',
-        name: 'Keith Wagner',
-        preferences: ['Slp', 'Sn', 'TT'], // Slippery, Sneaky, Tropic Thunder (from screenshot)
+        preferences: ['Slpr', 'Snk', 'TT'], // Slippery, Sneaky, Tropic Thunder (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Very Low', // From screenshot
         livingLocation: 'Westville',
         schedule: [{ entryNumber: 1, location: 'Westville Apartment Building, Unit #4', startTime: '7:00am' }],
     },
-    DL: {
+    'Doris Lubbin': {
         code: 'DL',
-        name: 'Doris Lubbin',
-        preferences: ['Sc', 'TT', 'Bd'], // Spicy, Tropic Thunder, Balding (from screenshot)
+        preferences: ['Sc', 'TT', 'Bldg'], // Spicy, Tropic Thunder, Balding (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -344,10 +325,9 @@ export const customers = {
             { entryNumber: 6, location: 'House behind west Gas Mart', startTime: '6:50pm' },
         ],
     },
-    JM: {
+    'Jerry Montero': {
         code: 'JM',
-        name: 'Jerry Montero',
-        preferences: ['Grs', 'Sm', 'TP'], // Gingeritis, Smelly, Thought-Provoking (from screenshot)
+        preferences: ['Gngr', 'Sml', 'TP'], // Gingeritis, Smelly, Thought-Provoking (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -372,19 +352,17 @@ export const customers = {
             { entryNumber: 8, location: 'In the tent in the encampment next to the western Gas Mart', startTime: '3:05am' },
         ],
     },
-    KD: {
+    'Kim Delaney': {
         code: 'KD',
-        name: 'Kim Delaney',
-        preferences: ['Sk', 'Jrs', 'Fcd'], // Shrinking, Jennerising, Focused (from screenshot)
+        preferences: ['Shrk', 'Jnrs', 'Fcsd'], // Shrinking, Jennerising, Focused (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
         schedule: [{ entryNumber: 1, location: 'Building behind basketball court', startTime: '7:00am' }],
     },
-    DW: {
+    'Dean Webster': {
         code: 'DW',
-        name: 'Dean Webster',
-        preferences: ['Gw', 'Lxt', 'Sc'], // Glowing, Laxative, Spicy (from screenshot)
+        preferences: ['Glw', 'Lxt', 'Sc'], // Glowing, Laxative, Spicy (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -394,10 +372,9 @@ export const customers = {
             { entryNumber: 3, location: 'House next to Bungalow property', startTime: '9:20pm' },
         ],
     },
-    CR: {
+    'Charles Rowland': {
         code: 'CR',
-        name: 'Charles Rowland',
-        preferences: ['Sdt', 'Dor', 'Fg'], // Sedating, Disorienting, Foggy (from screenshot)
+        preferences: ['Sdt', 'Dsrt', 'Fg'], // Sedating, Disorienting, Foggy (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -408,10 +385,9 @@ export const customers = {
             { entryNumber: 4, location: 'West Gas Mart', startTime: '6:00pm' },
         ],
     },
-    GG: {
+    'George Greene': {
         code: 'GG',
-        name: 'George Greene',
-        preferences: ['Egz', 'Fcd', 'TP'], // Energizing, Focused, Thought-Provoking (from screenshot)
+        preferences: ['Enrg', 'Fcsd', 'TP'], // Energizing, Focused, Thought-Provoking (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -431,10 +407,9 @@ export const customers = {
             { entryNumber: 8, location: 'Gray house two down from the Bungalow property', startTime: '3:30am' },
         ],
     },
-    DS: {
+    'Dan Samwell': {
         code: 'DS',
-        name: 'Dan Samwell',
-        preferences: ['Fcd', 'Egz', 'Sm'], // Focused, Energizing, Smelly (from screenshot)
+        preferences: ['Fcsd', 'Enrg', 'Sml'], // Focused, Energizing, Smelly (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Low', // From screenshot
         livingLocation: 'Westville',
@@ -447,10 +422,9 @@ export const customers = {
     },
 
     // Downtown Customers
-    EH: {
+    'Elizabeth Homley': {
         code: 'EH',
-        name: 'Elizabeth Homley',
-        preferences: ['Sdt', 'TT', 'Tx'], // Sedating, Tropic Thunder, Toxic (from screenshot)
+        preferences: ['Sdt', 'TT', 'Txc'], // Sedating, Tropic Thunder, Toxic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
@@ -470,10 +444,9 @@ export const customers = {
             { entryNumber: 8, location: 'Teleports somewhere?', startTime: '10:00pm' },
         ],
     },
-    JR: {
+    'Jennifer Rivera': {
         code: 'JR',
-        name: 'Jennifer Rivera',
-        preferences: ['Sk', 'Slp', 'Tx'], // Shrinking, Slippery, Toxic (from screenshot)
+        preferences: ['Shrk', 'Slpr', 'Txc'], // Shrinking, Slippery, Toxic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
@@ -485,19 +458,17 @@ export const customers = {
             { entryNumber: 5, location: 'Casino', startTime: '4:15pm' },
         ],
     },
-    KO: {
+    'Kevin Oakley': {
         code: 'KO',
-        name: 'Kevin Oakley',
         preferences: [], // No preferences (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
         schedule: [{ entryNumber: 1, location: 'By the water next to the Casino', startTime: '7:00am' }],
     },
-    LP: {
+    'Lucy Pennington': {
         code: 'LP',
-        name: 'Lucy Pennington',
-        preferences: ['CD', 'Epc', 'Gw'], // Calorie-Dense, Euphoric, Glowing (from screenshot)
+        preferences: ['CD', 'Ephr', 'Glw'], // Calorie-Dense, Euphoric, Glowing (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
@@ -511,28 +482,25 @@ export const customers = {
             { entryNumber: 7, location: 'Building behind Slop Shop', startTime: '8:00pm' },
         ],
     },
-    LF: {
+    'Louis Fourier': {
         code: 'LF',
-        name: 'Louis Fourier',
-        preferences: ['Sk', 'SI', 'Pna'], // Shrinking, Seizure-Inducing, Paranoia (from screenshot)
+        preferences: ['Shrk', 'SI', 'Prna'], // Shrinking, Seizure-Inducing, Paranoia (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
         schedule: [{ entryNumber: 1, location: 'Building south of Parking Garage', startTime: '7:00am' }],
     },
-    RC: {
+    'Randy Caulfield': {
         code: 'RC',
-        name: 'Randy Caulfield',
         preferences: [], // No preferences (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
         schedule: [{ entryNumber: 1, location: "Randy's Bait & Tackle", startTime: '7:00am' }],
     },
-    EB: {
+    'Eugene Buckley': {
         code: 'EB',
-        name: 'Eugene Buckley',
-        preferences: ['Szp', 'Tx', 'Cm'], // Schizophrenic, Toxic, Calming (from screenshot)
+        preferences: ['Szp', 'Txc', 'Clmg'], // Schizophrenic, Toxic, Calming (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
@@ -547,10 +515,9 @@ export const customers = {
             { entryNumber: 8, location: 'In the building behind Slop Shop', startTime: '8:20pm' },
         ],
     },
-    GF: {
+    'Greg Figgle': {
         code: 'GF',
-        name: 'Greg Figgle',
-        preferences: ['Epc', 'TT', 'Tx'], // Euphoric, Tropic Thunder, Toxic (from screenshot)
+        preferences: ['Ephr', 'TT', 'Txc'], // Euphoric, Tropic Thunder, Toxic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Very Low', // From screenshot
         livingLocation: 'Downtown',
@@ -570,9 +537,8 @@ export const customers = {
             { entryNumber: 8, location: 'Building north of Parking Garage', startTime: '3:35am' },
         ],
     },
-    JG: {
+    'Jeff Gilmore': {
         code: 'JG',
-        name: 'Jeff Gilmore',
         preferences: ['Sdt', 'LF', 'Lxt'], // Sedating, Long Faced, Laxative (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
@@ -585,10 +551,9 @@ export const customers = {
             { entryNumber: 5, location: 'Building south of Parking Garage', startTime: '9:00pm' },
         ],
     },
-    PW: {
+    'Philip Wentworth': {
         code: 'PW',
-        name: 'Philip Wentworth',
-        preferences: ['Rfs', 'Sk', 'Fg'], // Refreshing, Shrinking, Foggy (from screenshot)
+        preferences: ['Rfrsh', 'Shrk', 'Fg'], // Refreshing, Shrinking, Foggy (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // From screenshot
         livingLocation: 'Downtown',
@@ -596,9 +561,8 @@ export const customers = {
     },
 
     // Docks Customers
-    LG: {
+    'Lisa Gardener': {
         code: 'LG',
-        name: 'Lisa Gardener',
         preferences: ['Lxt', 'Szp', 'AG'], // Laxative, Schizophrenic, Anti-Gravity (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
@@ -611,10 +575,9 @@ export const customers = {
             },
         ],
     },
-    AC: {
+    'Anna Chesterfield': {
         code: 'AC',
-        name: 'Anna Chesterfield',
-        preferences: ['Rfs', 'TT', 'Tx'], // Refreshing, Tropic Thunder, Toxic (from screenshot)
+        preferences: ['Rfrsh', 'TT', 'Txc'], // Refreshing, Tropic Thunder, Toxic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
         livingLocation: 'Docks',
@@ -624,10 +587,9 @@ export const customers = {
             { entryNumber: 3, location: 'Building to the south of the Parking Garage', startTime: '8:30pm' },
         ],
     },
-    GB: {
+    'Genghis Barn': {
         code: 'GB',
-        name: 'Genghis Barn',
-        preferences: ['Elf', 'Grs', 'Al'], // Electrifying, Gingeritis, Athletic (from screenshot)
+        preferences: ['Elct', 'Gngr', 'Athl'], // Electrifying, Gingeritis, Athletic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Very Low', // Very Low (from screenshot)
         livingLocation: 'Docks',
@@ -652,10 +614,9 @@ export const customers = {
             },
         ],
     },
-    CF: {
+    'Cranky Frank': {
         code: 'CF',
-        name: 'Cranky Frank',
-        preferences: ['Lxt', 'Tx', 'TT'], // Laxative, Toxic, Tropic Thunder (from screenshot)
+        preferences: ['Lxt', 'Txc', 'TT'], // Laxative, Toxic, Tropic Thunder (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
         livingLocation: 'Docks',
@@ -677,9 +638,8 @@ export const customers = {
             { entryNumber: 10, location: 'On a bench in the encampment next to the western Gas Mart', startTime: '3:00am' },
         ],
     },
-    JP: {
+    'Javier Pérez': {
         code: 'JP',
-        name: 'Javier Pérez',
         preferences: [], // No preferences (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
@@ -701,10 +661,9 @@ export const customers = {
             { entryNumber: 4, location: 'Central Gas Mart', startTime: '6:05pm' },
         ],
     },
-    MB: {
+    'Marco Barone': {
         code: 'MB',
-        name: 'Marco Barone',
-        preferences: ['Sn', 'LF', 'Rfs'], // Sneaky, Long faced, Refreshing (from screenshot)
+        preferences: ['Snk', 'LF', 'Rfrsh'], // Sneaky, Long faced, Refreshing (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
         livingLocation: 'Docks',
@@ -716,10 +675,9 @@ export const customers = {
             { entryNumber: 5, location: "In building next to Jane the dealer's travel trailer", startTime: '10:55pm' },
         ],
     },
-    MW: {
+    'Melissa Wood': {
         code: 'MW',
-        name: 'Melissa Wood',
-        preferences: ['AG', 'Rfs', 'Slp'], // Anti-Gravity, Refreshing, Slippery (from screenshot)
+        preferences: ['AG', 'Rfrsh', 'Slpr'], // Anti-Gravity, Refreshing, Slippery (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
         livingLocation: 'Docks',
@@ -730,10 +688,9 @@ export const customers = {
             { entryNumber: 4, location: 'Casino', startTime: '3:30pm' },
         ],
     },
-    MC2: {
+    'Mac Cooper': {
         code: 'MC2',
-        name: 'Mac Cooper',
-        preferences: ['Fcd', 'Sc', 'LF'], // Focused, Spicy, Long faced (from screenshot)
+        preferences: ['Fcsd', 'Spcy', 'LF'], // Focused, Spicy, Long faced (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
         livingLocation: 'Docks',
@@ -746,10 +703,9 @@ export const customers = {
             { entryNumber: 6, location: 'Teleports back to building next to Docks Warehouse property', startTime: '7:00pm' },
         ],
     },
-    BK: {
+    'Billy Kramer': {
         code: 'BK',
-        name: 'Billy Kramer',
-        preferences: ['Sc', 'Szp', 'LF'], // Spicy, Schizophrenic, Long faced (from screenshot)
+        preferences: ['Spcy', 'Szp', 'LF'], // Spicy, Schizophrenic, Long faced (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'Moderate', // Moderate (from screenshot)
         livingLocation: 'Docks',
@@ -777,10 +733,9 @@ export const customers = {
     },
 
     // Suburbia Customers
-    CS: {
+    'Chris Sullivan': {
         code: 'CS',
-        name: 'Chris Sullivan',
-        preferences: ['Sn', 'Epc', 'Elf'], // Sneaky, Euphoric, Electrifying (from screenshot)
+        preferences: ['Snk', 'Ephr', 'Elct'], // Sneaky, Euphoric, Electrifying (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -799,10 +754,9 @@ export const customers = {
             { entryNumber: 7, location: 'Teleports somewhere', startTime: '11:00pm' },
         ],
     },
-    HS: {
+    'Hank Stevenson': {
         code: 'HS',
-        name: 'Hank Stevenson',
-        preferences: ['Sn', 'Tx', 'Szp'], // Sneaky, Toxic, Schizophrenic (from screenshot)
+        preferences: ['Snk', 'Txc', 'Szp'], // Sneaky, Toxic, Schizophrenic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -812,18 +766,16 @@ export const customers = {
             { entryNumber: 3, location: 'White house at the end of the road in Suburbia', startTime: '9:40pm' },
         ],
     },
-    KK: {
+    'Karen Kennedy': {
         code: 'KK',
-        name: 'Karen Kennedy',
         preferences: [], // No preferences (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
         schedule: [{ entryNumber: 1, location: 'On a bench in Suburbia Park', startTime: '7:00am' }],
     },
-    AK: {
+    'Alison Knight': {
         code: 'AK',
-        name: 'Alison Knight',
         preferences: [], // No preferences (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
@@ -839,10 +791,9 @@ export const customers = {
             { entryNumber: 8, location: 'House with the couch on the porch in Suburbia', startTime: '8:15pm' },
         ],
     },
-    JW2: {
+    'Jeremy Wilkinson': {
         code: 'JW2',
-        name: 'Jeremy Wilkinson',
-        preferences: ['Bd', 'Slp', 'CD'], // Balding, Slippery, Calorie Dense (from screenshot)
+        preferences: ['Bldg', 'Slpr', 'CD'], // Balding, Slippery, Calorie Dense (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -852,10 +803,9 @@ export const customers = {
             { entryNumber: 3, location: 'Brown house in Suburbia', startTime: '7:20pm' },
         ],
     },
-    CB2: {
+    'Carl Bundy': {
         code: 'CB2',
-        name: 'Carl Bundy',
-        preferences: ['Gw', 'Al', 'Dor'], // Glowing, Athletic, Disorienting (from screenshot)
+        preferences: ['Glw', 'Athl', 'Dsrt'], // Glowing, Athletic, Disorienting (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -866,9 +816,8 @@ export const customers = {
             { entryNumber: 4, location: 'The Crimson Canary', startTime: '4:55pm' },
         ],
     },
-    JS: {
+    'Jackie Stevenson': {
         code: 'JS',
-        name: 'Jackie Stevenson',
         preferences: [], // No preferences (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
@@ -880,10 +829,9 @@ export const customers = {
             { entryNumber: 4, location: 'White house at the end of the road in Suburbia', startTime: '8:30pm' },
         ],
     },
-    HC: {
+    'Harold Colt': {
         code: 'HC',
-        name: 'Harold Colt',
-        preferences: ['Fg', 'Sc', 'Jrs'], // Foggy, Spicy, Jennerising (from screenshot)
+        preferences: ['Fg', 'Sc', 'Jnrs'], // Foggy, Spicy, Jennerising (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -898,10 +846,9 @@ export const customers = {
             { entryNumber: 8, location: 'Yellow house in Suburbia', startTime: '12:15am' },
         ],
     },
-    JK: {
+    'Jack Knight': {
         code: 'JK',
-        name: 'Jack Knight',
-        preferences: ['Sk', 'TP', 'Lt'], // Shrinking, Thought-Provoking, Lethal (from screenshot)
+        preferences: ['Shrk', 'TP', 'Lt'], // Shrinking, Thought-Provoking, Lethal (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -917,7 +864,7 @@ export const customers = {
     DK: {
         code: 'DK',
         name: 'Dennis Kennedy',
-        preferences: ['Al', 'Fcd', 'BE'], // Athletic, Focused, Bright-eyed (from screenshot)
+        preferences: ['Athl', 'Fcsd', 'BE'], // Athletic, Focused, Bright-eyed (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Suburbia',
@@ -973,7 +920,7 @@ export const customers = {
     JH: {
         code: 'JH',
         name: 'Jen Heard',
-        preferences: ['Dor', 'Egz', 'Sn'], // Disorienting, Energizing, Sneaky (from screenshot)
+        preferences: ['Dsrt', 'Enrg', 'Snk'], // Disorienting, Energizing, Sneaky (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Uptown',
@@ -990,7 +937,7 @@ export const customers = {
     WC: {
         code: 'WC',
         name: 'Walter Cussler',
-        preferences: ['Szp', 'Cm', 'Bd'], // Schizophrenic, Calming, Balding (from screenshot)
+        preferences: ['Szp', 'Clmg', 'Bldg'], // Schizophrenic, Calming, Balding (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Uptown',
@@ -1010,10 +957,9 @@ export const customers = {
             { entryNumber: 9, location: 'Church', startTime: '6:40pm' },
         ],
     },
-    HB: {
+    'Herbert Bleuball': {
         code: 'HB',
-        name: 'Herbert Bleuball',
-        preferences: ['Slp', 'Fg', 'Eps'], // Slippery, Foggy, Explosive (from screenshot)
+        preferences: ['Slpr', 'Fg', 'Expl'], // Slippery, Foggy, Explosive (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Uptown',
@@ -1024,10 +970,9 @@ export const customers = {
             { entryNumber: 4, location: 'Blue building across from the Church', startTime: '8:35pm' },
         ],
     },
-    MB2: {
+    'Michael Boog': {
         code: 'MB2',
-        name: 'Michael Boog',
-        preferences: ['Jrs', 'Cm', 'Szp'], // Jennerising, Calming, Schizophrenic (from screenshot)
+        preferences: ['Jnrs', 'Clmg', 'Szp'], // Jennerising, Calming, Schizophrenic (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Uptown',
@@ -1050,18 +995,16 @@ export const customers = {
             { entryNumber: 11, location: 'Expensive house on the hill at the end of the street from the Church', startTime: '7:30pm' },
         ],
     },
-    TW: {
+    'Tobas Wentworth': {
         code: 'TW',
-        name: 'Tobas Wentworth',
-        preferences: ['Lt', 'Dor', 'Sc'], // Lethal, Disorienting, Spicy (from screenshot)
+        preferences: ['Lt', 'Dsrt', 'Sc'], // Lethal, Disorienting, Spicy (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
         livingLocation: 'Uptown',
         schedule: [{ entryNumber: 1, location: "Mayor's House (house at the end of the road past the Casino)", startTime: '7:00am' }],
     },
-    PM2: {
+    'Pearl Moore': {
         code: 'PM2',
-        name: 'Pearl Moore',
         preferences: ['Szp', 'Grs', 'Eps'], // Schizophrenic, Gingeritis, Explosive (from screenshot)
         spendingLevel: 'Unknown',
         qualityStandard: 'High', // High (from screenshot)
@@ -1084,8 +1027,80 @@ export const customers = {
     },
 } as const;
 
-// Derive the CustomerCode type from the keys of the customers object
-export type CustomerCode = keyof typeof customers;
+// Define the CustomerCode type as the possible code values
+export type CustomerCode =
+    | 'KC'
+    | 'AS'
+    | 'JW'
+    | 'KH'
+    | 'ML'
+    | 'ST'
+    | 'PF'
+    | 'DM'
+    | 'GP'
+    | 'CB'
+    | 'PM'
+    | 'LM'
+    | 'BP'
+    | 'MM'
+    | 'TS'
+    | 'MC'
+    | 'JB'
+    | 'KW'
+    | 'DL'
+    | 'JM'
+    | 'KD'
+    | 'DW'
+    | 'CR'
+    | 'GG'
+    | 'DS'
+    | 'EH'
+    | 'JR'
+    | 'KO'
+    | 'LP'
+    | 'LF'
+    | 'RC'
+    | 'EB'
+    | 'GF'
+    | 'JG'
+    | 'PW'
+    | 'LG'
+    | 'AC'
+    | 'GB'
+    | 'CF'
+    | 'JP'
+    | 'MB'
+    | 'MW'
+    | 'MC2'
+    | 'BK'
+    | 'CS'
+    | 'HS'
+    | 'KK'
+    | 'AK'
+    | 'JW2'
+    | 'CB2'
+    | 'JS'
+    | 'HC'
+    | 'JK'
+    | 'MB2'
+    | 'TW'
+    | 'PM2';
+
+// Helper function to get customer code by name
+export function getCustomerCode(name: string): CustomerCode | undefined {
+    const customer = customers[name as keyof typeof customers];
+    return customer ? (customer.code as CustomerCode) : undefined;
+}
+
+// Helper function to get customer name by code
+export function getCustomerName(code: CustomerCode): string | undefined {
+    for (const [name, customer] of Object.entries(customers)) {
+        if (customer.code === code) {
+            return name;
+        }
+    }
+    return undefined;
+}
 
 // Helper function to get customers by preference
 export function getCustomersByPreference(effectCode: EffectCode) {

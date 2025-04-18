@@ -28,7 +28,7 @@ describe('Seed Encoding Tests', () => {
         console.log('Export for decode test:');
         console.log(`const seed1 = '${seed1}';`);
         console.log(`const seed2 = '${seed2}';`);
-        console.log(`const ingredients1 = ['Banana', 'Cuke', 'Cuke', 'Donut', 'Battery'];`);
-        console.log(`const ingredients2 = ['Banana', 'Cuke', 'Cuke', 'Battery', 'Donut'];`);
+        console.log(`const ingredients1 = ['Bnn', 'Ck', 'Ck', 'Dnt', 'Btry'];`);
+        console.log(`const ingredients2 = ['Bnn', 'Ck', 'Ck', 'Btry', 'Dnt'];`);
     });
 });

@@ -1,8 +1,11 @@
 import type { EffectCode, IngredientCode, ProductCode } from '../types';
 
 import { effects } from '../data/effects';
-import { ingredients, ingredientNameToCode } from '../data/ingredients';
-import { products, productNameToCode } from '../data/products';
+import { ingredients } from '../data/ingredients';
+import { products } from '../data/products';
+import { getEffectName } from './effects';
+import { getIngredientCode } from './ingredients';
+import { getProductCode } from './products';
 
 /**
  * Calculate the cost of ingredients
@@ -13,11 +16,22 @@ export function calculateIngredientCost(ingredientNames: string[]): number {
     let cost = 0;
     for (const name of ingredientNames) {
         // Convert ingredient name to code
-        const code = ingredientNameToCode[name];
+        const code = getIngredientCode(name);
         if (code) {
-            const ingredient = ingredients[code];
-            if (ingredient) {
-                cost += ingredient.price;
+            // Find the ingredient by code
+            let ingredientName = '';
+            for (const [name, ing] of Object.entries(ingredients)) {
+                if (ing.code === code) {
+                    ingredientName = name;
+                    break;
+                }
+            }
+
+            if (ingredientName) {
+                const ingredient = ingredients[ingredientName];
+                if (ingredient) {
+                    cost += ingredient.price;
+                }
             }
         }
     }
@@ -32,19 +46,22 @@ export function calculateIngredientCost(ingredientNames: string[]): number {
  */
 export function calculateSellingPrice(productName: string, effectCodes: EffectCode[]): number {
     // Convert product name to code
-    const code = productNameToCode[productName];
+    const code = getProductCode(productName);
     if (!code) {
         throw new Error(`Unknown product: ${productName}`);
     }
 
-    const product = products[code];
+    const product = products[productName];
     if (!product) {
-        throw new Error(`Unknown product code: ${code}`);
+        throw new Error(`Unknown product: ${productName}`);
     }
 
     let effectValue = 0;
     for (const code of effectCodes) {
-        effectValue += effects[code]?.valueMultiplier || 0;
+        const effectName = getEffectName(code);
+        if (effectName) {
+            effectValue += effects[effectName]?.valueMultiplier || 0;
+        }
     }
 
     return Math.round(product.price * (1 + effectValue));
@@ -79,7 +96,10 @@ export function calculateProfitMargin(profit: number, sellingPrice: number): num
 export function calculateEffectValue(effectCodes: EffectCode[]): number {
     let value = 0;
     for (const code of effectCodes) {
-        value += effects[code]?.valueMultiplier || 0;
+        const effectName = getEffectName(code);
+        if (effectName) {
+            value += effects[effectName]?.valueMultiplier || 0;
+        }
     }
     return value;
 }
@@ -92,7 +112,10 @@ export function calculateEffectValue(effectCodes: EffectCode[]): number {
 export function calculateAddiction(effectCodes: EffectCode[]): number {
     let value = 0;
     for (const code of effectCodes) {
-        value += effects[code]?.addictiveness || 0;
+        const effectName = getEffectName(code);
+        if (effectName) {
+            value += effects[effectName]?.addictiveness || 0;
+        }
     }
     return Math.round(value * 100) / 100;
 }

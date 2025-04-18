@@ -1,247 +1,245 @@
-import type { Effect } from '../types';
-
-// Effect data with code as key and effect details as value
+// Effect data with name as key and effect details as value
 export const effects = {
-    AG: {
-        name: 'Anti-Gravity',
+    'Anti-Gravity': {
+        code: 'AG',
         description: 'Weakens the effects of gravity on the user.',
         valueMultiplier: 0.54,
         tier: 5,
         addictiveness: 0.611,
     },
-    Al: {
-        name: 'Athletic',
+    Athletic: {
+        code: 'Athltc',
         description: 'After consumption, the user is only able to run.',
         valueMultiplier: 0.32,
         tier: 3,
         addictiveness: 0.607,
     },
-    Bd: {
-        name: 'Balding',
+    Balding: {
+        code: 'Bldg',
         description: 'Causes balding in the user.',
         valueMultiplier: 0.3,
         tier: 3,
         addictiveness: 0.0,
     },
-    BE: {
-        name: 'Bright-Eyed',
+    'Bright-Eyed': {
+        code: 'BE',
         description: "Causes the user's eyes to emit light.",
         valueMultiplier: 0.4,
         tier: 4,
         addictiveness: 0.2,
     },
-    Cm: {
-        name: 'Calming',
+    Calming: {
+        code: 'Clmg',
         description: 'Induces a slight calmness in the user.',
         valueMultiplier: 0.1,
         tier: 1,
         addictiveness: 0.0,
     },
-    CD: {
-        name: 'Calorie-Dense',
+    'Calorie-Dense': {
+        code: 'CD',
         description: 'Results in immediate weight gain.',
         valueMultiplier: 0.28,
         tier: 2,
         addictiveness: 0.1,
     },
-    Ccp: {
-        name: 'Cyclopean',
+    Cyclopean: {
+        code: 'Cclpn',
         description: 'Causes the user to see with a single eye in the center of their forehead.',
         valueMultiplier: 0.56,
         tier: 5,
         addictiveness: 0.1,
     },
-    Dor: {
-        name: 'Disorienting',
+    Disorienting: {
+        code: 'Dsrtng',
         description: 'Causes unpredictable movement and slight visual impairment in the user.',
         valueMultiplier: 0.0,
         tier: 2,
         addictiveness: 0.0,
     },
-    Elf: {
-        name: 'Electrifying',
+    Electrifying: {
+        code: 'Elctfng',
         description: 'Electrifies the user, causing arcs of electricity to be emitted, zapping anyone nearby.',
         valueMultiplier: 0.5,
         tier: 5,
         addictiveness: 0.235,
     },
-    Egz: {
-        name: 'Energizing',
+    Energizing: {
+        code: 'Eegz',
         description: "Increases the user's energy.",
         valueMultiplier: 0.22,
         tier: 2,
         addictiveness: 0.34,
     },
-    Epc: {
-        name: 'Euphoric',
+    Euphoric: {
+        code: 'Ephrc',
         description: 'Induces mild euphoria in the user.',
         valueMultiplier: 0.18,
         tier: 1,
         addictiveness: 0.235,
     },
-    Eps: {
-        name: 'Explosive',
+    Explosive: {
+        code: 'Expl',
         description: 'Causes the user to explode shortly after consumption.',
         valueMultiplier: 0.0,
         tier: 5,
         addictiveness: 0.0,
     },
-    Fcd: {
-        name: 'Focused',
+    Focused: {
+        code: 'Fcsd',
         description: "Focuses the user's mind.",
         valueMultiplier: 0.16,
         tier: 1,
         addictiveness: 0.104,
     },
-    Fg: {
-        name: 'Foggy',
+    Foggy: {
+        code: 'Fg',
         description: 'Causes a cloud of fog to form around the user.',
         valueMultiplier: 0.36,
         tier: 3,
         addictiveness: 0.1,
     },
-    Grs: {
-        name: 'Gingeritis',
+    Gingeritis: {
+        code: 'Gngr',
         description: 'After consumption, the user will become a ginger.',
         valueMultiplier: 0.2,
         tier: 2,
         addictiveness: 0.0,
     },
-    Gw: {
-        name: 'Glowing',
+    Glowing: {
+        code: 'Glw',
         description: 'Imbues a bioluminescence on the user.',
         valueMultiplier: 0.48,
         tier: 4,
         addictiveness: 0.472,
     },
-    Jrs: {
-        name: 'Jennerising',
+    Jennerising: {
+        code: 'Jnrs',
         description: "Inverts the user's gender.",
         valueMultiplier: 0.42,
         tier: 4,
         addictiveness: 0.343,
     },
-    Lt: {
-        name: 'Lethal',
+    Lethal: {
+        code: 'Lt',
         description: 'Causes death shortly after consumption.',
         valueMultiplier: 0.0,
         tier: 5,
         addictiveness: 0.0,
     },
-    Lxt: {
-        name: 'Laxative',
+    Laxative: {
+        code: 'Lxt',
         description: 'Causes the user to fart and defecate uncontrollably.',
         valueMultiplier: 0.0,
         tier: 3,
         addictiveness: 0.1,
     },
-    LF: {
-        name: 'Long Faced',
+    'Long Faced': {
+        code: 'LF',
         description: "Considerably increases the size of the user's head and neck.",
         valueMultiplier: 0.52,
         tier: 5,
         addictiveness: 0.607,
     },
-    Mcs: {
-        name: 'Munchies',
+    Munchies: {
+        code: 'Mnch',
         description: 'Makes the user hungry.',
         valueMultiplier: 0.12,
         tier: 1,
         addictiveness: 0.096,
     },
-    Pna: {
-        name: 'Paranoia',
+    Paranoia: {
+        code: 'Prna',
         description: 'Induces paranoia in the user.',
         valueMultiplier: 0.0,
         tier: 1,
         addictiveness: 0.0,
     },
-    Rfs: {
-        name: 'Refreshing',
+    Refreshing: {
+        code: 'Rfrs',
         description: 'Slightly energizes the user.',
         valueMultiplier: 0.14,
         tier: 1,
         addictiveness: 0.104,
     },
-    Szp: {
-        name: 'Schizophrenia',
+    Schizophrenia: {
+        code: 'Szp',
         description: 'Induces hallucinations and unpredictable behaviour in the user.',
         valueMultiplier: 0.0,
         tier: 4,
         addictiveness: 0.0,
     },
-    Sdt: {
-        name: 'Sedating',
+    Sedating: {
+        code: 'Sdtng',
         description: 'Induces heavy sleepiness in the user.',
         valueMultiplier: 0.26,
         tier: 2,
         addictiveness: 0.0,
     },
-    SI: {
-        name: 'Seizure-Inducing',
+    'Seizure-Inducing': {
+        code: 'SI',
         description: 'Consumption results in an instant seizure.',
         valueMultiplier: 0.0,
         tier: 3,
         addictiveness: 0.0,
     },
-    Sk: {
-        name: 'Shrinking',
+    Shrinking: {
+        code: 'Shrkg',
         description: 'Shrinks the user.',
         valueMultiplier: 0.6,
         tier: 5,
         addictiveness: 0.336,
     },
-    Slp: {
-        name: 'Slippery',
+    Slippery: {
+        code: 'Slpry',
         description: "Reduces the user's ability to maintain traction on the ground.",
         valueMultiplier: 0.34,
         tier: 3,
         addictiveness: 0.309,
     },
-    Sm: {
-        name: 'Smelly',
+    Smelly: {
+        code: 'Sml',
         description: 'Makes the user unbearably smelly.',
         valueMultiplier: 0.0,
         tier: 1,
         addictiveness: 0.0,
     },
-    Sn: {
-        name: 'Sneaky',
+    Sneaky: {
+        code: 'Snk',
         description: 'Silences the users foot steps.',
         valueMultiplier: 0.24,
         tier: 2,
         addictiveness: 0.327,
     },
-    Sc: {
-        name: 'Spicy',
+    Spicy: {
+        code: 'Sc',
         description: "Consumption results in the user's eyes turning blue.",
         valueMultiplier: 0.38,
         tier: 3,
         addictiveness: 0.665,
     },
-    TP: {
-        name: 'Thought-Provoking',
+    'Thought-Provoking': {
+        code: 'TP',
         description: "Increases the size of the user's head.",
         valueMultiplier: 0.44,
         tier: 4,
         addictiveness: 0.37,
     },
-    Tx: {
-        name: 'Toxic',
+    Toxic: {
+        code: 'Txc',
         description: "Damages the user's liver and induces vomiting.",
         valueMultiplier: 0.0,
         tier: 2,
         addictiveness: 0.0,
     },
-    TT: {
-        name: 'Tropic Thunder',
+    'Tropic Thunder': {
+        code: 'TT',
         description: "Inverts the user's skin color.",
         valueMultiplier: 0.46,
         tier: 4,
         addictiveness: 0.803,
     },
-    Zbf: {
-        name: 'Zombifying',
+    Zombifying: {
+        code: 'Zmbfng',
         description: 'Transforms the user into a zombie, causing them to walk with a limp and seek brains.',
         valueMultiplier: 0.58,
         tier: 5,
@@ -249,14 +247,7 @@ export const effects = {
     },
 } as const;
 
-// Derive the EffectCode type from the keys of the effects object
-export type EffectCode = keyof typeof effects;
+// Define the EffectCode type using type inference from the effects object
+export type EffectCode = (typeof effects)[keyof typeof effects]['code'];
 
-// Map from effect codes to names for easier display
-export const effectCodeToName: Record<EffectCode, string> = Object.entries(effects).reduce(
-    (acc, [code, effect]) => {
-        acc[code as EffectCode] = effect.name;
-        return acc;
-    },
-    {} as Record<EffectCode, string>
-);
+// Helper functions moved to utils/effects.ts

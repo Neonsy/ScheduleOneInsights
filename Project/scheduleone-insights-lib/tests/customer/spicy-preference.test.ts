@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getCustomersByPreference } from '../../src';
-import { effectCodeToName } from '../../src/data/effects';
+import { getEffectName } from '../../src/utils/effects';
 
 describe('Customer Preference Tests', () => {
     it('should find all customers who prefer the Spicy effect', () => {
@@ -10,7 +10,7 @@ describe('Customer Preference Tests', () => {
         // Log the customers for debugging
         console.log('Customers who prefer Spicy effect:');
         spicyCustomers.forEach((customer) => {
-            console.log(`- ${customer.name} (${customer.code}) from ${customer.livingLocation}`);
+            console.log(`- ${customer.code} from ${customer.livingLocation}`);
         });
 
         // Verify that all returned customers have 'Sc' in their preferences
@@ -23,7 +23,7 @@ describe('Customer Preference Tests', () => {
         expect(spicyCustomers.length).toBeGreaterThan(0);
 
         // Output some additional information about the Spicy effect
-        console.log(`\nSpicy effect (Sc): ${effectCodeToName['Sc']}`);
+        console.log(`\nSpicy effect (Sc): ${getEffectName('Sc')}`);
         console.log(`Total customers who prefer Spicy: ${spicyCustomers.length}`);
 
         // Group customers by quality standard
@@ -32,7 +32,6 @@ describe('Customer Preference Tests', () => {
             Low: spicyCustomers.filter((c) => c.qualityStandard === 'Low').length,
             Moderate: spicyCustomers.filter((c) => c.qualityStandard === 'Moderate').length,
             High: spicyCustomers.filter((c) => c.qualityStandard === 'High').length,
-            Unknown: spicyCustomers.filter((c) => c.qualityStandard === 'Unknown').length,
         };
 
         console.log('Quality standards:');
@@ -40,7 +39,6 @@ describe('Customer Preference Tests', () => {
         console.log(`- Low: ${qualityStandards['Low']}`);
         console.log(`- Moderate: ${qualityStandards['Moderate']}`);
         console.log(`- High: ${qualityStandards['High']}`);
-        console.log(`- Unknown: ${qualityStandards['Unknown']}`);
 
         // Group customers by location
         const locations = {};

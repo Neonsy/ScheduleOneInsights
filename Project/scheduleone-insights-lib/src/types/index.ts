@@ -11,7 +11,7 @@ export type { EffectCode, IngredientCode, ProductCode, DealerCode, CustomerCode,
 
 // Product type
 export type Product = {
-    name: string;
+    code: ProductCode;
     price: number;
     unlockLevel: number;
     defaultEffect: EffectCode;
@@ -19,7 +19,7 @@ export type Product = {
 
 // Ingredient type
 export type Ingredient = {
-    name: string;
+    code: IngredientCode;
     price: number;
     unlockLevel: number;
     defaultEffect: EffectCode;
@@ -27,7 +27,7 @@ export type Ingredient = {
 
 // Effect type
 export type Effect = {
-    name: string;
+    code: EffectCode;
     description: string;
     valueMultiplier: number;
     tier: number;
@@ -48,7 +48,7 @@ export type Customer = {
 
 // Dealer type
 export type Dealer = {
-    name: string;
+    code: DealerCode;
     location: string;
     unlockCost: number;
     cut: number; // Percentage as decimal (e.g., 0.20 for 20%)

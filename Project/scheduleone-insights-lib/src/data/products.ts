@@ -1,60 +1,43 @@
 export const products = {
-    OK: {
-        name: 'OG Kush',
+    'OG Kush': {
+        code: 'OK',
         price: 35,
         unlockLevel: 0, // Available at game start
         defaultEffect: 'Cm', // Calming
     },
-    SD: {
-        name: 'Sour Diesel',
+    'Sour Diesel': {
+        code: 'SD',
         price: 35,
         unlockLevel: 4, // Street Rat IV
-        defaultEffect: 'Rfs', // Refreshing
+        defaultEffect: 'Rfrs', // Refreshing
     },
-    GC: {
-        name: 'Green Crack',
+    'Green Crack': {
+        code: 'GC',
         price: 35,
         unlockLevel: 2, // Hoodlum II
-        defaultEffect: 'Egz', // Energizing
+        defaultEffect: 'Eegz', // Energizing
     },
-    GP: {
-        name: 'Granddaddy Purple',
+    'Granddaddy Purple': {
+        code: 'GP',
         price: 35,
         unlockLevel: 4, // Hoodlum IV
-        defaultEffect: 'Sdt', // Sedating
+        defaultEffect: 'Sdtng', // Sedating
     },
-    Mtp: {
-        name: 'Methamphetamine',
+    Methamphetamine: {
+        code: 'Mthmphtmn',
         price: 70,
         unlockLevel: 10, // Higher level
         defaultEffect: 'Fcd', // Focused (placeholder, adjust as needed)
     },
-    Cc: {
-        name: 'Cocaine',
+    Cocaine: {
+        code: 'Ccn',
         price: 150,
         unlockLevel: 15, // Higher level
         defaultEffect: 'Epc', // Euphoric (placeholder, adjust as needed)
     },
 } as const;
 
-// Derive the ProductCode type from the keys of the products object
-export type ProductCode = keyof typeof products;
+// Define the ProductCode type using type inference from the products object
+export type ProductCode = (typeof products)[keyof typeof products]['code'];
 
-// Map from product names to codes for easier lookup
-export const productNameToCode: Record<string, ProductCode> = {
-    'OG Kush': 'OK',
-    'Sour Diesel': 'SD',
-    'Green Crack': 'GC',
-    'Granddaddy Purple': 'GP',
-    Methamphetamine: 'Mtp',
-    Cocaine: 'Cc',
-};
-
-// Map from product codes to names for easier display
-export const productCodeToName: Record<ProductCode, string> = Object.entries(products).reduce(
-    (acc, [code, product]) => {
-        acc[code as ProductCode] = product.name;
-        return acc;
-    },
-    {} as Record<ProductCode, string>
-);
+// Helper functions moved to utils/products.ts

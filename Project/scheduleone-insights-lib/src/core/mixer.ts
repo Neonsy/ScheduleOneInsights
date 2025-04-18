@@ -1,11 +1,14 @@
 import type { EffectCode, IngredientCode, MixResult, MixState, Product, ProductCode, ReplacementRule } from '../types';
 
-import { ingredients, ingredientNameToCode } from '../data/ingredients';
-import { products, productNameToCode } from '../data/products';
+import { ingredients } from '../data/ingredients';
+import { products } from '../data/products';
 import { effectTransformationsByIngredient } from '../data/transformations';
 import { createEffectSet, addEffect, removeEffect, hasEffect, toArray, getSize, cloneSet } from './effectSet';
 import { generateSeed, parseSeed } from './seedManager';
 import { calculateEffectValue, calculateAddiction } from '../utils/calculator';
+import { getIngredientCode } from '../utils/ingredients';
+import { getProductCode } from '../utils/products';
+import { normalizeEffectCode } from '../utils/effectCodes';
 
 const MAX_EFFECTS = 8;
 
@@ -17,21 +20,21 @@ const MAX_EFFECTS = 8;
  */
 function mixIngredientsInternal(productName: string, ingredientNames: string[]): MixResult {
     // Convert product name to code
-    const productCode = productNameToCode[productName];
-    if (!productCode || !products[productCode]) {
+    const productCode = getProductCode(productName);
+    if (!productCode) {
         throw new Error(`Unknown product: ${productName}`);
     }
 
     // Convert ingredient names to codes
     const ingredientCodes: IngredientCode[] = [];
     for (const name of ingredientNames) {
-        const code = ingredientNameToCode[name];
+        const code = getIngredientCode(name);
         if (code) {
             ingredientCodes.push(code);
         }
     }
 
-    const product = products[productCode];
+    const product = products[productName];
     const mixState: MixState = {
         product: productCode,
         ingredients: ingredientCodes,
@@ -63,11 +66,20 @@ function mixFromSeedInternal(seed: string): MixResult {
 
     const { product: productCode, ingredients: ingredientCodes } = mixState;
 
-    if (!products[productCode]) {
+    // Find the product by code
+    let productName = '';
+    for (const [name, prod] of Object.entries(products)) {
+        if (prod.code === productCode) {
+            productName = name;
+            break;
+        }
+    }
+
+    if (!productName) {
         throw new Error(`Unknown product in seed: ${productCode}`);
     }
 
-    const product = products[productCode];
+    const product = products[productName];
     const result = processMix(product, ingredientCodes);
 
     return {
@@ -92,7 +104,18 @@ function processMix(product: Product, ingredientCodes: IngredientCode[]): Omit<M
 
     // Process each ingredient in the order provided
     for (const code of ingredientCodes) {
-        const ingredient = ingredients[code];
+        // Find the ingredient by code
+        let ingredientName = '';
+        for (const [name, ing] of Object.entries(ingredients)) {
+            if (ing.code === code) {
+                ingredientName = name;
+                break;
+            }
+        }
+
+        if (!ingredientName) continue;
+
+        const ingredient = ingredients[ingredientName];
         if (!ingredient) continue;
 
         ingredientCost += ingredient.price;
@@ -108,6 +131,19 @@ function processMix(product: Product, ingredientCodes: IngredientCode[]): Omit<M
 
     // Calculate final values
     const finalEffects = toArray(effectsSet).slice(0, MAX_EFFECTS);
+
+    // Debug logging
+    console.log('Product:', product.name);
+    console.log('Ingredients:', ingredientCodes);
+
+    // Normalize effect codes to ensure consistency
+    for (let i = 0; i < finalEffects.length; i++) {
+        finalEffects[i] = normalizeEffectCode(finalEffects[i]);
+    }
+
+    console.log('Final effects:', finalEffects);
+    console.log('Expected effects (Granddaddy Purple):', ['Prna', 'Sdtng', 'TT', 'Eegz', 'CD', 'Expl']);
+
     const effectValue = calculateEffectValue(finalEffects);
     const addictionValue = calculateAddiction(finalEffects);
     const addictiveness = Math.round(addictionValue * 100) / 100;
@@ -139,6 +175,10 @@ function processMix(product: Product, ingredientCodes: IngredientCode[]): Omit<M
 function applyIngredientTransformations(effectsSet: Set<EffectCode>, ingredientCode: IngredientCode): Set<EffectCode> {
     const transformations = effectTransformationsByIngredient[ingredientCode];
     if (!transformations || transformations.length === 0) return effectsSet;
+
+    console.log('Applying transformations for ingredient:', ingredientCode);
+    console.log('Current effects:', toArray(effectsSet));
+    console.log('Transformations:', transformations);
 
     // Create a snapshot of the current effects for rule evaluation
     const snapshot = cloneSet(effectsSet);
@@ -292,6 +332,8 @@ function applyTransformation(
     removed: Set<EffectCode>
 ): Set<EffectCode> {
     let newEffectsSet = effectsSet;
+
+    console.log('Applying transformation:', replace);
 
     for (const [oldEffect, newEffect] of Object.entries(replace) as [EffectCode, EffectCode][]) {
         if (hasEffect(newEffectsSet, oldEffect)) {

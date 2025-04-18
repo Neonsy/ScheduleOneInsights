@@ -1,130 +1,103 @@
 export const ingredients = {
-    Ad: {
-        name: 'Addy',
+    Addy: {
+        code: 'Adrl',
         price: 9,
         unlockLevel: 12, // Hustler II
         defaultEffect: 'TP',
     },
-    Bnn: {
-        name: 'Banana',
+    Banana: {
+        code: 'Bnn',
         price: 2,
         unlockLevel: 0, // Available at game start
-        defaultEffect: 'Grs',
+        defaultEffect: 'Gngr',
     },
-    Btr: {
-        name: 'Battery',
+    Battery: {
+        code: 'Btry',
         price: 8,
         unlockLevel: 5, // Peddler V
         defaultEffect: 'BE',
     },
-    Cl: {
-        name: 'Chili',
+    Chili: {
+        code: 'Chl',
         price: 7,
         unlockLevel: 4, // Peddler IV
         defaultEffect: 'Sc',
     },
-    Ck: {
-        name: 'Cuke',
+    Cuke: {
+        code: 'Ck',
         price: 2,
         unlockLevel: 0, // Available at game start
-        defaultEffect: 'Egz',
+        defaultEffect: 'Enrg',
     },
-    Dn: {
-        name: 'Donut',
+    Donut: {
+        code: 'Dnt',
         price: 3,
         unlockLevel: 0, // Available at game start
         defaultEffect: 'CD',
     },
-    ED: {
-        name: 'Energy Drink',
+    'Energy Drink': {
+        code: 'EnrgyDrnk',
         price: 6,
         unlockLevel: 1, // Peddler I
-        defaultEffect: 'Al',
+        defaultEffect: 'Athl',
     },
-    FM: {
-        name: 'Flu Medicine',
+    'Flu Medicine': {
+        code: 'FM',
         price: 5,
         unlockLevel: 4, // Hoodlum IV
         defaultEffect: 'Sdt',
     },
-    Gsl: {
-        name: 'Gasoline',
+    Gasoline: {
+        code: 'Gsln',
         price: 5,
         unlockLevel: 5, // Hoodlum V
-        defaultEffect: 'Tx',
+        defaultEffect: 'Txc',
     },
-    HS: {
-        name: 'Horse Semen',
+    'Horse Semen': {
+        code: 'HrsSmn',
         price: 9,
         unlockLevel: 13, // Hustler III
         defaultEffect: 'LF',
     },
-    Idn: {
-        name: 'Iodine',
+    Iodine: {
+        code: 'Idn',
         price: 8,
         unlockLevel: 11, // Hustler I
-        defaultEffect: 'Jrs',
+        defaultEffect: 'Jnrs',
     },
-    MB: {
-        name: 'Mega Bean',
+    'Mega Bean': {
+        code: 'MgBn',
         price: 7,
         unlockLevel: 3, // Peddler III
         defaultEffect: 'Fg',
     },
-    MO: {
-        name: 'Motor Oil',
+    'Motor Oil': {
+        code: 'MtrOl',
         price: 6,
         unlockLevel: 2, // Peddler II
-        defaultEffect: 'Slp',
+        defaultEffect: 'Slpr',
     },
-    MW: {
-        name: 'Mouth Wash',
+    'Mouth Wash': {
+        code: 'MthWsh',
         price: 4,
         unlockLevel: 3, // Hoodlum III
-        defaultEffect: 'Bd',
+        defaultEffect: 'Bldg',
     },
-    Prct: {
-        name: 'Paracetamol',
+    Paracetamol: {
+        code: 'Prctm',
         price: 3,
         unlockLevel: 0, // Available at game start
-        defaultEffect: 'Sn',
+        defaultEffect: 'Snk',
     },
-    Vgr: {
-        name: 'Viagra',
+    Viagra: {
+        code: 'Vgr',
         price: 4,
         unlockLevel: 2, // Hoodlum II
         defaultEffect: 'TT',
     },
 } as const;
 
-// Derive the IngredientCode type from the keys of the ingredients object
-export type IngredientCode = keyof typeof ingredients;
+// Define the IngredientCode type using type inference from the ingredients object
+export type IngredientCode = (typeof ingredients)[keyof typeof ingredients]['code'];
 
-// Map from ingredient names to codes for easier lookup
-export const ingredientNameToCode: Record<string, IngredientCode> = {
-    Addy: 'Ad',
-    Banana: 'Bnn',
-    Battery: 'Btr',
-    Chili: 'Cl',
-    Cuke: 'Ck',
-    Donut: 'Dn',
-    'Energy Drink': 'ED',
-    'Flu Medicine': 'FM',
-    Gasoline: 'Gsl',
-    'Horse Semen': 'HS',
-    Iodine: 'Idn',
-    'Mega Bean': 'MB',
-    'Motor Oil': 'MO',
-    'Mouth Wash': 'MW',
-    Paracetamol: 'Prct',
-    Viagra: 'Vgr',
-};
-
-// Map from ingredient codes to names for easier display
-export const ingredientCodeToName: Record<IngredientCode, string> = Object.entries(ingredients).reduce(
-    (acc, [code, ingredient]) => {
-        acc[code as IngredientCode] = ingredient.name;
-        return acc;
-    },
-    {} as Record<IngredientCode, string>
-);
+// Helper functions moved to utils/ingredients.ts
