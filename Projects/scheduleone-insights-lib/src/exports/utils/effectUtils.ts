@@ -1,4 +1,4 @@
 /**
  * Effect utilities exports
  */
-export { findEffectByName } from '@/utils/effectUtils';
+export { findEffectByName, findEffectByCode } from '@/utils/effectUtils';

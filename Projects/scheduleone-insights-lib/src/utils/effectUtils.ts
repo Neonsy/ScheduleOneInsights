@@ -16,3 +16,19 @@ export const findEffectByName = (name: string): string => {
     }
     return effect.code;
 };
+
+/**
+ * Find an effect by its code
+ * @param code The effect code to find
+ * @returns The effect with the matching code
+ * @throws Error if the effect is not found
+ */
+export const findEffectByCode = (code: string) => {
+    const effect = effects.find((e) => e.code === code);
+    if (!effect) {
+        throw new Error(`Effect not found: ${code}`);
+    }
+    // The effects data is defined in our codebase and we know it conforms to our Effect interface
+    // TypeScript just can't verify this automatically due to the readonly constraints from 'as const'
+    return effect;
+};
