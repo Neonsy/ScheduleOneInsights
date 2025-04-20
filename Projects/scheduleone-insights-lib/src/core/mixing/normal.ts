@@ -4,6 +4,7 @@
  */
 import { Effect } from '@/types/Effect';
 import { MixResult } from '@/types/MixResult';
+import { transformationRules } from '@/data/transformationRules';
 import { findProductByCode } from '@/utils/productUtils';
 import { findIngredientByCode } from '@/utils/ingredientUtils';
 import { findEffectByCode } from '@/utils/effectUtils';
@@ -26,6 +27,17 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
     let totalCost = 0;
     let totalAddiction = 0;
 
+    // SEED the product's inherent effect if it has one (marijuana products have default effects)
+    // Check if it's a marijuana product by checking the type directly
+    if (product.type === 'Marijuana') {
+        // For marijuana products, we know they have a defaultEffect
+        // Use type assertion to tell TypeScript that this product has a defaultEffect property
+        const marijuanaProduct = product as { defaultEffect: string };
+        const baseEffect = findEffectByCode(marijuanaProduct.defaultEffect);
+        appliedEffects.push(baseEffect);
+        totalAddiction += baseEffect.addictiveness;
+    }
+
     // Process each ingredient in the exact order provided
     for (const ingCode of ingredientCodes) {
         // Find the ingredient → add its price to totalCost
@@ -42,6 +54,47 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
 
         // Add that effect's addictiveness to totalAddiction
         totalAddiction += effect.addictiveness;
+
+        // Apply transformation rules for this ingredient if they exist
+        const ingredientRules = transformationRules[ingCode as keyof typeof transformationRules];
+        if (ingredientRules) {
+            // Get the current effect codes in appliedEffects
+            const currentEffectCodes = appliedEffects.map((e) => e.code);
+
+            // Check each rule
+            for (const rule of ingredientRules) {
+                // Check if all ifPresent effects are present
+                const allPresent = rule.ifPresent.every((code) => {
+                    // Use type-safe string comparison instead of direct includes
+                    return currentEffectCodes.some((effectCode) => effectCode === code);
+                });
+
+                // Check if all ifNotPresent effects are not present
+                const allNotPresent = rule.ifNotPresent.every((code) => {
+                    // Use type-safe string comparison instead of direct includes
+                    return !currentEffectCodes.some((effectCode) => effectCode === code);
+                });
+
+                // If both conditions are met, apply the replacements
+                if (allPresent && allNotPresent) {
+                    // Apply each replacement
+                    for (const [oldCode, newCode] of Object.entries(rule.replace)) {
+                        // Find the index of the effect to replace
+                        const indexToReplace = appliedEffects.findIndex((e) => e.code === oldCode);
+
+                        // If the effect exists, replace it
+                        if (indexToReplace !== -1) {
+                            // Get the new effect - we know newCode is a string from Object.entries
+                            const effectCode = String(newCode);
+                            const newEffect = findEffectByCode(effectCode);
+
+                            // Replace the old effect with the new one
+                            appliedEffects[indexToReplace] = newEffect;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // After processing all ingredients, compute:
@@ -53,6 +106,10 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
 
     // profit = sellPrice - totalCost
     const profit = sellPrice - totalCost;
+
+    // Ensure a stable, deterministic ordering of effects for consistent test results
+    // Sort by effect code to guarantee the same order every time
+    appliedEffects.sort((a, b) => a.code.localeCompare(b.code));
 
     // Return the mix result
     return {
