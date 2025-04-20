@@ -7,3 +7,4 @@ export type { Effect } from './Effect';
 export type { Dealer } from './Dealer';
 export type { Customer } from './Customer';
 export type { TransformationRule } from './TransformationRule';
+export type { ProductType } from './consts/productTypes';
