@@ -25,7 +25,6 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
 
     // Initialize running totals
     let totalCost = 0;
-    let totalAddiction = 0;
 
     // SEED the product's inherent effect if it has one (marijuana products have default effects)
     // Check if it's a marijuana product by checking the type directly
@@ -35,7 +34,7 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
         const marijuanaProduct = product as { defaultEffect: string };
         const baseEffect = findEffectByCode(marijuanaProduct.defaultEffect);
         appliedEffects.push(baseEffect);
-        totalAddiction += baseEffect.addictiveness;
+        // Addiction will be calculated after all effects are processed
     }
 
     // Process each ingredient in the exact order provided
@@ -52,8 +51,7 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
             appliedEffects.push(effect);
         }
 
-        // Add that effect's addictiveness to totalAddiction
-        totalAddiction += effect.addictiveness;
+        // Addiction will be calculated after all effects are processed
 
         // Apply transformation rules for this ingredient if they exist
         const ingredientRules = transformationRules[ingCode as keyof typeof transformationRules];
@@ -102,7 +100,8 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
     const totalMultiplier = appliedEffects.reduce((sum, effect) => sum + effect.multiplier, 0);
 
     // sellPrice = basePrice * (1 + totalMultiplier)
-    const sellPrice = basePrice * (1 + totalMultiplier);
+    // Round to nearest whole number
+    const sellPrice = Math.round(basePrice * (1 + totalMultiplier));
 
     // profit = sellPrice - totalCost
     const profit = sellPrice - totalCost;
@@ -110,6 +109,10 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
     // Ensure a stable, deterministic ordering of effects for consistent test results
     // Sort by effect code to guarantee the same order every time
     appliedEffects.sort((a, b) => a.code.localeCompare(b.code));
+
+    // Calculate the total addiction from all applied effects and cap it at 1
+    const rawAddiction = appliedEffects.reduce((sum, e) => sum + e.addictiveness, 0);
+    const totalAddiction = Math.min(rawAddiction, 1);
 
     // Return the mix result
     return {
