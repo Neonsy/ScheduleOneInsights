@@ -43,17 +43,7 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
         const ingredient = findIngredientByCode(ingCode);
         totalCost += ingredient.price;
 
-        // Take its defaultEffect name → look up the corresponding effect object
-        const effect = findEffectByCode(ingredient.defaultEffect);
-
-        // If that effect is not already in appliedEffects, append it
-        if (!appliedEffects.some((e) => e.code === effect.code)) {
-            appliedEffects.push(effect);
-        }
-
-        // Addiction will be calculated after all effects are processed
-
-        // Apply transformation rules for this ingredient if they exist
+        // First apply transformation rules for this ingredient if they exist
         const ingredientRules = transformationRules[ingCode as keyof typeof transformationRules];
         if (ingredientRules) {
             // Get the current effect codes in appliedEffects
@@ -93,6 +83,12 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
                 }
             }
         }
+
+        // After applying transformation rules, add the ingredient's default effect if not already present
+        const effect = findEffectByCode(ingredient.defaultEffect);
+        if (!appliedEffects.some((e) => e.code === effect.code)) {
+            appliedEffects.push(effect);
+        }
     }
 
     // After processing all ingredients, compute:
@@ -104,7 +100,8 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
     const sellPrice = Math.round(basePrice * (1 + totalMultiplier));
 
     // profit = sellPrice - totalCost
-    const profit = sellPrice - totalCost;
+    // Round to ensure consistent test results
+    const profit = Math.round(sellPrice - totalCost);
 
     // Ensure a stable, deterministic ordering of effects for consistent test results
     // Sort by effect code to guarantee the same order every time
@@ -112,7 +109,8 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
 
     // Calculate the total addiction from all applied effects and cap it at 1
     const rawAddiction = appliedEffects.reduce((sum, e) => sum + e.addictiveness, 0);
-    const totalAddiction = Math.min(rawAddiction, 1);
+    // Round to 2 decimal places for consistent test results
+    const totalAddiction = Math.min(Math.round(rawAddiction * 100) / 100, 1);
 
     // Return the mix result
     return {
