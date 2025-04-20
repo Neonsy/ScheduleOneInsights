@@ -4,13 +4,14 @@
  */
 import { ranks } from '@/data/ranks';
 import { ProductType } from '@/types/consts/productTypes';
+import { findEffectByName } from '@/utils/effectUtils';
 
 export const products = [
     {
         name: 'OG Kush',
         code: 'OK',
         basePrice: 35,
-        defaultEffect: 'TODO',
+        defaultEffect: findEffectByName('Calming'),
         rank: ranks['Street Rat I'],
         type: 'Marijuana' as ProductType,
     },
@@ -18,7 +19,7 @@ export const products = [
         name: 'Sour Diesel',
         code: 'SD',
         basePrice: 35,
-        defaultEffect: 'TODO',
+        defaultEffect: findEffectByName('Refreshing'),
         rank: ranks['Street Rat IV'],
         type: 'Marijuana' as ProductType,
     },
@@ -26,7 +27,7 @@ export const products = [
         name: 'Green Crack',
         code: 'GC',
         basePrice: 35,
-        defaultEffect: 'TODO',
+        defaultEffect: findEffectByName('Energizing'),
         rank: ranks['Hoodlum II'],
         type: 'Marijuana' as ProductType,
     },
@@ -34,7 +35,7 @@ export const products = [
         name: 'Granddaddy Purple',
         code: 'GP',
         basePrice: 35,
-        defaultEffect: 'TODO',
+        defaultEffect: findEffectByName('Sedating'),
         rank: ranks['Hoodlum IV'],
         type: 'Marijuana' as ProductType,
     },
@@ -42,7 +43,6 @@ export const products = [
         name: 'Meth',
         code: 'M',
         basePrice: 70,
-        defaultEffect: 'TODO',
         rank: ranks['Hoodlum I'],
         type: 'Meth' as ProductType,
     },
@@ -50,7 +50,6 @@ export const products = [
         name: 'Cocaine',
         code: 'CC',
         basePrice: 150,
-        defaultEffect: 'TODO',
         rank: ranks['Enforcer I'],
         type: 'Cocaine' as ProductType,
     },

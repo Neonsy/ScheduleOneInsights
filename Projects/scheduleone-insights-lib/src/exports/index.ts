@@ -4,3 +4,4 @@
  */
 export * from '@/exports/data';
 export * from '@/exports/types';
+export * from '@/exports/utils';
