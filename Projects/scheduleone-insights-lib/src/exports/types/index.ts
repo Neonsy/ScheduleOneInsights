@@ -10,3 +10,5 @@ export type { TransformationRule } from '@/exports/types/TransformationRule';
 export type { MixResult } from '@/exports/types/MixResult';
 export type { ProductType } from '@/exports/types/consts/productTypes';
 export type { EffectType } from '@/exports/types/consts/effectTypes';
+export type { District } from '@/exports/types/consts/districts';
+export { districts } from '@/exports/types/consts/districts';
