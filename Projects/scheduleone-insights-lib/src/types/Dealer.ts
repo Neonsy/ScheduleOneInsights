@@ -1,4 +1,4 @@
-import { dealers } from '../data/dealers';
+import { dealers } from '@/data/dealers';
 
 /**
  * Dealer type - inferred from the dealers data

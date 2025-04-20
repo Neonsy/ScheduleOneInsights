@@ -1,4 +1,4 @@
 /**
  * Ranks data exports
  */
-export { ranks } from '../../data/ranks';
+export { ranks } from '@/data/ranks';

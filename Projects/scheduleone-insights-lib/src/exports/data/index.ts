@@ -1,10 +1,10 @@
 /**
  * Data exports index
  */
-export * from './ingredients';
-export * from './products';
-export * from './effects';
-export * from './dealers';
-export * from './customers';
-export * from './transformationRules';
-export * from './ranks';
+export * from '@/exports/data/ingredients';
+export * from '@/exports/data/products';
+export * from '@/exports/data/effects';
+export * from '@/exports/data/dealers';
+export * from '@/exports/data/customers';
+export * from '@/exports/data/transformationRules';
+export * from '@/exports/data/ranks';

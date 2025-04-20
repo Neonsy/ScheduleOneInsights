@@ -1,4 +1,4 @@
 /**
  * Customers data exports
  */
-export { customers } from '../../data/customers';
+export { customers } from '@/data/customers';

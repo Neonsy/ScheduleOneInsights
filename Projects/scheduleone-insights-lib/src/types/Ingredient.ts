@@ -1,4 +1,4 @@
-import { ingredients } from '../data/ingredients';
+import { ingredients } from '@/data/ingredients';
 
 /**
  * Ingredient type - inferred from the ingredients data

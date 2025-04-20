@@ -2,8 +2,8 @@
  * Products data - single source of truth
  * All product types and properties are inferred from this data
  */
-import { ranks } from './ranks';
-import { ProductType } from '../types/consts/productTypes';
+import { ranks } from '@/data/ranks';
+import { ProductType } from '@/types/consts/productTypes';
 
 export const products = [
     {

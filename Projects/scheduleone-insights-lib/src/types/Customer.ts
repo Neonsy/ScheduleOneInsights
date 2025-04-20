@@ -1,4 +1,4 @@
-import { customers } from '../data/customers';
+import { customers } from '@/data/customers';
 
 /**
  * Customer type - inferred from the customers data

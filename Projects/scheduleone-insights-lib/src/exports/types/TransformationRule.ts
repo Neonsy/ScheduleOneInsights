@@ -1,4 +1,4 @@
 /**
  * TransformationRule type exports
  */
-export type { TransformationRule } from '../../types/TransformationRule';
+export type { TransformationRule } from '@/types/TransformationRule';

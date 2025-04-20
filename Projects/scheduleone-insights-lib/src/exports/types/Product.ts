@@ -1,4 +1,4 @@
 /**
  * Product type exports
  */
-export type { Product } from '../../types/Product';
+export type { Product } from '@/types/Product';

@@ -1,4 +1,4 @@
 /**
  * Customer type exports
  */
-export type { Customer } from '../../types/Customer';
+export type { Customer } from '@/types/Customer';

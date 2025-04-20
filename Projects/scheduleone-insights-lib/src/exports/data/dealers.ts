@@ -1,4 +1,4 @@
 /**
  * Dealers data exports
  */
-export { dealers } from '../../data/dealers';
+export { dealers } from '@/data/dealers';

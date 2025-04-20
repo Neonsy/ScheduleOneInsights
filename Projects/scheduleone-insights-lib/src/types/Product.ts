@@ -1,4 +1,4 @@
-import { products } from '../data/products';
+import { products } from '@/data/products';
 
 /**
  * Product type - inferred from the products data

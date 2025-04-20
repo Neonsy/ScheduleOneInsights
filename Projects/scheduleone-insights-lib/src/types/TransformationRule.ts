@@ -1,4 +1,4 @@
-import { transformationRules } from '../data/transformationRules';
+import { transformationRules } from '@/data/transformationRules';
 
 /**
  * TransformationRule type - inferred from the transformationRules data

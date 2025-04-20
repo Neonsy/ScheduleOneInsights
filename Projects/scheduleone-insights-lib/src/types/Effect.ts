@@ -1,4 +1,4 @@
-import { effects } from '../data/effects';
+import { effects } from '@/data/effects';
 
 /**
  * Effect type - inferred from the effects data

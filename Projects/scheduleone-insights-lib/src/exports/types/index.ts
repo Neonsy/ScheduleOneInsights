@@ -1,10 +1,10 @@
 /**
  * Types exports index
  */
-export type { Ingredient } from './Ingredient';
-export type { Product } from './Product';
-export type { Effect } from './Effect';
-export type { Dealer } from './Dealer';
-export type { Customer } from './Customer';
-export type { TransformationRule } from './TransformationRule';
-export type { ProductType } from './consts/productTypes';
+export type { Ingredient } from '@/exports/types/Ingredient';
+export type { Product } from '@/exports/types/Product';
+export type { Effect } from '@/exports/types/Effect';
+export type { Dealer } from '@/exports/types/Dealer';
+export type { Customer } from '@/exports/types/Customer';
+export type { TransformationRule } from '@/exports/types/TransformationRule';
+export type { ProductType } from '@/exports/types/consts/productTypes';
