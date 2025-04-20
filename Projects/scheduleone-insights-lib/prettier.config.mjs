@@ -1,0 +1,19 @@
+// prettier.config.mjs
+/** @type {import("prettier").Config} */
+export default {
+  quoteProps: 'as-needed',
+  arrowParens: 'always',
+  bracketSameLine: true,
+  bracketSpacing: true,
+  endOfLine: 'lf',
+  htmlWhitespaceSensitivity: 'ignore',
+  jsxSingleQuote: true,
+  printWidth: 150,
+  proseWrap: 'preserve',
+  semi: true,
+  singleAttributePerLine: false,
+  singleQuote: true,
+  tabWidth: 4,
+  trailingComma: 'es5',
+  useTabs: false,
+};
