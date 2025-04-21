@@ -19,99 +19,54 @@ import { Ingredient } from '@/types/Ingredient';
  * @returns The result of mixing the product with the ingredients
  */
 export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingredient['code'][]): MixResult => {
-    // Look up the base product by code → get its basePrice
     const product = findProductByCode(productCode);
     const basePrice = product.basePrice;
 
-    // Initialize an empty array appliedEffects: Effect[]
-    const appliedEffects: Effect[] = [];
-
-    // Initialize running totals
+    const effectMap = new Map<Effect['code'], Effect>();
     let totalCost = 0;
 
-    // SEED the product's inherent effect if it is a marijuana product
     if (isMarijuanaProduct(product)) {
-        // defaultEffect is guaranteed to exist and be a valid code
         const baseEffect = findEffectByCode(product.defaultEffect);
-        appliedEffects.push(baseEffect);
+        effectMap.set(baseEffect.code, baseEffect);
     }
 
-    // Process each ingredient in the exact order provided
     for (const ingCode of ingredientCodes) {
-        // Find the ingredient → add its price to totalCost
         const ingredient = findIngredientByCode(ingCode);
         totalCost += ingredient.price;
 
-        // First apply transformation rules for this ingredient if they exist
-        const ingredientRules = transformationRules[ingCode as keyof typeof transformationRules];
-        if (ingredientRules) {
-            // Get the current effect codes in appliedEffects
-            const currentEffectCodes = appliedEffects.map((e) => e.code);
-
-            // Check each rule
-            for (const rule of ingredientRules) {
-                // Check if all ifPresent effects are present
-                const allPresent = rule.ifPresent.every((code) => {
-                    // Use type-safe string comparison instead of direct includes
-                    return currentEffectCodes.some((effectCode) => effectCode === code);
-                });
-
-                // Check if all ifNotPresent effects are not present
-                const allNotPresent = rule.ifNotPresent.every((code) => {
-                    // Use type-safe string comparison instead of direct includes
-                    return !currentEffectCodes.some((effectCode) => effectCode === code);
-                });
-
-                // If both conditions are met, apply the replacements
-                if (allPresent && allNotPresent) {
-                    // Apply each replacement
-                    for (const [oldCode, newCode] of Object.entries(rule.replace)) {
-                        // Find the index of the effect to replace
-                        const indexToReplace = appliedEffects.findIndex((e) => e.code === oldCode);
-
-                        // If the effect exists, replace it
-                        if (indexToReplace !== -1) {
-                            // `newCode` comes from our rules map and should be a valid effect code
-                            const effectCode = newCode as Effect['code'];
-                            const newEffect = findEffectByCode(effectCode);
-
-                            // Replace the old effect with the new one
-                            appliedEffects[indexToReplace] = newEffect;
+        const rules = transformationRules[ingCode as keyof typeof transformationRules];
+        if (rules) {
+            for (const { ifPresent, ifNotPresent, replace } of rules) {
+                const presentOK = ifPresent.every((code) => effectMap.has(code));
+                const notPresentOK = ifNotPresent.every((code) => !effectMap.has(code));
+                if (presentOK && notPresentOK) {
+                    for (const [oldCode, newCode] of Object.entries(replace) as [Effect['code'], Effect['code']][]) {
+                        if (effectMap.has(oldCode)) {
+                            const newEffect = findEffectByCode(newCode);
+                            effectMap.delete(oldCode);
+                            effectMap.set(newCode, newEffect);
                         }
                     }
                 }
             }
         }
 
-        // After applying transformation rules, add the ingredient's default effect if not already present
-        const effect = findEffectByCode(ingredient.defaultEffect);
-        if (!appliedEffects.some((e) => e.code === effect.code)) {
-            appliedEffects.push(effect);
+        if (!effectMap.has(ingredient.defaultEffect)) {
+            const defaultEffect = findEffectByCode(ingredient.defaultEffect);
+            effectMap.set(defaultEffect.code, defaultEffect);
         }
     }
 
-    // After processing all ingredients, compute:
-    // totalMultiplier = sum(e.multiplier for e in appliedEffects)
-    const totalMultiplier = appliedEffects.reduce((sum, effect) => sum + effect.multiplier, 0);
-
-    // sellPrice = basePrice * (1 + totalMultiplier)
-    // Round to nearest whole number
-    const sellPrice = Math.round(basePrice * (1 + totalMultiplier));
-
-    // profit = sellPrice - totalCost
-    // Round to ensure consistent test results
-    const profit = Math.round(sellPrice - totalCost);
-
-    // Ensure a stable, deterministic ordering of effects for consistent test results
-    // Sort by effect code to guarantee the same order every time
+    const appliedEffects = Array.from(effectMap.values());
     appliedEffects.sort((a, b) => a.code.localeCompare(b.code));
 
-    // Calculate the total addiction from all applied effects and cap it at 1
+    const totalMultiplier = appliedEffects.reduce((sum, e) => sum + e.multiplier, 0);
+    const sellPrice = Math.round(basePrice * (1 + totalMultiplier));
+    const profit = Math.round(sellPrice - totalCost);
+
     const rawAddiction = appliedEffects.reduce((sum, e) => sum + e.addictiveness, 0);
-    // Round to 2 decimal places for consistent test results
     const totalAddiction = Math.min(Math.round(rawAddiction * 100) / 100, 1);
 
-    // Return the mix result
     return {
         effects: appliedEffects.map((e) => e.name),
         totalAddiction,
