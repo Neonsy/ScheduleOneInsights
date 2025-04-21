@@ -76,7 +76,8 @@ export const ingredients = [
         rank: ranks['Peddler I'],
         price: 6,
         defaultEffect: findEffectByName('Athletic'),
-        description: 'Tasty energy drink filled with lots of yummy chemicals to make you feel refreshed. Removes the effects of drugs when consumed.',
+        description:
+            'Tasty energy drink filled with lots of yummy chemicals to make you feel refreshed. Removes the effects of drugs when consumed.',
     },
     {
         name: 'Motor Oil',

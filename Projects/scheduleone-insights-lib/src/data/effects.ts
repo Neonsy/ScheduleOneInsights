@@ -69,7 +69,8 @@ export const effects = [
     {
         name: 'Disorienting',
         code: 'DOIET',
-        description: 'Inverts up/down camera; left/right movement inverted; forward/backward inverts at random for a few steps.',
+        description:
+            'Inverts up/down camera; left/right movement inverted; forward/backward inverts at random for a few steps.',
         type: 'Ability',
         multiplier: 0.0,
         tier: 1,

@@ -3,4 +3,4 @@
  * Defines the available effect types in the system
  */
 
-export type EffectType = "Ability" | "Cosmetic";
+export type EffectType = 'Ability' | 'Cosmetic';

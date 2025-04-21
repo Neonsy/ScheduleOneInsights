@@ -8,7 +8,7 @@ export default {
   endOfLine: 'lf',
   htmlWhitespaceSensitivity: 'ignore',
   jsxSingleQuote: true,
-  printWidth: 150,
+  printWidth: 120,
   proseWrap: 'preserve',
   semi: true,
   singleAttributePerLine: false,
