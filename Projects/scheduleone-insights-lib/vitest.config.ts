@@ -8,7 +8,11 @@ export default defineConfig({
         },
     },
     test: {
+        globals: true,
         environment: 'node',
+        typecheck: {
+            tsconfig: './tsconfig.dev.json',
+        },
         include: ['tests/**/*.test.ts'],
         coverage: {
             reporter: ['text', 'json', 'html'],
