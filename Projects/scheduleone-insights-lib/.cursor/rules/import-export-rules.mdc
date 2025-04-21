@@ -1,0 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+alias paths
+If the project uses "@" aliases, always use those for imports and exports.
+
+use-barrel-files
+Add an index.ts barrel in each feature root to re-export public modules. That should be done in the exports directory.
+
+ensure-exports-up-to-date
+Ensure when creating or modifying code that exports are up to date.
