@@ -16,7 +16,7 @@
         "test:coverage": "vitest run --coverage",
         "lint": "eslint src --ext .ts",
         "lint:fix": "eslint src --ext .ts --fix",
-        "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+        "format": "prettier --write ."
     },
     "keywords": [
         "schedule1",

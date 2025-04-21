@@ -24,7 +24,7 @@ export default tseslint.config(tseslint.configs.recommended, eslint.configs.reco
         prettier: prettierPlugin,
     },
     rules: {
-        'prettier/prettier': ['error', { endOfLine: 'auto' }],
+        'prettier/prettier': ['error'],
         'linebreak-style': 'off',
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': ['error'],
