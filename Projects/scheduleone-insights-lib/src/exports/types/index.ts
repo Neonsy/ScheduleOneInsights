@@ -8,6 +8,7 @@ export type { Dealer } from '@/exports/types/Dealer';
 export type { Customer } from '@/exports/types/Customer';
 export type { TransformationRule } from '@/exports/types/TransformationRule';
 export type { MixResult } from '@/exports/types/MixResult';
+export type { RecipePayload } from '@/exports/types/RecipePayload';
 export type { ProductType } from '@/exports/types/consts/productTypes';
 export type { EffectType } from '@/exports/types/consts/effectTypes';
 export type { District } from '@/exports/types/consts/districts';

@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+pnpm build (compiles TS, fails on errors)
+pnpm lint (ESLint, fails on warnings/errors)
+pnpm test (unit & integration tests)
+
+
+
