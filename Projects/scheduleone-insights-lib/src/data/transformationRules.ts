@@ -1,4 +1,6 @@
-export const transformationRules = {
+import type { TransformationRules } from '@/types/TransformationRule';
+
+export const transformationRules: TransformationRules = {
     // Ingredient codes in alphabetical order
     AD /*Addy*/: [
         {
@@ -604,4 +606,4 @@ export const transformationRules = {
             replace: { SI: 'GGIT' },
         },
     ],
-} as const;
+};

@@ -1,7 +1,13 @@
-import { dealers } from '@/data/dealers';
+import type { District } from '@/types/consts/districts';
 
 /**
- * Dealer type - inferred from the dealers data
- * This ensures we have a single source of truth
+ * Dealer interface - explicit typing for dealer records
  */
-export type Dealer = (typeof dealers)[number];
+export interface Dealer {
+    name: string;
+    code: string;
+    cut: number;
+    district: District;
+    cost: number;
+    rank: number;
+}

@@ -2,6 +2,7 @@
  * Product utility functions
  */
 import { products } from '@/data/products';
+import type { Product } from '@/types/Product';
 
 /**
  * Find a product by its code
@@ -9,7 +10,7 @@ import { products } from '@/data/products';
  * @returns The product with the matching code
  * @throws Error if the product is not found
  */
-export const findProductByCode = (code: string) => {
+export const findProductByCode = (code: Product['code']): Product => {
     const product = products.find((p) => p.code === code);
     if (!product) {
         throw new Error(`Product not found: ${code}`);

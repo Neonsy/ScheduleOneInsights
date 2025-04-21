@@ -1,5 +1,6 @@
 import { products } from '@/data/products';
 import { ProductType } from '@/types/consts/productTypes';
+import type { Effect } from '@/types/Effect';
 
 /**
  * Base product interface with common properties
@@ -17,7 +18,7 @@ interface BaseProduct {
  */
 interface MarijuanaProduct extends BaseProduct {
     type: 'Marijuana';
-    defaultEffect: string;
+    defaultEffect: Effect['code'];
 }
 
 /**

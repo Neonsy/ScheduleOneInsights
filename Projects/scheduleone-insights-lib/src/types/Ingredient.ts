@@ -1,7 +1,13 @@
-import { ingredients } from '@/data/ingredients';
-
 /**
- * Ingredient type - inferred from the ingredients data
- * This ensures we have a single source of truth
+ * Ingredient interface - strict typing
  */
-export type Ingredient = (typeof ingredients)[number];
+import type { Effect } from '@/types/Effect';
+
+export interface Ingredient {
+    name: string;
+    code: string;
+    rank: number;
+    price: number;
+    defaultEffect: Effect['code'];
+    description: string;
+}

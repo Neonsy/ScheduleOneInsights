@@ -2,14 +2,15 @@
  * Effect utility functions
  */
 import { effects } from '@/data/effects';
+import type { Effect } from '@/types/Effect';
 
 /**
  * Find an effect by name and return its code
- * @param name The name of the effect to find
+ * @param name The name of the effect to find (must be a valid Effect name)
  * @returns The code of the effect
  * @throws Error if the effect is not found
  */
-export const findEffectByName = (name: string): string => {
+export const findEffectByName = (name: Effect['name']): Effect['code'] => {
     const effect = effects.find((e) => e.name === name);
     if (!effect) {
         throw new Error(`Effect not found: ${name}`);
@@ -19,11 +20,11 @@ export const findEffectByName = (name: string): string => {
 
 /**
  * Find an effect by its code
- * @param code The effect code to find
+ * @param code The effect code to find (must be a valid Effect code)
  * @returns The effect with the matching code
  * @throws Error if the effect is not found
  */
-export const findEffectByCode = (code: string) => {
+export const findEffectByCode = (code: Effect['code']): Effect => {
     const effect = effects.find((e) => e.code === code);
     if (!effect) {
         throw new Error(`Effect not found: ${code}`);

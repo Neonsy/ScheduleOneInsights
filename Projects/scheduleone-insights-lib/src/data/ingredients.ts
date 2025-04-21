@@ -4,8 +4,9 @@
  */
 import { ranks } from '@/data/ranks';
 import { findEffectByName } from '@/utils/effectUtils';
+import type { Ingredient } from '@/types/Ingredient';
 
-export const ingredients = [
+export const ingredients: Ingredient[] = [
     {
         name: 'Cuke',
         code: 'C',
@@ -135,4 +136,4 @@ export const ingredients = [
         defaultEffect: findEffectByName('Long Faced'),
         description: 'A big jug of ethically sourced horse semen.',
     },
-] as const;
+];

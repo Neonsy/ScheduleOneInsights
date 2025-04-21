@@ -2,6 +2,7 @@
  * Ingredient utility functions
  */
 import { ingredients } from '@/data/ingredients';
+import type { Ingredient } from '@/types/Ingredient';
 
 /**
  * Find an ingredient by its code
@@ -9,7 +10,7 @@ import { ingredients } from '@/data/ingredients';
  * @returns The ingredient with the matching code
  * @throws Error if the ingredient is not found
  */
-export const findIngredientByCode = (code: string) => {
+export const findIngredientByCode = (code: Ingredient['code']): Ingredient => {
     const ingredient = ingredients.find((i) => i.code === code);
     if (!ingredient) {
         throw new Error(`Ingredient not found: ${code}`);

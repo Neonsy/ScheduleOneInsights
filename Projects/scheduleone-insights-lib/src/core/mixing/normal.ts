@@ -8,6 +8,9 @@ import { transformationRules } from '@/data/transformationRules';
 import { findProductByCode } from '@/utils/productUtils';
 import { findIngredientByCode } from '@/utils/ingredientUtils';
 import { findEffectByCode } from '@/utils/effectUtils';
+import { isMarijuanaProduct } from '@/types/Product';
+import { Product } from '@/types/Product';
+import { Ingredient } from '@/types/Ingredient';
 
 /**
  * Mix a product with ingredients to create a new product
@@ -15,7 +18,7 @@ import { findEffectByCode } from '@/utils/effectUtils';
  * @param ingredientCodes Array of ingredient codes to mix with the product
  * @returns The result of mixing the product with the ingredients
  */
-export const mixProduct = (productCode: string, ingredientCodes: string[]): MixResult => {
+export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingredient['code'][]): MixResult => {
     // Look up the base product by code → get its basePrice
     const product = findProductByCode(productCode);
     const basePrice = product.basePrice;
@@ -26,15 +29,11 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
     // Initialize running totals
     let totalCost = 0;
 
-    // SEED the product's inherent effect if it has one (marijuana products have default effects)
-    // Check if it's a marijuana product by checking the type directly
-    if (product.type === 'Marijuana') {
-        // For marijuana products, we know they have a defaultEffect
-        // Use type assertion to tell TypeScript that this product has a defaultEffect property
-        const marijuanaProduct = product as { defaultEffect: string };
-        const baseEffect = findEffectByCode(marijuanaProduct.defaultEffect);
+    // SEED the product's inherent effect if it is a marijuana product
+    if (isMarijuanaProduct(product)) {
+        // defaultEffect is guaranteed to exist and be a valid code
+        const baseEffect = findEffectByCode(product.defaultEffect);
         appliedEffects.push(baseEffect);
-        // Addiction will be calculated after all effects are processed
     }
 
     // Process each ingredient in the exact order provided
@@ -72,8 +71,8 @@ export const mixProduct = (productCode: string, ingredientCodes: string[]): MixR
 
                         // If the effect exists, replace it
                         if (indexToReplace !== -1) {
-                            // Get the new effect - we know newCode is a string from Object.entries
-                            const effectCode = String(newCode);
+                            // `newCode` comes from our rules map and should be a valid effect code
+                            const effectCode = newCode as Effect['code'];
                             const newEffect = findEffectByCode(effectCode);
 
                             // Replace the old effect with the new one

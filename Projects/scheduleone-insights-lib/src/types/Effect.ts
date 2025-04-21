@@ -1,7 +1,21 @@
-import { effects } from '@/data/effects';
+import type { EffectType } from '@/types/consts/effectTypes';
 
 /**
- * Effect type - inferred from the effects data
- * This ensures we have a single source of truth
+ * Explicit interface for effect objects
  */
-export type Effect = (typeof effects)[number];
+export interface Effect {
+    /** Human-readable effect name */
+    name: string;
+    /** Unique effect code */
+    code: string;
+    /** Description of the effect */
+    description: string;
+    /** Ability or cosmetic type */
+    type: EffectType;
+    /** Multiplier value for effect strength */
+    multiplier: number;
+    /** Tier level of the effect */
+    tier: number;
+    /** How addictive the effect is */
+    addictiveness: number;
+}
