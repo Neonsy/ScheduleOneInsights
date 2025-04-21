@@ -13,3 +13,4 @@ export type { ProductType } from '@/exports/types/consts/productTypes';
 export type { EffectType } from '@/exports/types/consts/effectTypes';
 export type { District } from '@/exports/types/consts/districts';
 export { districts } from '@/exports/types/consts/districts';
+export type { Person } from '@/exports/types/Person';

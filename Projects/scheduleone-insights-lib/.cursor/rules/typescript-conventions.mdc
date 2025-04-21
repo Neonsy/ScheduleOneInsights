@@ -13,8 +13,7 @@ model it until you can (or use a temporary unknown and narrow it).
 
 interface-over-type
 Always define object shapes and API contracts as interface (more performant
-for extension and declaration merging). Only use type for advanced cases
-(unions, mapped types) when interface isnt sufficient.
+for extension and declaration merging). Only use type for advanced cases when interface isnt sufficient.
 
 use-custom-types
 Whenever a custom type or interface already exists, reuse it rather than redefining
@@ -22,5 +21,3 @@ inline. This keeps types DRY and consistent.
 
 readonly-properties
 Mark every property readonly if it should never be mutated after construction.
-
-

@@ -9,9 +9,10 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
-        "baseUrl": ".",
+        "rootDir": ".",
+        "baseUrl": "src",
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": ["*"]
         }
     },
     "include": ["src/**/*", "tests/**/*"],
