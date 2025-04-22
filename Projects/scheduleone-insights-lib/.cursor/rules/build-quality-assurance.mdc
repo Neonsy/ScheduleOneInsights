@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+pnpm typecheck (checks for typescript errors)
+pnpm lint (ESLint, fails on warnings/errors)
+pnpm test (unit & integration tests)
+pnpm build (compiles TS, fails on errors)
+
