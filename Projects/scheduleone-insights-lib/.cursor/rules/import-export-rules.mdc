@@ -4,7 +4,7 @@ globs:
 alwaysApply: true
 ---
 mirroring
-Make sure that the export dir mirros the rest of the src dir. However, only folders and filenames that are being exported should be mirrored.
+Make sure that the export dir mirros the rest of the lib dir. However, only folders and filenames that are being exported should be mirrored.
 
 alias paths
 Always use "@" alias for local project imports and exports.

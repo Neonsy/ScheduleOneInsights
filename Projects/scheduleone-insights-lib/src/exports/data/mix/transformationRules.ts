@@ -1,4 +1,4 @@
 /**
  * Transformation Rules data exports
  */
-export { transformationRules } from '@/data/mix/transformationRules';
+export { transformationRules } from '@/lib/data/mix/transformationRules';

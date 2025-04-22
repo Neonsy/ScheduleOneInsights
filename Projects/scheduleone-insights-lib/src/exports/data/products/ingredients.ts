@@ -1,4 +1,4 @@
 /**
  * Ingredients data exports
  */
-export { ingredients } from '@/data/products/ingredients';
+export { ingredients } from '@/lib/data/products/ingredients';

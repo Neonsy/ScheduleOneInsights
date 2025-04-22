@@ -1,4 +1,4 @@
 /**
  * Products data exports
  */
-export { products } from '@/data/products/products';
+export { products } from '@/lib/data/products/products';

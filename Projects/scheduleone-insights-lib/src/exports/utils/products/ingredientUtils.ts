@@ -1,4 +1,4 @@
 /**
  * Ingredient utilities exports
  */
-export { findIngredientByCode } from '@/utils/products/ingredientUtils';
+export { findIngredientByCode } from '@/lib/utils/products/ingredientUtils';

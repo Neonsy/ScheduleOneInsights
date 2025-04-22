@@ -1,4 +1,4 @@
 /**
  * Effects data exports
  */
-export { effects } from '@/data/effects/effects';
+export { effects } from '@/lib/data/effects/effects';

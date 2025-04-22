@@ -1,7 +1,7 @@
 // tests/seedManager/seedManager.test.ts
 import { describe, it, expect } from 'vitest';
-import { encodeRecipe } from '@/core/seedManager/encode';
-import { decodeRecipe } from '@/core/seedManager/decode';
+import { encodeRecipe } from '@/lib/core/seedManager/encode';
+import { decodeRecipe } from '@/lib/core/seedManager/decode';
 
 describe('seedManager encode/decode', () => {
     const productCode = 'OK';

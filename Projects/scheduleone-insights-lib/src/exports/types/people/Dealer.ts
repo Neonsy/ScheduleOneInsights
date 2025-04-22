@@ -1,4 +1,4 @@
 /**
  * Dealer type exports
  */
-export type { Dealer } from '@/types/people/Dealer';
+export type { Dealer } from '@/lib/types/people/Dealer';

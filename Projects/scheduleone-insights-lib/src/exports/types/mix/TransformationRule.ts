@@ -1,4 +1,4 @@
 /**
  * TransformationRule type exports
  */
-export type { TransformationRule, TransformationRules } from '@/types/mix/TransformationRule';
+export type { TransformationRule, TransformationRules } from '@/lib/types/mix/TransformationRule';

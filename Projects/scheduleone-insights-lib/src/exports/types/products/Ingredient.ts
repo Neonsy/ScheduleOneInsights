@@ -1,4 +1,4 @@
 /**
  * Ingredient type exports
  */
-export type { Ingredient } from '@/types/products/Ingredient';
+export type { Ingredient } from '@/lib/types/products/Ingredient';

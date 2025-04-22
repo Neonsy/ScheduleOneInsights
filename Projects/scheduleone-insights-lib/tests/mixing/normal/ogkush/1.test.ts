@@ -1,6 +1,6 @@
 // tests/mixing/normal/ogkush/1.test.ts
 import { describe, it, expect } from 'vitest';
-import { mixProduct } from '@/core/mixing/normal';
+import { mixProduct } from '@/lib/core/mixing/normal';
 
 describe('OG Kush mixing (scenario #1): mix Cuke → Chili → Banana → Donut → Donut', () => {
     it('should include all required effects regardless of order', () => {

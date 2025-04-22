@@ -1,6 +1,6 @@
 // tests/mixing/normal/granddaddypurple/1.test.ts
 import { describe, it, expect } from 'vitest';
-import { mixProduct } from '@/core/mixing/normal';
+import { mixProduct } from '@/lib/core/mixing/normal';
 
 describe('Granddaddy Purple mixing: mix Chili → Battery → Donut → Donut → Mouth Wash → Banana', () => {
     it('should include all required effects regardless of order', () => {

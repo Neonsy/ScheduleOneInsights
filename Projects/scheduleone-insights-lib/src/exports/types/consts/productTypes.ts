@@ -1,4 +1,4 @@
 /**
  * Product types exports
  */
-export type { ProductType } from '@/types/consts/productTypes';
+export type { ProductType } from '@/lib/types/consts/productTypes';

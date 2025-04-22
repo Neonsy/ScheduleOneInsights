@@ -1,4 +1,4 @@
 /**
  * Customer utilities exports
  */
-export { findCustomersByEffectName, findCustomersByEffectCode } from '@/utils/people/customerUtils';
+export { findCustomersByEffectName, findCustomersByEffectCode } from '@/lib/utils/people/customerUtils';

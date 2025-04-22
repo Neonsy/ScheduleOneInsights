@@ -1,4 +1,4 @@
 /**
  * Normal mixing functionality exports
  */
-export { mixProduct } from '@/core/mixing/normal';
+export { mixProduct } from '@/lib/core/mixing/normal';

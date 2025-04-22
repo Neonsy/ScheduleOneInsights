@@ -1,4 +1,4 @@
 /**
  * Person type exports
  */
-export type { Person } from '@/types/people/Person';
+export type { Person } from '@/lib/types/people/Person';
