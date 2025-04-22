@@ -6,6 +6,9 @@ import { RecipePayload } from '@/lib/types/mix/RecipePayload';
 /**
  * Encode a recipe (product + ingredients) into a deterministic Base64 string.
  * Order of ingredients is preserved, so the same recipe always yields the same string.
+ * @param productCode - The code of the base product.
+ * @param ingredientCodes - Ordered list of ingredient codes.
+ * @returns The Base64-encoded recipe string.
  */
 export function encodeRecipe(productCode: Product['code'], ingredientCodes: Ingredient['code'][]): string {
     const payload: RecipePayload = { productCode, ingredientCodes };

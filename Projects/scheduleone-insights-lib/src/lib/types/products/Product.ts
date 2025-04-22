@@ -36,7 +36,9 @@ interface NonMarijuanaProduct extends BaseProduct {
 export type Product = MarijuanaProduct | NonMarijuanaProduct;
 
 /**
- * Runtime type check for marijuana products
+ * Runtime type guard to check if a product is a MarijuanaProduct.
+ * @param product - The product to test.
+ * @returns True if the product's type is 'Marijuana'.
  */
 export const isMarijuanaProduct = (product: Product): product is MarijuanaProduct => {
     return product.type === 'Marijuana';
