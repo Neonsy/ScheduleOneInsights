@@ -3,11 +3,14 @@ description:
 globs: 
 alwaysApply: true
 ---
+mirroring
+Make sure that the export dir mirros the rest of the src dir. However, only folders and filenames that are being exported should be mirrored.
+
 alias paths
 Always use "@" alias for local project imports and exports.
 
 use-barrel-files
-Add an index.ts barrel in each feature root to re-export public modules. That should be done in the exports directory.
+Add an index.ts barrel in each feature root to re-export public modules. That should be done in the exports directory. Barrel index files can use wildcard exports, as the non index files take care of explicitly exporting.
 
 ensure-exports-up-to-date
 Ensure when creating or modifying code that exports are up to date.
