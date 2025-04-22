@@ -4,10 +4,10 @@
  */
 import { Effect } from '@/types/effects/Effect';
 import { MixResult } from '@/types/mix/MixResult';
-import { transformationRules } from '@/data/transformationRules';
-import { findProductByCode } from '@/utils/productUtils';
-import { findIngredientByCode } from '@/utils/ingredientUtils';
-import { findEffectByCode } from '@/utils/effectUtils';
+import { transformationRules } from '@/data/mix/transformationRules';
+import { findProductByCode } from '@/utils/products/productUtils';
+import { findIngredientByCode } from '@/utils/products/ingredientUtils';
+import { findEffectByCode } from '@/utils/effects/effectUtils';
 import { isMarijuanaProduct } from '@/types/products/Product';
 import { Product } from '@/types/products/Product';
 import { Ingredient } from '@/types/products/Ingredient';

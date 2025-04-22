@@ -9,14 +9,15 @@
         "dist"
     ],
     "scripts": {
-        "check": "tsc --project tsconfig.dev.json",
+        "typecheck": "tsc --project tsconfig.dev.json",
         "build": "tsc --build tsconfig.build.json",
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "lint": "eslint src --ext .ts",
         "lint:fix": "eslint src --ext .ts --fix",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "prepublishOnly": "pnpm run lint && pnpm run test && pnpm run build"
     },
     "keywords": [
         "schedule1",

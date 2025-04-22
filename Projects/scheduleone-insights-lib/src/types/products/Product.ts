@@ -1,4 +1,4 @@
-import { products } from '@/data/products';
+import { products } from '@/data/products/products';
 import { ProductType } from '@/types/consts/productTypes';
 import type { Effect } from '@/types/effects/Effect';
 

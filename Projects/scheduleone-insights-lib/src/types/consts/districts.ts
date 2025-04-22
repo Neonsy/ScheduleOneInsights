@@ -1,15 +1,11 @@
 /**
- * District definitions
- * Defines the available districts in the system
+ * District enum - numeric enum where 0 = first district
  */
-
-export const districts = {
-    Northtown: 'Northtown',
-    Westville: 'Westville',
-    Downtown: 'Downtown',
-    Docks: 'Docks',
-    Suburbia: 'Suburbia',
-    Uptown: 'Uptown',
-} as const;
-
-export type District = keyof typeof districts;
+export enum District {
+    Northtown,
+    Westville,
+    Downtown,
+    Docks,
+    Suburbia,
+    Uptown,
+}
