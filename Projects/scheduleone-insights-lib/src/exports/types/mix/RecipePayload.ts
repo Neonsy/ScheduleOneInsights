@@ -1,1 +1,1 @@
-export type { RecipePayload } from '@/lib/types/mix/RecipePayload';
+export type { RecipePayload } from '@/code/types/mix/RecipePayload';

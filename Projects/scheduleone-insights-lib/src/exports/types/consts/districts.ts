@@ -1,4 +1,4 @@
 /**
  * District exports
  */
-export type { District } from '@/lib/types/consts/districts';
+export type { District } from '@/code/types/consts/districts';

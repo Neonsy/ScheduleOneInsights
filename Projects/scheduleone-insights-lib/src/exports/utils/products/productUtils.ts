@@ -1,4 +1,4 @@
 /**
  * Product utilities exports
  */
-export { findProductByCode } from '@/lib/utils/products/productUtils';
+export { findProductByCode } from '@/code/utils/products/productUtils';

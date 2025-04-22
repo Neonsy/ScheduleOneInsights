@@ -1,4 +1,4 @@
 /**
  * Effect type exports
  */
-export type { Effect } from '@/lib/types/effects/Effect';
+export type { Effect } from '@/code/types/effects/Effect';

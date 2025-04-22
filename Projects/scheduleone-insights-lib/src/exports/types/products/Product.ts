@@ -1,5 +1,5 @@
 /**
  * Product type exports
  */
-export type { Product } from '@/lib/types/products/Product';
-export { isMarijuanaProduct } from '@/lib/types/products/Product';
+export type { Product } from '@/code/types/products/Product';
+export { isMarijuanaProduct } from '@/code/types/products/Product';

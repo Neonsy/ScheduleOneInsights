@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { findCustomersByEffectName, findCustomersByEffectCode } from '@/lib/utils/people/customerUtils';
+import { findCustomersByEffectName, findCustomersByEffectCode } from '@/code/utils/people/customerUtils';
 
 const expectedNames = ['Herbert Bleuball', 'Pearl Moore'].sort();
 

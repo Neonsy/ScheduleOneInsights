@@ -1,4 +1,4 @@
 /**
  * People utilities exports
  */
-export { getPeopleByDistrict } from '@/lib/utils/people/peopleUtils';
+export { getPeopleByDistrict } from '@/code/utils/people/peopleUtils';

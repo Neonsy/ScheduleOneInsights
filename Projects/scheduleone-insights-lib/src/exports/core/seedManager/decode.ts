@@ -1,1 +1,1 @@
-export { decodeRecipe } from '@/lib/core/seedManager/decode';
+export { decodeRecipe } from '@/code/core/seedManager/decode';
