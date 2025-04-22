@@ -2,7 +2,7 @@
  * Effect utility functions
  */
 import { effects } from '@/data/effects';
-import type { Effect } from '@/types/Effect';
+import type { Effect } from '@/types/effects/Effect';
 
 /**
  * Find an effect by name and return its code

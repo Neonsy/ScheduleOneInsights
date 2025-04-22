@@ -1,7 +1,7 @@
-import { Product } from '@/types/Product';
-import { Ingredient } from '@/types/Ingredient';
+import { Product } from '@/types/products/Product';
+import { Ingredient } from '@/types/products/Ingredient';
 import { Buffer } from 'buffer';
-import { RecipePayload } from '@/types/RecipePayload';
+import { RecipePayload } from '@/types/mix/RecipePayload';
 
 /**
  * Encode a recipe (product + ingredients) into a deterministic Base64 string.

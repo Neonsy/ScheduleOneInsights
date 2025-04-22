@@ -1,4 +1,4 @@
-import type { Effect } from '@/types/Effect';
+import type { Effect } from '@/types/effects/Effect';
 
 /**
  * Single transformation rule applied by ingredient codes.

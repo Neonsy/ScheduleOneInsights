@@ -1,7 +1,7 @@
 import { customers } from '@/data/customers';
 import { dealers } from '@/data/dealers';
 import type { District } from '@/types/consts/districts';
-import type { Person } from '@/types/Person';
+import type { Person } from '@/types/people/Person';
 
 /**
  * Get all people (customers and dealers) by district.

@@ -2,7 +2,7 @@
  * Product utility functions
  */
 import { products } from '@/data/products';
-import type { Product } from '@/types/Product';
+import type { Product } from '@/types/products/Product';
 
 /**
  * Find a product by its code

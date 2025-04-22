@@ -1,6 +1,6 @@
 import { districts } from '@/types/consts/districts';
 import { findEffectByName } from '@/utils/effectUtils';
-import type { Customer } from '@/types/Customer';
+import type { Customer } from '@/types/people/Customer';
 
 /**
  * Customers data - single source of truth

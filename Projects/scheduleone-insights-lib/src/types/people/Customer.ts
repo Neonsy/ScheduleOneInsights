@@ -1,5 +1,5 @@
 import { District } from '@/types/consts/districts';
-import { Effect } from '@/types/Effect';
+import { Effect } from '@/types/effects/Effect';
 
 /**
  * Customer interface - strict typing for customer records

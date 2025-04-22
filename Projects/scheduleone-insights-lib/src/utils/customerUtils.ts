@@ -1,7 +1,7 @@
 import { customers } from '@/data/customers';
 import { findEffectByName, findEffectByCode } from '@/utils/effectUtils';
-import type { Customer } from '@/types/Customer';
-import type { Effect } from '@/types/Effect';
+import type { Customer } from '@/types/people/Customer';
+import type { Effect } from '@/types/effects/Effect';
 
 /**
  * Find customers by effect name.

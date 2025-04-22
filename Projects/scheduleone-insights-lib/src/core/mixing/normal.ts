@@ -2,15 +2,15 @@
  * Normal mixing functionality
  * Provides functions for mixing products with ingredients
  */
-import { Effect } from '@/types/Effect';
-import { MixResult } from '@/types/MixResult';
+import { Effect } from '@/types/effects/Effect';
+import { MixResult } from '@/types/mix/MixResult';
 import { transformationRules } from '@/data/transformationRules';
 import { findProductByCode } from '@/utils/productUtils';
 import { findIngredientByCode } from '@/utils/ingredientUtils';
 import { findEffectByCode } from '@/utils/effectUtils';
-import { isMarijuanaProduct } from '@/types/Product';
-import { Product } from '@/types/Product';
-import { Ingredient } from '@/types/Ingredient';
+import { isMarijuanaProduct } from '@/types/products/Product';
+import { Product } from '@/types/products/Product';
+import { Ingredient } from '@/types/products/Ingredient';
 
 /**
  * Mix a product with ingredients to create a new product

@@ -4,7 +4,7 @@
  */
 import { ranks } from '@/data/ranks';
 import { districts } from '@/types/consts/districts';
-import type { Dealer } from '@/types/Dealer';
+import type { Dealer } from '@/types/people/Dealer';
 
 export const dealers: Dealer[] = [
     {

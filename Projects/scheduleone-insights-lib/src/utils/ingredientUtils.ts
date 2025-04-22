@@ -2,7 +2,7 @@
  * Ingredient utility functions
  */
 import { ingredients } from '@/data/ingredients';
-import type { Ingredient } from '@/types/Ingredient';
+import type { Ingredient } from '@/types/products/Ingredient';
 
 /**
  * Find an ingredient by its code

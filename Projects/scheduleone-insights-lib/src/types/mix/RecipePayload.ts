@@ -1,5 +1,5 @@
-import { Product } from '@/types/Product';
-import { Ingredient } from '@/types/Ingredient';
+import { Product } from '@/types/products/Product';
+import { Ingredient } from '@/types/products/Ingredient';
 
 /**
  * Payload for seed encoding/decoding of a recipe.

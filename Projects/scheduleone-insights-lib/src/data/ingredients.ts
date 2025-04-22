@@ -4,7 +4,7 @@
  */
 import { ranks } from '@/data/ranks';
 import { findEffectByName } from '@/utils/effectUtils';
-import type { Ingredient } from '@/types/Ingredient';
+import type { Ingredient } from '@/types/products/Ingredient';
 
 export const ingredients: Ingredient[] = [
     {

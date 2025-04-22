@@ -1,4 +1,4 @@
-import type { TransformationRules } from '@/types/TransformationRule';
+import type { TransformationRules } from '@/types/mix/TransformationRule';
 
 export const transformationRules: TransformationRules = {
     // Ingredient codes in alphabetical order

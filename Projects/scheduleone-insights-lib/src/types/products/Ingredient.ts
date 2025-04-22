@@ -1,7 +1,7 @@
 /**
  * Ingredient interface - strict typing
  */
-import type { Effect } from '@/types/Effect';
+import type { Effect } from '@/types/effects/Effect';
 
 export interface Ingredient {
     name: string;
