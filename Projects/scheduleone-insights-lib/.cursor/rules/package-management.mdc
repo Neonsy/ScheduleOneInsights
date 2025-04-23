@@ -4,6 +4,4 @@ globs:
 alwaysApply: true
 ---
 use-pnpm: Always use pnpm for installing, adding, and removing dependencies.
-commit-pnpm-lock: Check in pnpm-lock.yaml to ensure reproducible installs.
-
 update-lockfile: After adding/removing deps, run pnpm install to update the lockfile.

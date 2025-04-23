@@ -1,6 +1,6 @@
 // tests/mixing/normal/greencrack/1.test.ts
 import { describe, it, expect } from 'vitest';
-import { mixProduct } from '@/code/core/mixing/normal';
+import { mixProduct } from '@/code/core/mixing/normal/algorithm';
 
 describe('Green Crack mixing: mix Banana → Gasoline', () => {
     it('should include all required effects regardless of order', () => {
