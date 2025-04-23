@@ -11,6 +11,10 @@ interface BaseProduct {
     basePrice: number;
     rank: number;
     type: ProductType;
+    /**
+     * This field is needed because non-marijuana products like Meth and Cocaine have inherent addictiveness (0 to 1).
+     */
+    readonly addictiveness?: number;
 }
 
 /**

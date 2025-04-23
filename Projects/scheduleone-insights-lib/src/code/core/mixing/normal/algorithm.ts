@@ -34,29 +34,36 @@ export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingred
         const ingredient = findIngredientByCode(ingCode);
         totalCost += ingredient.price;
 
+        // Apply all applicable transformation rules for this ingredient using a snapshot (avoid cascading matches)
+        const snapshot = new Set(effectMap.keys());
         const rules = transformationRules[ingCode as keyof typeof transformationRules];
         if (rules) {
+            const transforms: [Effect['code'], Effect['code']][] = [];
             for (const { ifPresent, ifNotPresent, replace } of rules) {
-                const presentOK = ifPresent.every((code) => effectMap.has(code));
-                const notPresentOK = ifNotPresent.every((code) => !effectMap.has(code));
+                const presentOK = ifPresent.every((code) => snapshot.has(code));
+                const notPresentOK = ifNotPresent.every((code) => !snapshot.has(code));
                 if (presentOK && notPresentOK) {
                     for (const [oldCode, newCode] of Object.entries(replace) as [Effect['code'], Effect['code']][]) {
-                        if (effectMap.has(oldCode)) {
-                            const newEffect = findEffectByCode(newCode);
-                            effectMap.delete(oldCode);
-                            effectMap.set(newCode, newEffect);
+                        if (snapshot.has(oldCode)) {
+                            transforms.push([oldCode, newCode]);
                         }
                     }
                 }
             }
+            for (const [oldCode, newCode] of transforms) {
+                const newEffect = findEffectByCode(newCode);
+                effectMap.delete(oldCode);
+                effectMap.set(newEffect.code, newEffect);
+            }
         }
-
-        if (!effectMap.has(ingredient.defaultEffect)) {
+        // Now apply the ingredient's own effect if not already present and under 8 effects
+        if (!effectMap.has(ingredient.defaultEffect) && effectMap.size < 8) {
             const defaultEffect = findEffectByCode(ingredient.defaultEffect);
             effectMap.set(defaultEffect.code, defaultEffect);
         }
     }
 
+    // Collect and sort unique effects
     const appliedEffects = Array.from(effectMap.values());
     appliedEffects.sort((a, b) => a.code.localeCompare(b.code));
 
