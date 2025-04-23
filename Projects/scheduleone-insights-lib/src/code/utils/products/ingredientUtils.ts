@@ -4,6 +4,11 @@
 import { ingredients } from '@/code/data/products/ingredients';
 import type { Ingredient } from '@/code/types/products/Ingredient';
 
+// Performance: Precompute ingredient lookup map for constant-time access
+const ingredientByCodeMap: Map<Ingredient['code'], Ingredient> = new Map(
+    ingredients.map((i: Ingredient) => [i.code, i])
+);
+
 /**
  * Find an ingredient by its code
  * @param code The ingredient code to find
@@ -11,7 +16,7 @@ import type { Ingredient } from '@/code/types/products/Ingredient';
  * @throws Error if the ingredient is not found
  */
 export const findIngredientByCode = (code: Ingredient['code']): Ingredient => {
-    const ingredient = ingredients.find((i) => i.code === code);
+    const ingredient = ingredientByCodeMap.get(code);
     if (!ingredient) {
         throw new Error(`Ingredient not found: ${code}`);
     }

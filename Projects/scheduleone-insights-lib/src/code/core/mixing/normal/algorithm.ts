@@ -65,14 +65,21 @@ export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingred
 
     // Collect and sort unique effects
     const appliedEffects = Array.from(effectMap.values());
-    appliedEffects.sort((a, b) => a.code.localeCompare(b.code));
+    appliedEffects.sort((a, b) => (a.code < b.code ? -1 : a.code > b.code ? 1 : 0));
 
-    const totalMultiplier = appliedEffects.reduce((sum, e) => sum + e.multiplier, 0);
+    // Compute total multiplier and addiction in a single pass for better performance
+    let totalMultiplier = 0;
+    let rawAddiction = 0;
+    for (const e of appliedEffects) {
+        totalMultiplier += e.multiplier;
+        rawAddiction += e.addictiveness;
+    }
+
     const sellPrice = Math.round(basePrice * (1 + totalMultiplier));
     const profit = Math.round(sellPrice - totalCost);
 
-    const rawAddiction = appliedEffects.reduce((sum, e) => sum + e.addictiveness, 0);
-    const totalAddiction = Math.min(Math.round(rawAddiction * 100) / 100, 1);
+    // If max number of effects (8) reached, addiction saturates at 1
+    const totalAddiction = appliedEffects.length === 8 ? 1 : Math.min(Math.round(rawAddiction * 100) / 100, 1);
 
     return {
         effects: appliedEffects.map((e) => e.name),
