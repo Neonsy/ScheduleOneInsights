@@ -13,7 +13,7 @@ describe('OG Kush mixing (scenario #2): mix Banana → Donut', () => {
         // Verify no unexpected effects
         expect(result.effects).toHaveLength(expectedEffects.length);
 
-        expect(result.totalAddiction).toEqual(0.43);
+        expect(result.totalAddiction).toEqual(0.47);
         expect(result.totalCost).toEqual(5);
         expect(result.sellPrice).toEqual(60);
         expect(result.profit).toEqual(55);

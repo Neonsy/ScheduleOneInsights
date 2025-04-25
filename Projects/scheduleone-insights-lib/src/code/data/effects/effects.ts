@@ -2,7 +2,9 @@
  * Effects data - single source of truth
  * All effect types and properties are inferred from this data
  */
-export const effects = [
+import type { Effect } from '@/code/types/effects/Effect';
+
+export const effects: readonly Effect[] = [
     {
         name: 'Anti-Gravity',
         code: 'AG',
@@ -10,7 +12,7 @@ export const effects = [
         type: 'Ability',
         multiplier: 0.54,
         tier: 5,
-        addictiveness: 0.0,
+        addictiveness: 0.611,
     },
     {
         name: 'Athletic',
@@ -64,7 +66,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.56,
         tier: 5,
-        addictiveness: 0.0,
+        addictiveness: 0.1,
     },
     {
         name: 'Disorienting',
@@ -83,7 +85,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.5,
         tier: 5,
-        addictiveness: 0.0,
+        addictiveness: 0.235,
     },
     {
         name: 'Energizing',
@@ -101,7 +103,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.18,
         tier: 1,
-        addictiveness: 0.0,
+        addictiveness: 0.235,
     },
     {
         name: 'Explosive',
@@ -119,7 +121,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.16,
         tier: 1,
-        addictiveness: 0.0,
+        addictiveness: 0.104,
     },
     {
         name: 'Foggy',
@@ -146,7 +148,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.48,
         tier: 5,
-        addictiveness: 0.0,
+        addictiveness: 0.472,
     },
     {
         name: 'Jennerising',
@@ -164,7 +166,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.0,
         tier: 1,
-        addictiveness: 0.0,
+        addictiveness: 0.1,
     },
     {
         name: 'Lethal',
@@ -191,7 +193,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.12,
         tier: 1,
-        addictiveness: 0.0,
+        addictiveness: 0.096,
     },
     {
         name: 'Paranoia',
@@ -209,7 +211,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.14,
         tier: 1,
-        addictiveness: 0.0,
+        addictiveness: 0.104,
     },
     {
         name: 'Schizophrenic',
@@ -245,7 +247,7 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.6,
         tier: 5,
-        addictiveness: 0.0,
+        addictiveness: 0.336,
     },
     {
         name: 'Slippery',
@@ -317,6 +319,6 @@ export const effects = [
         type: 'Cosmetic',
         multiplier: 0.58,
         tier: 5,
-        addictiveness: 0.0,
+        addictiveness: 0.598,
     },
 ] as const;

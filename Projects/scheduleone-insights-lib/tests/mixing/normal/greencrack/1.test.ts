@@ -13,7 +13,7 @@ describe('Green Crack mixing: mix Banana → Gasoline', () => {
         // Verify no unexpected effects
         expect(result.effects).toHaveLength(expectedEffects.length);
 
-        expect(result.totalAddiction).toEqual(0.37);
+        expect(result.totalAddiction).toEqual(0.42);
         expect(result.totalCost).toEqual(7);
         expect(result.sellPrice).toEqual(50);
         expect(result.profit).toEqual(43);
