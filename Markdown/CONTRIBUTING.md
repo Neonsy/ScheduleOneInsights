@@ -2,6 +2,9 @@
 
 > _A guide to our branching strategy and code contribution workflow_
 
+> [!NOTE]
+> This is a guide, helper, and an overview. Not everything may be strictly followed all of the time.
+
 ## 🌳 Branch Structure
 
 ScheduleOneInsights follows a structured branching strategy to ensure code quality and maintain a stable production environment.
