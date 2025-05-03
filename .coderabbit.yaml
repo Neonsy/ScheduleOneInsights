@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+version: 2
+
+# Override only the settings that differ from organization defaults
+reviews:
+  auto_review:
+    base_branches:
+      - main  # Include your default branch(es)
+      - Dev   # Add Dev branch
+      - Preview  # Add Preview branch
