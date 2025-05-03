@@ -5,7 +5,7 @@ This project focuses on delivering powerful tools for optimizing production and 
 The goal is to equip players with the insights needed to navigate and dominate the in-game economy.
 Input from the community plays a vital role in shaping the project's direction.
 
-### Current Snapshot (as of 03.05.2025)
+## Current Snapshot (as of 03.05.2025)
 
 Below is a visualization of the project's current modular structure and planned components:
 
