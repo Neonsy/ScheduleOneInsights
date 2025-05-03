@@ -2,6 +2,9 @@
 
 > _A guide to our branching strategy and code contribution workflow_
 
+> [!NOTE]
+> This is a guide, helper, and an overview. Not everything may be strictly followed all of the time.
+
 ## 🌳 Branch Structure
 
 ScheduleOneInsights follows a structured branching strategy to ensure code quality and maintain a stable production environment.
@@ -120,9 +123,9 @@ When the `Preview` branch is stable and ready for production:
 When reviewing code, consider:
 
 -   Does the code follow project standards?
--   Is the code well-tested?
--   Is the implementation efficient and maintainable?
--   Is documentation adequate?
+-   Is the code well-tested? (Proof outside test tools is also valid)
+-   Is the implementation efficient and maintainable? (Non strict, but should be loosely followed)
+-   Is documentation adequate? (Comments and Docstring)
 -   Are there any security concerns?
 
 ## 🚀 Future CI/CD Pipeline
@@ -133,7 +136,7 @@ Once implemented, these will include:
 -   **Automated Testing**: Unit tests, integration tests, and end-to-end tests
 -   **Code Quality Checks**: Linting, formatting, and static analysis
 -   **Security Scanning**: Dependency vulnerability checks
--   **Performance Testing**: Ensuring changes don't negatively impact performance
+-   **Performance Testing** (If needed): Ensuring changes don't negatively impact performance
 -   **Automated Deployments**: To preview and production environments
 
 ## 🤝 Getting Help

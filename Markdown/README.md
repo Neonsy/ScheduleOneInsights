@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 ![Status: In Development](https://img.shields.io/badge/Status-In%20Development-blue)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Neonsy/ScheduleOneInsights?utm_source=oss&utm_medium=github&utm_campaign=Neonsy%2FScheduleOneInsights&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 [![Ko-fi: Donate](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?style=flat&logo=ko-fi)](https://ko-fi.com/neonsy)
 
 ## 🚀 Introduction
