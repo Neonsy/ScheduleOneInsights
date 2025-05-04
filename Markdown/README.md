@@ -1,4 +1,4 @@
-# 🧪 ScheduleOneInsights
+# 🧪 [ScheduleOneInsights](https://scheduleoneinsights.space)
 
 > _Dominate the in-game economy with precision mixing and strategic insights_
 
@@ -14,11 +14,11 @@ ScheduleOneInsights is a fan-made project designed to enhance your [Schedule One
 Whether you're a casual player enjoying the silliness or a strategic mastermind optimizing your production chain, this toolkit provides everything you need to excel.
 
 > [!TIP]
-> Check out the [Roadmap](#-roadmap) to see what's coming next!
+> Check out the [Roadmap](/Markdown/Roadmap.md) to see what's coming next!
 
 ## ✨ Features
 
-### 🌐 Website (User-Facing Experience)
+### 🌐 [Website](/Projects/Web/) (User-Facing Experience)
 
 The project's intuitive web interface offers:
 
@@ -28,7 +28,7 @@ The project's intuitive web interface offers:
 -   **📚 Actionable Game Guide**: Unlock proven strategies for rapid early-game progression
 -   **🌍 Community-Driven Meta**: Share and discover cutting-edge mix strategies from top players
 
-### 📦 Library (schedule1lib)
+### 📦 [Library](/Projects/Lib/) (scheduleone-insights-lib)
 
 Under the hood, the project's powerful library ensures:
 
@@ -37,6 +37,10 @@ Under the hood, the project's powerful library ensures:
 -   **🧪 Rigorous Unit Testing**: Guarantee calculation accuracy and prevent costly mistakes
 -   **🧩 Modular and Scalable Design**: Adapt to evolving game mechanics with minimal effort
 -   **🚀 Lean Implementation**: Optimized for performance and responsiveness
+
+#### 📝 [Documentation](/Projects/Docs/)
+
+If you want a web based documentation, you can find it [here](https://docs.scheduleoneinsights.space).
 
 > [!IMPORTANT]
 > The library is designed to be used independently of the website, making it perfect for integration into your own projects!
@@ -62,7 +66,7 @@ For information on how to contribute, please refer to the [Contribution Guidelin
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details.
 
 ## 🙏 Acknowledgements
 

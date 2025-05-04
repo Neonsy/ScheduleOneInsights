@@ -19,11 +19,6 @@ jobs:
             docs_changed: ${{ steps.read_outputs.outputs.docs_changed }} # Output the docs_changed value
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-              with:
-                  ref: ${{ github.event.workflow_run.head_sha }} # Checkout the correct commit
-
             - name: Download monorepo changes artifact
               uses: actions/download-artifact@v4
               with:
