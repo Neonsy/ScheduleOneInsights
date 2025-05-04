@@ -1,0 +1,70 @@
+name: Lib CI
+
+on:
+    workflow_run:
+        workflows: ['Monorepo Identify Changes']
+        types: [completed]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_sha }}
+    cancel-in-progress: true
+
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+        outputs:
+            lib_changed: ${{ steps.read_outputs.outputs.lib_changed }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }} # Checkout the correct commit
+
+            - name: Download monorepo changes artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: monorepo-changes
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+
+            - name: List files after download
+              run: ls -l
+
+            - name: Print outputs.properties content
+              run: cat outputs.properties
+
+            - name: Read outputs from artifact
+              id: read_outputs # Keep the ID to reference outputs later
+              # Using a dedicated action to read properties file
+              uses: kurt-code/gha-properties@v0.0.1
+              with:
+                operation: 'read'
+                file-path: 'outputs.properties'
+                keys: 'docs_changed' # Explicitly list the key for this workflow
+
+            - name: Print Step Outputs
+              run: |
+                echo "Lib changed (step output): ${{ steps.read_outputs.outputs.lib_changed }}"
+                # Note: Only lib_changed will be available as a step output here
+
+    lib_job:
+        needs: prepare
+
+        runs-on: ubuntu-latest
+
+        if: needs.prepare.outputs.lib_changed == 'true'
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+
+            - name: Run lib specific job
+              run: |
+                  echo "Changes detected in Projects/Lib. Running lib specific tasks."
+                  # Add your lib specific commands here

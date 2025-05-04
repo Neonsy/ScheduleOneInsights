@@ -1,0 +1,71 @@
+name: Docs CI
+
+on:
+    workflow_run:
+        workflows: ['Monorepo Identify Changes'] # Trigger after the initial workflow completes
+        types: [completed]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_sha }}
+    cancel-in-progress: true
+
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+
+        if: ${{ github.event.workflow_run.conclusion == 'success' }} # Ensure the preceding workflow succeeded
+
+        outputs:
+            docs_changed: ${{ steps.read_outputs.outputs.docs_changed }} # Output the docs_changed value
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }} # Checkout the correct commit
+
+            - name: Download monorepo changes artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: monorepo-changes
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+
+            - name: List files after download
+              run: ls -l
+
+            - name: Print outputs.properties content
+              run: cat outputs.properties
+
+            - name: Read outputs from artifact
+              id: read_outputs # Keep the ID to reference outputs later
+              # Using a dedicated action to read properties file
+              uses: kurt-code/gha-properties@v0.0.1
+              with:
+                operation: 'read'
+                file-path: 'outputs.properties'
+                keys: 'docs_changed' # Explicitly list the key for this workflow
+
+            - name: Print Step Outputs
+              run: |
+                echo "Docs changed (step output): ${{ steps.read_outputs.outputs.docs_changed }}"
+                # Note: Only docs_changed will be available as a step output here
+
+    docs_job:
+        needs: prepare # This job depends on the 'prepare' job
+
+        runs-on: ubuntu-latest
+
+        # Access the output from the 'prepare' job
+        if: needs.prepare.outputs.docs_changed == 'true'
+
+        steps:
+            - name: Checkout code # Need to checkout code again in the second job
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }} # Checkout the correct commit
+
+            - name: Run docs specific job
+              run: |
+                  echo "Changes detected in Projects/Docs. Running docs specific tasks."
+                  # Add your docs specific commands here
