@@ -44,7 +44,7 @@ jobs:
               with:
                 operation: 'read'
                 file-path: 'outputs.properties'
-                keys: 'docs_changed' # Explicitly list the key for this workflow
+                keys: 'lib_changed' # Explicitly list the key for this workflow
 
             - name: Print Step Outputs
               run: |
