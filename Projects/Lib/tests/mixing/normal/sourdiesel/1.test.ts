@@ -10,19 +10,18 @@ test('mixProduct for Sour Diesel with specific ingredients sequence', () => {
     const result = mixProduct('SD', ingredientCodes);
 
     // Should have exactly the 8 desired effects (order doesn't matter)
-    expect(result.effects).toHaveLength(8);
-    expect(result.effects).toEqual(
-        expect.arrayContaining([
-            'Refreshing',
-            'Paranoia',
-            'Sneaky',
-            'Euphoric',
-            'Calorie-Dense',
-            'Bright-Eyed',
-            'Thought-Provoking',
-            'Tropic Thunder',
-        ])
-    );
+    const expectedEffects = [
+        'Refreshing',
+        'Paranoia',
+        'Sneaky',
+        'Euphoric',
+        'Calorie-Dense',
+        'Bright-Eyed',
+        'Thought-Provoking',
+        'Tropic Thunder',
+    ];
+    // Sort both arrays to ensure order-independent comparison
+    expect(result.effects.sort()).toEqual(expectedEffects.sort());
 
     // Cost, sale price, profit, and maximal addiction
     expect(result.totalCost).toBe(36);

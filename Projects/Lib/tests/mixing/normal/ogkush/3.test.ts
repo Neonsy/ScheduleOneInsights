@@ -9,20 +9,18 @@ test('mixProduct for OG Kush with specific ingredients sequence', () => {
     const ingredientCodes: string[] = ['MB', 'BNN', 'C', 'ED', 'BNN', 'ED', 'DN', 'DN', 'PRCTM', 'MO'];
     const result = mixProduct('OK', ingredientCodes);
 
-    // Should have exactly the 8 desired effects (order doesn't matter)
-    expect(result.effects).toHaveLength(8);
-    expect(result.effects).toEqual(
-        expect.arrayContaining([
-            'Cyclopean',
-            'Thought-Provoking',
-            'Athletic',
-            'Gingeritis',
-            'Shrinking',
-            'Explosive',
-            'Calorie-Dense',
-            'Anti-Gravity',
-        ])
-    );
+    const expectedEffects = [
+        'Cyclopean',
+        'Thought-Provoking',
+        'Athletic',
+        'Gingeritis',
+        'Shrinking',
+        'Explosive',
+        'Calorie-Dense',
+        'Anti-Gravity',
+    ];
+    // Sort both arrays to ensure order-independent comparison
+    expect(result.effects.sort()).toEqual(expectedEffects.sort());
 
     // Cost, sale price, profit, and maximal addiction
     expect(result.totalCost).toBe(40);

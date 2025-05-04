@@ -6,7 +6,7 @@ import { District } from '@/code/types/consts/districts';
  * Customers data - single source of truth
  * All customer types and properties are inferred from this data
  */
-export const customers: Customer[] = [
+export const customers: readonly Customer[] = [
     // Northtown
     {
         name: 'Kyle Cooley',

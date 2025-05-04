@@ -92,6 +92,12 @@ export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingred
         }
     }
 
+    // Safety cap: enforce maximum of 8 effects by evicting the oldest entry
+    while (effectMap.size > 8) {
+        const oldestCode = effectMap.keys().next().value!;
+        effectMap.delete(oldestCode);
+    }
+
     // Collect, sort and extract effect names
     const appliedEffects = Array.from(effectMap.values()).sort((a, b) =>
         a.code < b.code ? -1 : a.code > b.code ? 1 : 0
