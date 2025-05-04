@@ -1,0 +1,55 @@
+name: Monorepo Identify Changes
+
+on:
+    pull_request:
+        types: [opened, synchronize] # Trigger on PR events
+        branches:
+            - main
+            - Dev
+            - Preview
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    filter:
+        runs-on: ubuntu-latest
+
+        outputs:
+            docs_changed: ${{ steps.changes.outputs.docs }}
+            lib_changed: ${{ steps.changes.outputs.lib }}
+            web_changed: ${{ steps.changes.outputs.web }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Check for path changes
+              id: changes # Give this step an ID to reference its outputs
+              uses: tj-actions/changed-files@v44 # Use the changed-files action
+              with:
+                  since_last_remote_commit: true
+                  files_yaml: |
+                      docs:
+                        - 'Projects/Docs/**'
+                      lib:
+                        - 'Projects/Lib/**'
+                      web:
+                        - 'Projects/Web/**'
+
+            - name: Print outputs to console and create file
+              run: |
+                  echo "Docs changed: ${{ steps.changes.outputs.docs_any_changed }}"
+                  echo "Lib changed: ${{ steps.changes.outputs.lib_any_changed }}"
+                  echo "Web changed: ${{ steps.changes.outputs.web_any_changed }}"
+
+                  echo "docs_changed=${{ steps.changes.outputs.docs_any_changed }}" > outputs.properties
+                  echo "lib_changed=${{ steps.changes.outputs.lib_any_changed }}" >> outputs.properties
+                  echo "web_changed=${{ steps.changes.outputs.web_any_changed }}" >> outputs.properties
+
+            - name: Upload outputs artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: monorepo-changes
+                  path: outputs.properties
