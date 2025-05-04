@@ -19,11 +19,6 @@ jobs:
             lib_changed: ${{ steps.read_outputs.outputs.lib_changed }}
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-              with:
-                  ref: ${{ github.event.workflow_run.head_sha }} # Checkout the correct commit
-
             - name: Download monorepo changes artifact
               uses: actions/download-artifact@v4
               with:
