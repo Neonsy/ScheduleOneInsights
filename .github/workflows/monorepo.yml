@@ -24,6 +24,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
 
             - name: Check for path changes
               id: changes # Give this step an ID to reference its outputs
