@@ -1,61 +1,55 @@
 name: Monorepo Identify Changes
 
 on:
-  pull_request:
-    types: [opened, synchronize] # Trigger on PR events
-    branches:
-      - main
-      - Dev
-      - Preview
+    pull_request:
+        types: [opened, synchronize] # Trigger on PR events
+        branches:
+            - main
+            - Dev
+            - Preview
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
     cancel-in-progress: true
 
 jobs:
-  filter:
-    runs-on: ubuntu-latest
-    
-    outputs:
-      docs_changed: ${{ steps.changes.outputs.docs }}
-      lib_changed: ${{ steps.changes.outputs.lib }}
-      web_changed: ${{ steps.changes.outputs.web }}
+    filter:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history to accurately detect changes
+        outputs:
+            docs_changed: ${{ steps.changes.outputs.docs }}
+            lib_changed: ${{ steps.changes.outputs.lib }}
+            web_changed: ${{ steps.changes.outputs.web }}
 
-      - name: Check for path changes
-        id: changes # Give this step an ID to reference its outputs
-        uses: tj-actions/changed-files@v44 # Use the changed-files action
-        with:
-          # Compare changes between the current commit and the previous remote commit of the PR branch
-          since_last_remote_commit: true
-          # Define your paths using files_yaml
-          files_yaml: |
-            docs:
-              - 'Projects/Docs/**'
-            lib:
-              - 'Projects/Lib/**'
-            web:
-              - 'Projects/Web/**'
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Print outputs to console and create file
-        run: |
-          # Access the outputs using the keys defined in files_yaml
-          echo "Docs changed: ${{ steps.changes.outputs.docs_any_changed }}"
-          echo "Lib changed: ${{ steps.changes.outputs.lib_any_changed }}"
-          echo "Web changed: ${{ steps.changes.outputs.web_any_changed }}"
+            - name: Check for path changes
+              id: changes # Give this step an ID to reference its outputs
+              uses: tj-actions/changed-files@v44 # Use the changed-files action
+              with:
+                  since_last_remote_commit: true
+                  files_yaml: |
+                      docs:
+                        - 'Projects/Docs/**'
+                      lib:
+                        - 'Projects/Lib/**'
+                      web:
+                        - 'Projects/Web/**'
 
-          # Create outputs file for artifact
-          echo "docs_changed=${{ steps.changes.outputs.docs_any_changed }}" > outputs.properties
-          echo "lib_changed=${{ steps.changes.outputs.lib_any_changed }}" >> outputs.properties
-          echo "web_changed=${{ steps.changes.outputs.web_any_changed }}" >> outputs.properties
+            - name: Print outputs to console and create file
+              run: |
+                  echo "Docs changed: ${{ steps.changes.outputs.docs_any_changed }}"
+                  echo "Lib changed: ${{ steps.changes.outputs.lib_any_changed }}"
+                  echo "Web changed: ${{ steps.changes.outputs.web_any_changed }}"
 
-      - name: Upload outputs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: monorepo-changes
-          path: outputs.properties
+                  echo "docs_changed=${{ steps.changes.outputs.docs_any_changed }}" > outputs.properties
+                  echo "lib_changed=${{ steps.changes.outputs.lib_any_changed }}" >> outputs.properties
+                  echo "web_changed=${{ steps.changes.outputs.web_any_changed }}" >> outputs.properties
+
+            - name: Upload outputs artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: monorepo-changes
+                  path: outputs.properties

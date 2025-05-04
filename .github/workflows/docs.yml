@@ -42,14 +42,14 @@ jobs:
               # Using a dedicated action to read properties file
               uses: kurt-code/gha-properties@v0.0.1
               with:
-                operation: 'read'
-                file-path: 'outputs.properties'
-                keys: 'docs_changed' # Explicitly list the key for this workflow
+                  operation: 'read'
+                  file-path: 'outputs.properties'
+                  keys: 'docs_changed' # Explicitly list the key for this workflow
 
             - name: Print Step Outputs
               run: |
-                echo "Docs changed (step output): ${{ steps.read_outputs.outputs.docs_changed }}"
-                # Note: Only docs_changed will be available as a step output here
+                  echo "Docs changed (step output): ${{ steps.read_outputs.outputs.docs_changed }}"
+                  # Note: Only docs_changed will be available as a step output here
 
     docs_job:
         needs: prepare # This job depends on the 'prepare' job
