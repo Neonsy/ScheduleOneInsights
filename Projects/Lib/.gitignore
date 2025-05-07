@@ -35,4 +35,3 @@ pnpm-debug.log*
 .env.production.local
 
 # Local files
-tsconfig.build.tsbuildinfo
