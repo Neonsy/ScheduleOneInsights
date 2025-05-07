@@ -1,11 +1,12 @@
-// tsconfig.build.json
 {
     "extends": "./tsconfig.dev.json",
     "compilerOptions": {
-        "noEmit": false, // We want to emit when building
+        "noEmit": false,
+        "declaration": true,
+        "emitDeclarationOnly": true,
         "outDir": "./dist",
-        "rootDir": "src"
+        "rootDir": "src",
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist", "tests"]
+    "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "vite.config.ts"]
 }
