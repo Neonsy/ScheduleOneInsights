@@ -1,6 +1,6 @@
-import { findEffectByName } from '@/code/utils/effects/effectUtils';
-import type { Customer } from '@/code/types/people/Customer';
 import { District } from '@/code/types/consts/districts';
+import type { Customer } from '@/code/types/people/Customer';
+import { findEffectByNameOrThrow } from '@/code/utils/effects/effectUtils';
 
 /**
  * Customers data - single source of truth
@@ -27,7 +27,13 @@ export const customers: readonly Customer[] = [
                 end: null,
             },
         ],
-        preferredEffects: [findEffectByName('Calming'), findEffectByName('Munchies'), findEffectByName('Smelly')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Calming'),
+
+            findEffectByNameOrThrow('Munchies'),
+
+            findEffectByNameOrThrow('Smelly'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -46,9 +52,11 @@ export const customers: readonly Customer[] = [
             { location: 'Yellow house with the yellow sh*tbox in front in Westville', start: '11:50pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Calorie-Dense'),
-            findEffectByName('Euphoric'),
-            findEffectByName('Munchies'),
+            findEffectByNameOrThrow('Calorie-Dense'),
+
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Munchies'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -66,7 +74,13 @@ export const customers: readonly Customer[] = [
             { location: 'In front of the Docks Warehouse property', start: '7:30pm', end: '9:00pm' },
             { location: 'Motel Room #5', start: '11:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Energizing'), findEffectByName('Paranoia'), findEffectByName('Sneaky')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Energizing'),
+
+            findEffectByNameOrThrow('Paranoia'),
+
+            findEffectByNameOrThrow('Sneaky'),
+        ],
         expectedQuality: 'Very Low',
         spend: null,
     },
@@ -85,7 +99,13 @@ export const customers: readonly Customer[] = [
             { location: 'Community Center', start: '4:40pm', end: '6:30pm' },
             { location: 'Westville Apartment Building, Unit #2', start: '6:50pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Athletic'), findEffectByName('Energizing'), findEffectByName('Focused')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Athletic'),
+
+            findEffectByNameOrThrow('Energizing'),
+
+            findEffectByNameOrThrow('Focused'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -101,7 +121,13 @@ export const customers: readonly Customer[] = [
             { location: 'Red pickup truck in Sauerkraut Supreme Pizza parking lot', start: '10:45pm', end: '11:40pm' },
             { location: 'House behind Westville Gas Mart', start: '11:40pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Euphoric'), findEffectByName('Bright-Eyed'), findEffectByName('Sneaky')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Bright-Eyed'),
+
+            findEffectByNameOrThrow('Sneaky'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -130,7 +156,13 @@ export const customers: readonly Customer[] = [
             },
             { location: 'Drives back to light blue house in Suburbia', start: '11:15pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Munchies'), findEffectByName('Athletic'), findEffectByName('Smelly')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Munchies'),
+
+            findEffectByNameOrThrow('Athletic'),
+
+            findEffectByNameOrThrow('Smelly'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -151,7 +183,13 @@ export const customers: readonly Customer[] = [
             { location: 'Bench outside Hyland Range', start: '7:35pm', end: '8:45pm' },
             { location: 'Motel Room #3', start: '9:30pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Focused'), findEffectByName('Refreshing'), findEffectByName('Sneaky')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Focused'),
+
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Sneaky'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -168,7 +206,13 @@ export const customers: readonly Customer[] = [
             { location: 'On West Bridge', start: '6:40pm', end: '8:00pm' },
             { location: 'Motel Office', start: '8:30pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Refreshing'), findEffectByName('Lethal'), findEffectByName('Munchies')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Lethal'),
+
+            findEffectByNameOrThrow('Munchies'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -201,7 +245,13 @@ export const customers: readonly Customer[] = [
             },
             { location: 'Teleports back to the pink building', start: '7:50pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Balding'), findEffectByName('Long Faced'), findEffectByName('Sedating')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Balding'),
+
+            findEffectByNameOrThrow('Long Faced'),
+
+            findEffectByNameOrThrow('Sedating'),
+        ],
         expectedQuality: 'Very Low',
         spend: null,
     },
@@ -214,7 +264,13 @@ export const customers: readonly Customer[] = [
             { location: 'Bus stop in front of Gas Mart', start: '6:30pm', end: '7:30pm' },
             { location: 'Building south of the Parking Garage', start: '8:50pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Euphoric'), findEffectByName('Shrinking'), findEffectByName('Munchies')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Munchies'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -233,9 +289,11 @@ export const customers: readonly Customer[] = [
             { location: 'Teleports back to building behind the basketball court', start: '8:50pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Bright-Eyed'),
-            findEffectByName('Refreshing'),
-            findEffectByName('Energizing'),
+            findEffectByNameOrThrow('Bright-Eyed'),
+
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Energizing'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -253,9 +311,11 @@ export const customers: readonly Customer[] = [
             { location: 'Building behind Slop Shop', start: '9:00pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Euphoric'),
-            findEffectByName('Refreshing'),
-            findEffectByName('Energizing'),
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Energizing'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -283,9 +343,11 @@ export const customers: readonly Customer[] = [
         district: District.Northtown,
         schedule: [{ location: 'Chinese Restaurant', start: '7:00am', end: null }],
         preferredEffects: [
-            findEffectByName('Gingeritis'),
-            findEffectByName('Shrinking'),
-            findEffectByName('Electrifying'),
+            findEffectByNameOrThrow('Gingeritis'),
+
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Electrifying'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -316,9 +378,11 @@ export const customers: readonly Customer[] = [
             { location: 'At the blue house by the water in Westville', start: '9:50pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Athletic'),
-            findEffectByName('Balding'),
-            findEffectByName('Calorie-Dense'),
+            findEffectByNameOrThrow('Athletic'),
+
+            findEffectByNameOrThrow('Balding'),
+
+            findEffectByNameOrThrow('Calorie-Dense'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -334,9 +398,11 @@ export const customers: readonly Customer[] = [
             { location: 'Yellow house with the yellow sh*tbox in front in Westville', start: '9:50pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Sneaky'),
-            findEffectByName('Slippery'),
-            findEffectByName('Thought-Provoking'),
+            findEffectByNameOrThrow('Sneaky'),
+
+            findEffectByNameOrThrow('Slippery'),
+
+            findEffectByNameOrThrow('Thought-Provoking'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -363,9 +429,11 @@ export const customers: readonly Customer[] = [
             },
         ],
         preferredEffects: [
-            findEffectByName('Euphoric'),
-            findEffectByName('Thought-Provoking'),
-            findEffectByName('Calorie-Dense'),
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Thought-Provoking'),
+
+            findEffectByNameOrThrow('Calorie-Dense'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -384,9 +452,11 @@ export const customers: readonly Customer[] = [
             { location: 'Westville Apartment Building, Unit #4', start: '8:40pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Slippery'),
-            findEffectByName('Sneaky'),
-            findEffectByName('Tropic Thunder'),
+            findEffectByNameOrThrow('Slippery'),
+
+            findEffectByNameOrThrow('Sneaky'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
         ],
         expectedQuality: 'Very Low',
         spend: null,
@@ -403,7 +473,13 @@ export const customers: readonly Customer[] = [
             { location: 'Community Center', start: '4:40pm', end: '6:15pm' },
             { location: 'House behind west Gas Mart', start: '6:50pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Spicy'), findEffectByName('Tropic Thunder'), findEffectByName('Balding')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Spicy'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
+
+            findEffectByNameOrThrow('Balding'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -430,9 +506,11 @@ export const customers: readonly Customer[] = [
             { location: 'In the tent in the encampment next to the western Gas Mart', start: '3:05am', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Gingeritis'),
-            findEffectByName('Smelly'),
-            findEffectByName('Thought-Provoking'),
+            findEffectByNameOrThrow('Gingeritis'),
+
+            findEffectByNameOrThrow('Smelly'),
+
+            findEffectByNameOrThrow('Thought-Provoking'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -448,7 +526,13 @@ export const customers: readonly Customer[] = [
             { location: 'Slop Shop', start: '11:30pm', end: '12:00am' },
             { location: 'Teleports to building behind basketball court', start: '12:00am', end: null },
         ],
-        preferredEffects: [findEffectByName('Shrinking'), findEffectByName('Jennerising'), findEffectByName('Focused')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Jennerising'),
+
+            findEffectByNameOrThrow('Focused'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -461,7 +545,13 @@ export const customers: readonly Customer[] = [
             { location: 'Standing outside Top Tattoo', start: '6:05pm', end: '8:00pm' },
             { location: 'House next to Bungalow property', start: '9:20pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Glowing'), findEffectByName('Laxative'), findEffectByName('Spicy')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Glowing'),
+
+            findEffectByNameOrThrow('Laxative'),
+
+            findEffectByNameOrThrow('Spicy'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -475,7 +565,13 @@ export const customers: readonly Customer[] = [
             { location: 'Bus stop near Motel Office', start: '3:20pm', end: '5:10pm' },
             { location: 'West Gas Mart', start: '6:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Sedating'), findEffectByName('Disorienting'), findEffectByName('Foggy')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Sedating'),
+
+            findEffectByNameOrThrow('Disorienting'),
+
+            findEffectByNameOrThrow('Foggy'),
+        ],
         expectedQuality: 'Low',
         spend: null,
     },
@@ -498,9 +594,11 @@ export const customers: readonly Customer[] = [
             { location: 'Gray house two down from the Bungalow property', start: '3:30am', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Energizing'),
-            findEffectByName('Focused'),
-            findEffectByName('Thought-Provoking'),
+            findEffectByNameOrThrow('Energizing'),
+
+            findEffectByNameOrThrow('Focused'),
+
+            findEffectByNameOrThrow('Thought-Provoking'),
         ],
         expectedQuality: 'Low',
         spend: null,
@@ -525,7 +623,13 @@ export const customers: readonly Customer[] = [
             { location: 'Grey Docks Building', start: '7:50pm', end: '10:00pm' },
             { location: 'Teleports to building behind Slop Shop', start: '10:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Sedating'), findEffectByName('Tropic Thunder'), findEffectByName('Toxic')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Sedating'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
+
+            findEffectByNameOrThrow('Toxic'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -540,7 +644,13 @@ export const customers: readonly Customer[] = [
             { location: 'Sitting at a table behind Hyland Tower', start: '2:50pm', end: '3:30pm' },
             { location: 'Casino', start: '4:15pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Shrinking'), findEffectByName('Slippery'), findEffectByName('Toxic')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Slippery'),
+
+            findEffectByNameOrThrow('Toxic'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -575,9 +685,11 @@ export const customers: readonly Customer[] = [
             { location: 'Building behind Slop Shop', start: '8:00pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Calorie-Dense'),
-            findEffectByName('Euphoric'),
-            findEffectByName('Glowing'),
+            findEffectByNameOrThrow('Calorie-Dense'),
+
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Glowing'),
         ],
         expectedQuality: 'Moderate',
         spend: null,
@@ -595,9 +707,11 @@ export const customers: readonly Customer[] = [
             { location: 'Building south of Parking Garage', start: '2:25am', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Shrinking'),
-            findEffectByName('Seizure-Inducing'),
-            findEffectByName('Paranoia'),
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Seizure-Inducing'),
+
+            findEffectByNameOrThrow('Paranoia'),
         ],
         expectedQuality: 'Moderate',
         spend: null,
@@ -631,7 +745,13 @@ export const customers: readonly Customer[] = [
             { location: 'Standing by central canal, south of the Police Station', start: '7:45pm', end: '8:05pm' },
             { location: 'In the building behind Slop Shop', start: '8:20pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Schizophrenic'), findEffectByName('Toxic'), findEffectByName('Calming')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Schizophrenic'),
+
+            findEffectByNameOrThrow('Toxic'),
+
+            findEffectByNameOrThrow('Calming'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -654,7 +774,13 @@ export const customers: readonly Customer[] = [
             { location: "Bud's Bar", start: '11:05pm', end: '3:00am' },
             { location: 'Building north of Parking Garage', start: '3:35am', end: null },
         ],
-        preferredEffects: [findEffectByName('Euphoric'), findEffectByName('Tropic Thunder'), findEffectByName('Toxic')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
+
+            findEffectByNameOrThrow('Toxic'),
+        ],
         expectedQuality: 'Very Low',
         spend: null,
     },
@@ -669,7 +795,13 @@ export const customers: readonly Customer[] = [
             { location: 'Standing outside Sauerkraut Supreme Pizza', start: '7:00pm', end: '8:00pm' },
             { location: 'Building south of Parking Garage', start: '9:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Sedating'), findEffectByName('Long Faced'), findEffectByName('Laxative')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Sedating'),
+
+            findEffectByNameOrThrow('Long Faced'),
+
+            findEffectByNameOrThrow('Laxative'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -687,7 +819,13 @@ export const customers: readonly Customer[] = [
             { location: 'Slop Shop', start: '1:35pm', end: '3:10pm' },
             { location: 'Casino', start: '4:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Refreshing'), findEffectByName('Shrinking'), findEffectByName('Foggy')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Foggy'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -712,9 +850,11 @@ export const customers: readonly Customer[] = [
             { location: 'Teleports to Grey Docks Building', start: '7:50pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Laxative'),
-            findEffectByName('Schizophrenic'),
-            findEffectByName('Anti-Gravity'),
+            findEffectByNameOrThrow('Laxative'),
+
+            findEffectByNameOrThrow('Schizophrenic'),
+
+            findEffectByNameOrThrow('Anti-Gravity'),
         ],
         expectedQuality: 'Moderate',
         spend: null,
@@ -729,9 +869,11 @@ export const customers: readonly Customer[] = [
             { location: 'Building to the south of the Parking Garage', start: '8:30pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Refreshing'),
-            findEffectByName('Tropic Thunder'),
-            findEffectByName('Toxic'),
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
+
+            findEffectByNameOrThrow('Toxic'),
         ],
         expectedQuality: 'Moderate',
         spend: null,
@@ -764,9 +906,11 @@ export const customers: readonly Customer[] = [
             },
         ],
         preferredEffects: [
-            findEffectByName('Electrifying'),
-            findEffectByName('Gingeritis'),
-            findEffectByName('Athletic'),
+            findEffectByNameOrThrow('Electrifying'),
+
+            findEffectByNameOrThrow('Gingeritis'),
+
+            findEffectByNameOrThrow('Athletic'),
         ],
         expectedQuality: 'Very Low',
         spend: null,
@@ -791,7 +935,13 @@ export const customers: readonly Customer[] = [
             { location: 'Taco Ticklers', start: '1:00am', end: '2:00am' },
             { location: 'On a bench in the encampment next to the western Gas Mart', start: '3:00am', end: null },
         ],
-        preferredEffects: [findEffectByName('Laxative'), findEffectByName('Toxic'), findEffectByName('Tropic Thunder')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Laxative'),
+
+            findEffectByNameOrThrow('Toxic'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -829,7 +979,13 @@ export const customers: readonly Customer[] = [
             { location: 'Standing outside Casino', start: '8:10pm', end: '9:00pm' },
             { location: "In building next to Jane the dealer's travel trailer", start: '10:55pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Sneaky'), findEffectByName('Long Faced'), findEffectByName('Refreshing')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Sneaky'),
+
+            findEffectByNameOrThrow('Long Faced'),
+
+            findEffectByNameOrThrow('Refreshing'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -848,9 +1004,11 @@ export const customers: readonly Customer[] = [
             { location: 'Casino', start: '3:30pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Anti-Gravity'),
-            findEffectByName('Refreshing'),
-            findEffectByName('Slippery'),
+            findEffectByNameOrThrow('Anti-Gravity'),
+
+            findEffectByNameOrThrow('Refreshing'),
+
+            findEffectByNameOrThrow('Slippery'),
         ],
         expectedQuality: 'Moderate',
         spend: null,
@@ -871,7 +1029,13 @@ export const customers: readonly Customer[] = [
             { location: 'Yellow house in Suburbia', start: '6:45pm', end: '7:00pm' },
             { location: 'Teleports back to building next to Docks Warehouse property', start: '7:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Focused'), findEffectByName('Spicy'), findEffectByName('Long Faced')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Focused'),
+
+            findEffectByNameOrThrow('Spicy'),
+
+            findEffectByNameOrThrow('Long Faced'),
+        ],
         expectedQuality: 'Moderate',
         spend: null,
     },
@@ -901,9 +1065,11 @@ export const customers: readonly Customer[] = [
             },
         ],
         preferredEffects: [
-            findEffectByName('Spicy'),
-            findEffectByName('Schizophrenic'),
-            findEffectByName('Long Faced'),
+            findEffectByNameOrThrow('Spicy'),
+
+            findEffectByNameOrThrow('Schizophrenic'),
+
+            findEffectByNameOrThrow('Long Faced'),
         ],
         expectedQuality: 'Moderate',
         spend: null,
@@ -928,7 +1094,13 @@ export const customers: readonly Customer[] = [
             { location: 'Hyland Bank', start: '8:30pm', end: '11:00pm' },
             { location: 'Teleports somewhere', start: '11:00pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Sneaky'), findEffectByName('Euphoric'), findEffectByName('Electrifying')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Sneaky'),
+
+            findEffectByNameOrThrow('Euphoric'),
+
+            findEffectByNameOrThrow('Electrifying'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -941,7 +1113,13 @@ export const customers: readonly Customer[] = [
             { location: "Drives the blue car in the parking lot of Handy Hank's", start: '8:00pm', end: null },
             { location: 'White house at the end of the road in Suburbia', start: '9:40pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Sneaky'), findEffectByName('Toxic'), findEffectByName('Schizophrenic')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Sneaky'),
+
+            findEffectByNameOrThrow('Toxic'),
+
+            findEffectByNameOrThrow('Schizophrenic'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -996,9 +1174,11 @@ export const customers: readonly Customer[] = [
             { location: 'Brown house in Suburbia', start: '7:20pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Balding'),
-            findEffectByName('Slippery'),
-            findEffectByName('Calorie-Dense'),
+            findEffectByNameOrThrow('Balding'),
+
+            findEffectByNameOrThrow('Slippery'),
+
+            findEffectByNameOrThrow('Calorie-Dense'),
         ],
         expectedQuality: 'High',
         spend: null,
@@ -1013,7 +1193,13 @@ export const customers: readonly Customer[] = [
             { location: 'ATM in front of Supermarket', start: '4:40pm', end: null },
             { location: 'The Crimson Canary', start: '4:55pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Glowing'), findEffectByName('Athletic'), findEffectByName('Disorienting')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Glowing'),
+
+            findEffectByNameOrThrow('Athletic'),
+
+            findEffectByNameOrThrow('Disorienting'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -1049,7 +1235,13 @@ export const customers: readonly Customer[] = [
             { location: 'White car in Parking Garage', start: '10:40pm', end: null },
             { location: 'Yellow house in Suburbia', start: '12:15am', end: null },
         ],
-        preferredEffects: [findEffectByName('Foggy'), findEffectByName('Spicy'), findEffectByName('Jennerising')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Foggy'),
+
+            findEffectByNameOrThrow('Spicy'),
+
+            findEffectByNameOrThrow('Jennerising'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -1066,9 +1258,11 @@ export const customers: readonly Customer[] = [
             { location: 'Teleports to white house with couch on front porch in Suburbia', start: '6:45pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Shrinking'),
-            findEffectByName('Thought-Provoking'),
-            findEffectByName('Lethal'),
+            findEffectByNameOrThrow('Shrinking'),
+
+            findEffectByNameOrThrow('Thought-Provoking'),
+
+            findEffectByNameOrThrow('Lethal'),
         ],
         expectedQuality: 'High',
         spend: null,
@@ -1085,7 +1279,13 @@ export const customers: readonly Customer[] = [
             { location: 'Slop Shop (back door)', start: '7:15pm', end: '7:25pm' },
             { location: 'Dark grey house in Suburbia', start: '9:30pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Athletic'), findEffectByName('Focused'), findEffectByName('Bright-Eyed')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Athletic'),
+
+            findEffectByNameOrThrow('Focused'),
+
+            findEffectByNameOrThrow('Bright-Eyed'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -1117,9 +1317,11 @@ export const customers: readonly Customer[] = [
             { location: 'Blue building across from the Church', start: '8:15pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Lethal'),
-            findEffectByName('Thought-Provoking'),
-            findEffectByName('Tropic Thunder'),
+            findEffectByNameOrThrow('Lethal'),
+
+            findEffectByNameOrThrow('Thought-Provoking'),
+
+            findEffectByNameOrThrow('Tropic Thunder'),
         ],
         expectedQuality: 'High',
         spend: null,
@@ -1152,9 +1354,11 @@ export const customers: readonly Customer[] = [
             { location: 'Blue building across from the Church', start: '7:10pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Disorienting'),
-            findEffectByName('Energizing'),
-            findEffectByName('Sneaky'),
+            findEffectByNameOrThrow('Disorienting'),
+
+            findEffectByNameOrThrow('Energizing'),
+
+            findEffectByNameOrThrow('Sneaky'),
         ],
         expectedQuality: 'High',
         spend: null,
@@ -1178,7 +1382,13 @@ export const customers: readonly Customer[] = [
             { location: 'Parking lot across from the Church', start: '6:25pm', end: null },
             { location: 'Church', start: '6:40pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Schizophrenic'), findEffectByName('Calming'), findEffectByName('Balding')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Schizophrenic'),
+
+            findEffectByNameOrThrow('Calming'),
+
+            findEffectByNameOrThrow('Balding'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -1192,7 +1402,13 @@ export const customers: readonly Customer[] = [
             { location: 'Hyland Bank', start: '7:30pm', end: '7:55pm' },
             { location: 'Blue building across from the Church', start: '8:35pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Slippery'), findEffectByName('Foggy'), findEffectByName('Explosive')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Slippery'),
+
+            findEffectByNameOrThrow('Foggy'),
+
+            findEffectByNameOrThrow('Explosive'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -1222,9 +1438,11 @@ export const customers: readonly Customer[] = [
             },
         ],
         preferredEffects: [
-            findEffectByName('Jennerising'),
-            findEffectByName('Calming'),
-            findEffectByName('Schizophrenic'),
+            findEffectByNameOrThrow('Jennerising'),
+
+            findEffectByNameOrThrow('Calming'),
+
+            findEffectByNameOrThrow('Schizophrenic'),
         ],
         expectedQuality: 'High',
         spend: null,
@@ -1252,7 +1470,13 @@ export const customers: readonly Customer[] = [
             { location: 'Police Station', start: '7:10pm', end: '8:30pm' },
             { location: "Mayor's House", start: '9:40pm', end: null },
         ],
-        preferredEffects: [findEffectByName('Lethal'), findEffectByName('Disorienting'), findEffectByName('Spicy')],
+        preferredEffects: [
+            findEffectByNameOrThrow('Lethal'),
+
+            findEffectByNameOrThrow('Disorienting'),
+
+            findEffectByNameOrThrow('Spicy'),
+        ],
         expectedQuality: 'High',
         spend: null,
     },
@@ -1275,9 +1499,11 @@ export const customers: readonly Customer[] = [
             { location: 'Church', start: '7:30pm', end: null },
         ],
         preferredEffects: [
-            findEffectByName('Schizophrenic'),
-            findEffectByName('Gingeritis'),
-            findEffectByName('Explosive'),
+            findEffectByNameOrThrow('Schizophrenic'),
+
+            findEffectByNameOrThrow('Gingeritis'),
+
+            findEffectByNameOrThrow('Explosive'),
         ],
         expectedQuality: 'High',
         spend: null,

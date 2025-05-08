@@ -1,8 +1,8 @@
 /**
- * ReverseMixResult type exports
+ * @file Re-exports ReverseMixResult types from the core codebase.
  */
-export type {
-    CheapestReverseMixResult,
-    ReverseSearchStats,
-    ReverseByEffectOutcome,
+export {
+    type CheapestReverseMixResult,
+    type ReverseSearchStats,
+    type ReverseByEffectOutcome,
 } from '@/code/types/mixing/ReverseMixResult';

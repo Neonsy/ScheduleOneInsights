@@ -1,6 +1,9 @@
 /**
- * Product type exports
+ * @file Re-exports Product types and utilities from the core codebase.
  */
-export type { Product } from '@/code/types/products/Product';
-export { isMarijuanaProduct } from '@/code/types/products/Product';
-export type { ProductCode } from '@/code/types/products/Product';
+export {
+    isMarijuanaProduct,
+    type Product,
+    type MarijuanaProduct,
+    type ProductCode,
+} from '@/code/types/products/Product';

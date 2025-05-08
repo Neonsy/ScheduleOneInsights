@@ -1,4 +1,4 @@
 /**
- * Ranks types exports
+ * @file Re-exports Rank enum from the core codebase.
  */
-export type { Rank } from '@/code/types/consts/ranks';
+export { Rank } from '@/code/types/consts/ranks';

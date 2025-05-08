@@ -1,6 +1,8 @@
+import { products } from '@/code/data/products/products';
 import { ProductType } from '@/code/types/consts/productTypes';
 import type { EffectCode } from '@/code/types/effects/Effect';
-import { products } from '@/code/data/products/products';
+import type { EffectNameNotFoundUtilError } from '@/code/types/errors/UtilError';
+import type { Result } from 'neverthrow';
 
 /**
  * Base product interface with common properties
@@ -21,10 +23,10 @@ interface BaseProduct {
 /**
  * Marijuana product interface - requires defaultEffect
  */
-interface MarijuanaProduct extends BaseProduct {
+export interface MarijuanaProduct extends BaseProduct {
     readonly type: 'Marijuana';
-    /** Default effect code literal */
-    readonly defaultEffect: EffectCode;
+    /** Default effect code literal, as a Result */
+    readonly defaultEffect: Result<EffectCode, EffectNameNotFoundUtilError>;
 }
 
 /**

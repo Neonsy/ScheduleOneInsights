@@ -3,12 +3,11 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Code Quality Checks
+Code Quality Checks
 
 Run these checks frequently:
 
-1.  `pnpm typecheck` (checks for typescript errors)
-2.  `pnpm lint` (ESLint, fails on warnings/errors)
-3.  `pnpm test` (unit & integration tests)
-4.  `pnpm build` (compiles TS, fails on errors)
-
+pnpm typecheck (checks for typescript errors)
+pnpm lint (ESLint, fails on warnings/errors)
+pnpm test (unit & integration tests)
+pnpm build (compiles TS, fails on errors)

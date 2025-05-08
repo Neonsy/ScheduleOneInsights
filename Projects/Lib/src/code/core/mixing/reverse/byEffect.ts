@@ -1,41 +1,26 @@
-import type { Product } from '@/code/types/products/Product';
+import type { EffectCode } from '@/code/types/effects/Effect';
+import { NO_SOLUTION_FOUND_ERROR, type NoSolutionFoundError } from '@/code/types/errors/MixingError';
+import { type ProductNotFoundProdError } from '@/code/types/errors/ProductError';
+import { type UtilError } from '@/code/types/errors/UtilError';
 import type { Ingredient } from '@/code/types/products/Ingredient';
 import type { ProductCode } from '@/code/types/products/Product';
-import type { EffectCode } from '@/code/types/effects/Effect';
+import { Result, err, ok } from 'neverthrow';
 
-import { ingredients as allIngredientsData } from '@/code/data/products/ingredients';
-
-import { findProductByCode } from '@/code/utils/products/productUtils';
 import { mixProduct } from '@/code/core/mixing/normal/algorithm';
+import { ingredients as allIngredientsData } from '@/code/data/products/ingredients';
+import type { CheapestReverseMixResult, ReverseSearchStats } from '@/code/types/mixing/ReverseMixResult';
 import {
     calculateIngredientCost,
-    getSortedEffectCodesFromNames,
     doEffectsMatchTarget,
+    getSortedEffectCodesFromNames,
 } from '@/code/utils/mixing/reverseHelpers';
-import type {
-    CheapestReverseMixResult,
-    ReverseSearchStats,
-    ReverseByEffectOutcome,
-} from '@/code/types/mixing/ReverseMixResult';
+import { findProductByCode } from '@/code/utils/products/productUtils';
 
-interface ReverseSolution {
-    ingredients: Ingredient['code'][];
-}
-
-/**
- * The result of reversing a product by target effect codes.
- */
-export interface ReverseByEffectResult {
-    /** The product code for which solutions were found */
-    productCode: ProductCode;
-    /** The desired effect codes being targeted */
-    desiredEffectCodes: EffectCode[];
-    solutions: ReverseSolution[];
-    searchStats: {
-        maxDepthSearched: number;
-        pathsExplored: number;
-        solutionsFound: number;
-    };
+// The old ReverseSolution and ReverseByEffectResult might be deprecated or changed.
+// For now, defining a new success type.
+export interface ReverseByEffectSuccess {
+    readonly result: CheapestReverseMixResult;
+    readonly stats: ReverseSearchStats;
 }
 
 const ALL_AVAILABLE_INGREDIENT_CODES: ReadonlyArray<Ingredient['code']> = allIngredientsData.map((ing) => ing.code);
@@ -55,100 +40,105 @@ const MAX_SEARCH_DEPTH_SAFEGUARD: number = 8;
  *
  * @param productCode - The code of the product to reverse.
  * @param targetEffectCodes - The target effect codes that must be present.
- * @returns A ReverseByEffectOutcome indicating if a solution was found,
- *          containing the single cheapest result if found within the limits.
+ * @returns A Result containing ReverseByEffectSuccess if a solution is found,
+ *          or a MixingError if an error occurs or no solution is found.
  */
-export function reverseByEffect(productCode: ProductCode, targetEffectCodes: EffectCode[]): ReverseByEffectOutcome {
-    let product: Product;
-    try {
-        product = findProductByCode(productCode);
-    } catch (error) {
-        // Let the consumer handle the error if the product cannot be found.
-        // It's a precondition failure for this function.
-        throw new Error(
-            `[reverseByEffect] Prerequisite failed: Could not find product with code "${productCode}". Original error: ${error instanceof Error ? error.message : String(error)}`
-        );
-    }
+export function reverseByEffect(
+    productCode: ProductCode,
+    targetEffectCodes: EffectCode[]
+): Result<ReverseByEffectSuccess, ProductNotFoundProdError | NoSolutionFoundError | UtilError> {
+    const productResult = findProductByCode(productCode);
 
-    // Pre-process target effects for efficient lookup
+    if (productResult.isErr()) {
+        return err(productResult.error);
+    }
+    const product = productResult.value;
+
     const sortedTargetEffectCodes = [...targetEffectCodes].sort();
     const desiredEffectsSet = new Set(sortedTargetEffectCodes);
-
-    // Prepare a map for quick ingredient data lookup (e.g., for names)
     const ingredientDataMap = new Map<Ingredient['code'], Ingredient>(allIngredientsData.map((ing) => [ing.code, ing]));
 
     let pathsExplored = 0;
-    let solutionsFound = 0; // Total valid solutions encountered, useful for stats
+    let solutionsFound = 0;
     let cheapestCost = Infinity;
     let cheapestSequence: Ingredient['code'][] | null = null;
-    // Tracks unique ingredient sequences at their respective depths to avoid redundant mix calculations
-    // if different permutations lead to the same sequence at the same depth.
     const foundSolutionSequencesAtDepth = new Set<string>();
     let actualMaxDepthSearched = 0;
 
-    function findSequencesOfLengthK(currentSequence: Ingredient['code'][], targetSequenceLength: number) {
+    function findSequencesOfLengthK(
+        currentSequence: Ingredient['code'][],
+        targetSequenceLength: number
+    ): Result<void, UtilError> {
         pathsExplored++;
 
-        const currentCost = calculateIngredientCost(currentSequence);
-        // Pruning: If the current path's cost already equals or exceeds the cheapest solution found so far,
-        // no need to explore this path further.
+        const costResult = calculateIngredientCost(currentSequence);
+        if (costResult.isErr()) {
+            return err(costResult.error);
+        }
+        const currentCost = costResult.value;
+
         if (currentCost >= cheapestCost) {
-            return;
+            return ok(undefined);
         }
 
         if (currentSequence.length === targetSequenceLength) {
             const solutionKey = currentSequence.join(',');
-            // Avoid re-evaluating the same sequence if it has already been processed at this depth.
             if (foundSolutionSequencesAtDepth.has(solutionKey)) {
-                return;
+                return ok(undefined);
             }
 
             const mixResult = mixProduct(product.code, currentSequence);
-            const actualEffectCodesSorted = getSortedEffectCodesFromNames(mixResult.effects);
+            const actualEffectCodesSortedResult = getSortedEffectCodesFromNames(mixResult.effects);
+
+            if (actualEffectCodesSortedResult.isErr()) {
+                return err(actualEffectCodesSortedResult.error);
+            }
+            const actualEffectCodesSorted = actualEffectCodesSortedResult.value;
 
             if (doEffectsMatchTarget(actualEffectCodesSorted, desiredEffectsSet)) {
-                // This sequence produces the desired effects.
                 solutionsFound++;
                 if (targetSequenceLength > 0) {
-                    // Don't mark empty sequence as a "found" solution sequence
                     foundSolutionSequencesAtDepth.add(solutionKey);
                 }
-
-                // Since currentCost < cheapestCost (due to the prune check), this is a new cheapest solution.
                 cheapestCost = currentCost;
-                cheapestSequence = [...currentSequence]; // Store a copy of the new cheapest sequence
+                cheapestSequence = [...currentSequence];
             }
-            return; // Reached target depth for this path.
+            return ok(undefined);
         }
 
-        // Recursive step: Explore adding one more ingredient if current length is less than target.
-        // The pruning check at the beginning of this function will handle costs for the next level.
         if (currentSequence.length < targetSequenceLength) {
             for (const nextIngredientCode of ALL_AVAILABLE_INGREDIENT_CODES) {
                 currentSequence.push(nextIngredientCode);
-                // Pre-emptive cost check before recursion
-                if (calculateIngredientCost(currentSequence) < cheapestCost) {
-                    findSequencesOfLengthK(currentSequence, targetSequenceLength);
+
+                const nextCostResult = calculateIngredientCost(currentSequence);
+                if (nextCostResult.isErr()) {
+                    currentSequence.pop();
+                    return err(nextCostResult.error);
                 }
-                currentSequence.pop(); // Backtrack to explore other ingredients at this position.
+                if (nextCostResult.value < cheapestCost) {
+                    const searchResult = findSequencesOfLengthK(currentSequence, targetSequenceLength);
+                    if (searchResult.isErr()) {
+                        currentSequence.pop();
+                        return err(searchResult.error);
+                    }
+                }
+                currentSequence.pop();
             }
         }
+        return ok(undefined);
     }
 
-    // Iterative Deepening Depth-First Search (IDDFS)
-    // Explores all sequences of length 0, then 1, then 2, and so on.
     for (let currentSearchDepth = 0; currentSearchDepth <= MAX_SEARCH_DEPTH_SAFEGUARD; currentSearchDepth++) {
         actualMaxDepthSearched = currentSearchDepth;
-        foundSolutionSequencesAtDepth.clear(); // Reset for the new depth level
+        foundSolutionSequencesAtDepth.clear();
 
-        findSequencesOfLengthK([], currentSearchDepth);
+        const searchIterationResult = findSequencesOfLengthK([], currentSearchDepth);
+        if (searchIterationResult.isErr()) {
+            return err(searchIterationResult.error);
+        }
 
-        // Optimization: If any solution has been found after completing the search for currentSearchDepth,
-        // that solution (stored in cheapestSequence) must be the overall cheapest.
-        // This is because IDDFS explores shortest sequences first, and ingredient costs are non-negative.
-        // Thus, no sequence explored at a greater depth (currentSearchDepth + 1) can be cheaper.
         if (cheapestSequence !== null) {
-            break; // Exit the loop, the cheapest possible solution is found.
+            break;
         }
     }
 
@@ -160,30 +150,30 @@ export function reverseByEffect(productCode: ProductCode, targetEffectCodes: Eff
 
     if (cheapestSequence !== null) {
         const finalMixResult = mixProduct(productCode, cheapestSequence);
-        // Explicitly assert the type of cheapestSequence before mapping
         const codes = cheapestSequence as Ingredient['code'][];
         const ingredientNames = codes.map((code: Ingredient['code']) => {
             const ing = ingredientDataMap.get(code);
-            return ing ? ing.name : `Unknown Ingredient (${code})`; // Fallback for safety
+            return ing ? ing.name : `Unknown Ingredient (${code})`;
         });
 
-        // Note: The type CheapestReverseMixResult has been updated to expect 'ingredientNames'.
-        const cheapestResult: CheapestReverseMixResult = {
+        const cheapestResultData: CheapestReverseMixResult = {
             ...finalMixResult,
             productCode: productCode,
-            ingredientNames: ingredientNames, // Changed from ingredientCodes
+            ingredientNames: ingredientNames,
         };
-        return {
-            found: true,
-            result: cheapestResult,
+        return ok({
+            result: cheapestResultData,
             stats: stats,
-        };
+        });
     } else {
-        return {
-            found: false,
-            productCode: productCode,
-            desiredEffectCodes: sortedTargetEffectCodes, // Return the original sorted target effects
-            stats: stats,
+        const errorDetail: NoSolutionFoundError = {
+            type: NO_SOLUTION_FOUND_ERROR,
+            message: `No solution found for product "${productCode}" with desired effects.`,
+            context: {
+                productCode: productCode,
+                desiredEffectCodes: sortedTargetEffectCodes,
+            },
         };
+        return err(errorDetail);
     }
 }

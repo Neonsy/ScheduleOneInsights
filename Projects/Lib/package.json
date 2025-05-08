@@ -38,7 +38,6 @@
     ],
     "author": "Neonsy",
     "license": "MIT",
-    "packageManager": "pnpm@10.8.1",
     "devDependencies": {
         "@bufferings/eslint-plugin-neverthrow": "^0.2.12",
         "@eslint/js": "^9.25.0",

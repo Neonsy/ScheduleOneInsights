@@ -1,4 +1,4 @@
 /**
- * TransformationRule type exports
+ * @file Re-exports TransformationRule types from the core codebase.
  */
-export type { TransformationRule, TransformationRules } from '@/code/types/mixing/TransformationRule';
+export { type TransformationRule, type TransformationRules } from '@/code/types/mixing/TransformationRule';

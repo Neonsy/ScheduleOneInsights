@@ -3,14 +3,12 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Dependency Management
+Dependency Management
 
-## use-pnpm
+use-pnpm
 
 Always use pnpm for installing, adding, and removing dependencies as well as other node commands.
 
-## update-lockfile
+update-lockfile
 
-After adding/removing deps, run `pnpm install` to update the lockfile.
-
-
+After adding/removing deps, run pnpm install to update the lockfile.

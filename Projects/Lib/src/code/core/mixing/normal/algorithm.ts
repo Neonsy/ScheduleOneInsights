@@ -22,7 +22,11 @@ export const mixProduct = (
     ingredientCodes: RecipePayload['ingredientCodes']
 ): MixResult => {
     // Lookup product
-    const product: Product = findProductByCode(productCode);
+    const productResult = findProductByCode(productCode);
+    if (productResult.isErr()) {
+        throw new Error(`Product not found: ${productCode}. Error: ${productResult.error.message}`);
+    }
+    const product: Product = productResult.value;
     const basePrice = product.basePrice;
 
     // Accumulate cost and effects
@@ -32,13 +36,28 @@ export const mixProduct = (
 
     // Step 1: add default effect for marijuana
     if (isMarijuanaProduct(product)) {
-        const baseEffect = findEffectByCode(product.defaultEffect as EffectCode);
+        if (product.defaultEffect.isErr()) {
+            throw new Error(
+                `Invalid default effect for product ${product.name}: ${product.defaultEffect.error.message}`
+            );
+        }
+        const baseEffectResult = findEffectByCode(product.defaultEffect.value);
+        if (baseEffectResult.isErr()) {
+            throw new Error(
+                `Could not find base effect ${product.defaultEffect.value} for product ${product.name}: ${baseEffectResult.error.message}`
+            );
+        }
+        const baseEffect = baseEffectResult.value;
         effectMap.set(baseEffect.code, baseEffect);
     }
 
     // Step 2: process each mixer in order
     for (const ingCode of ingredientCodes) {
-        const ingredient = findIngredientByCode(ingCode);
+        const ingredientResult = findIngredientByCode(ingCode);
+        if (ingredientResult.isErr()) {
+            throw new Error(`Ingredient not found: ${ingCode}. Error: ${ingredientResult.error.message}`);
+        }
+        const ingredient = ingredientResult.value;
         totalCost += ingredient.price;
 
         // 2a: apply two-phase cascading transforms
@@ -61,7 +80,13 @@ export const mixProduct = (
                     for (const [oldCode, newCode] of Object.entries(replace) as [EffectCode, EffectCode][]) {
                         if (effectMap.has(oldCode) && !effectMap.has(newCode)) {
                             effectMap.delete(oldCode);
-                            const newEff = findEffectByCode(newCode);
+                            const newEffResult = findEffectByCode(newCode);
+                            if (newEffResult.isErr()) {
+                                throw new Error(
+                                    `New effect not found: ${newCode}. Error: ${newEffResult.error.message}`
+                                );
+                            }
+                            const newEff = newEffResult.value;
                             effectMap.set(newEff.code, newEff);
                             removed.add(oldCode);
                         }
@@ -84,7 +109,13 @@ export const mixProduct = (
                     for (const [oldCode, newCode] of Object.entries(replace) as [EffectCode, EffectCode][]) {
                         if (effectMap.has(oldCode) && !effectMap.has(newCode)) {
                             effectMap.delete(oldCode);
-                            const newEff = findEffectByCode(newCode);
+                            const newEffResult = findEffectByCode(newCode);
+                            if (newEffResult.isErr()) {
+                                throw new Error(
+                                    `New effect not found: ${newCode}. Error: ${newEffResult.error.message}`
+                                );
+                            }
+                            const newEff = newEffResult.value;
                             effectMap.set(newEff.code, newEff);
                             removed.add(oldCode);
                         }
@@ -95,8 +126,21 @@ export const mixProduct = (
         }
 
         // 2b: add mixer's own effect if space & not already present
-        if (!effectMap.has(ingredient.defaultEffect as EffectCode) && effectMap.size < 8) {
-            const defaultEffect = findEffectByCode(ingredient.defaultEffect as EffectCode);
+        if (ingredient.defaultEffect.isErr()) {
+            throw new Error(
+                `Invalid default effect for ingredient ${ingredient.name}: ${ingredient.defaultEffect.error.message}`
+            );
+        }
+        const ingredientDefaultEffectCode = ingredient.defaultEffect.value;
+
+        if (!effectMap.has(ingredientDefaultEffectCode) && effectMap.size < 8) {
+            const defaultEffectResult = findEffectByCode(ingredientDefaultEffectCode);
+            if (defaultEffectResult.isErr()) {
+                throw new Error(
+                    `Default effect ${ingredientDefaultEffectCode} for ingredient ${ingredient.name} not found: ${defaultEffectResult.error.message}`
+                );
+            }
+            const defaultEffect = defaultEffectResult.value;
             effectMap.set(defaultEffect.code, defaultEffect);
         }
     }
@@ -124,7 +168,7 @@ export const mixProduct = (
     // Sum effect addictiveness
     const effectAddiction = appliedEffects.reduce((sum, e) => sum + e.addictiveness, 0);
     // Base addictiveness (meth or cocaine) for non-weed products
-    const baseAdd = ('addictiveness' in product ? product.addictiveness || 0 : 0) as number;
+    const baseAdd = 'addictiveness' in product ? product.addictiveness || 0 : 0;
     // Hybrid weed bonus for marijuana with at least one mixer
     const hybridBonus = isMarijuanaProduct(product) && ingredientCodes.length > 0 ? 0.05 : 0;
     // Total before rounding and cap

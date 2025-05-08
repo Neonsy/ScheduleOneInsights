@@ -1,31 +1,38 @@
-/* global console */
 import { findIngredientByCode } from '@/code/utils/products/ingredientUtils';
 import { findEffectByName } from '@/code/utils/effects/effectUtils';
 import type { Ingredient } from '@/code/types/products/Ingredient';
-import type { Effect } from '@/code/types/effects/Effect';
-import type { EffectCode } from '@/code/types/effects/Effect';
+import type { Effect, EffectCode } from '@/code/types/effects/Effect';
+import { type EffectNameNotFoundUtilError, type IngredientNotFoundUtilError } from '@/code/types/errors/UtilError';
+import { Result, err, ok } from 'neverthrow';
 
-export function calculateIngredientCost(ingredientCodes: Ingredient['code'][]): number {
-    let cost = 0;
+export function calculateIngredientCost(
+    ingredientCodes: Ingredient['code'][]
+): Result<number, IngredientNotFoundUtilError> {
+    let totalCost = 0;
     for (const code of ingredientCodes) {
-        try {
-            cost += findIngredientByCode(code).price;
-        } catch {
-            console.warn(`[reverseByEffect] Could not find ingredient ${code} for cost calculation.`);
+        const ingredientResult = findIngredientByCode(code);
+
+        if (ingredientResult.isErr()) {
+            return err(ingredientResult.error);
         }
+        totalCost += ingredientResult.value.price;
     }
-    return cost;
+    return ok(totalCost);
 }
 
-export function getSortedEffectCodesFromNames(effectNames: Effect['name'][]): EffectCode[] {
-    try {
-        // Ensure findEffectByName returns EffectCode or handle potential errors/mismatches
-        // The 'as EffectCode[]' might be needed if findEffectByName strictly returns string
-        return effectNames.map((name) => findEffectByName(name)).sort() as EffectCode[];
-    } catch (e) {
-        console.warn(`[reverseByEffect] Error converting effect names to codes: ${e}`);
-        return [];
+export function getSortedEffectCodesFromNames(
+    effectNames: Effect['name'][]
+): Result<EffectCode[], EffectNameNotFoundUtilError> {
+    const codes: EffectCode[] = [];
+    for (const name of effectNames) {
+        const effectCodeResult = findEffectByName(name);
+
+        if (effectCodeResult.isErr()) {
+            return err(effectCodeResult.error);
+        }
+        codes.push(effectCodeResult.value);
     }
+    return ok(codes.sort());
 }
 
 export function doEffectsMatchTarget(actualSortedCodes: EffectCode[], targetSet: Set<EffectCode>): boolean {

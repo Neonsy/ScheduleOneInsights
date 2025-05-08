@@ -38,6 +38,14 @@ export default tseslint.config(
         },
         rules: {
             'linebreak-style': 'off', // Good, as Prettier handles line endings
+            'neverthrow/must-use-result': 'warn', // Global setting
+        },
+    },
+    // Override for specific data files to turn off must-use-result
+    {
+        files: ['src/code/data/products/ingredients.ts', 'src/code/data/products/products.ts'],
+        rules: {
+            'neverthrow/must-use-result': 'off',
         },
     }
 );

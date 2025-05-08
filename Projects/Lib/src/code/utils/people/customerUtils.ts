@@ -11,18 +11,24 @@ import type { EffectCode } from '@/code/types/effects/Effect';
  * Find customers by effect name.
  * @param name The effect name to search for.
  * @returns Array of customers whose preferredEffects include the effect's code.
+ * Returns empty array if the effect name is invalid.
  */
 export const findCustomersByEffectName = (name: Effect['name']): Customer[] => {
-    const code = findEffectByName(name);
-    return customers.filter((customer) => customer.preferredEffects.includes(code));
+    return findEffectByName(name).match(
+        (effectCode) => customers.filter((customer) => customer.preferredEffects.includes(effectCode)),
+        () => [] // If the effect name is invalid, return empty array
+    );
 };
 
 /**
  * Find customers by effect code.
  * @param code The effect code to search for.
  * @returns Array of customers whose preferredEffects include the effect code.
+ * Returns empty array if the effect code is invalid.
  */
 export const findCustomersByEffectCode = (code: EffectCode): Customer[] => {
-    findEffectByCode(code);
-    return customers.filter((customer) => customer.preferredEffects.includes(code));
+    return findEffectByCode(code).match(
+        () => customers.filter((customer) => customer.preferredEffects.includes(code)),
+        () => [] // If the effect code is invalid, return empty array
+    );
 };
