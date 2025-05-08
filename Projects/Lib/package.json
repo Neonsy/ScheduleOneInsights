@@ -40,6 +40,7 @@
     "license": "MIT",
     "packageManager": "pnpm@10.8.1",
     "devDependencies": {
+        "@bufferings/eslint-plugin-neverthrow": "^0.2.12",
         "@eslint/js": "^9.25.0",
         "@types/node": "^22.14.1",
         "@typescript-eslint/eslint-plugin": "^8.30.1",
@@ -55,5 +56,8 @@
         "vite": "^6.3.5",
         "vite-plugin-dts": "^4.5.3",
         "vitest": "^3.1.1"
+    },
+    "dependencies": {
+        "neverthrow": "^8.2.0"
     }
 }
