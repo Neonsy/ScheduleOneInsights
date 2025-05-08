@@ -10,24 +10,29 @@ import { findIngredientByCode } from '@/code/utils/products/ingredientUtils';
 import { findEffectByCode } from '@/code/utils/effects/effectUtils';
 import { isMarijuanaProduct } from '@/code/types/products/Product';
 import type { Product } from '@/code/types/products/Product';
-import type { Ingredient } from '@/code/types/products/Ingredient';
+import type { EffectCode } from '@/code/types/effects/Effect';
+import type { RecipePayload } from '@/code/types/mix/RecipePayload';
 
 /**
  * Mix a product with ingredients according to game rules (snapshot reactions, default effect, limits).
  * Implements price and addictiveness formulas from the Steam guide.
  */
-export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingredient['code'][]): MixResult => {
+export const mixProduct = (
+    productCode: RecipePayload['productCode'],
+    ingredientCodes: RecipePayload['ingredientCodes']
+): MixResult => {
     // Lookup product
-    const product = findProductByCode(productCode);
+    const product: Product = findProductByCode(productCode);
     const basePrice = product.basePrice;
 
     // Accumulate cost and effects
     let totalCost = 0;
-    const effectMap = new Map<Effect['code'], Effect>();
+    // Map of effect code literals to effect objects
+    const effectMap = new Map<EffectCode, Effect>();
 
     // Step 1: add default effect for marijuana
     if (isMarijuanaProduct(product)) {
-        const baseEffect = findEffectByCode(product.defaultEffect);
+        const baseEffect = findEffectByCode(product.defaultEffect as EffectCode);
         effectMap.set(baseEffect.code, baseEffect);
     }
 
@@ -40,18 +45,20 @@ export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingred
         const rules = transformationRules[ingCode as keyof typeof transformationRules];
         if (rules) {
             // snapshot initial effect codes
-            const initialCodes = new Set(effectMap.keys());
+            const initialCodes = new Set<EffectCode>(effectMap.keys());
             const removed = new Set<Effect['code']>();
             const applied = new Set<number>();
 
             // Phase 1: immediate transforms based on initial snapshot
             rules.forEach((rule, idx) => {
                 const { ifPresent, ifNotPresent, replace } = rule;
-                const presentOK = ifPresent.every((code) => initialCodes.has(code));
-                const notPresentOK = ifNotPresent.every((code) => !initialCodes.has(code));
-                const hasReplaceable = Object.keys(replace).some((oldCode) => initialCodes.has(oldCode));
+                const presentOK = ifPresent.every((code: EffectCode) => initialCodes.has(code));
+                const notPresentOK = ifNotPresent.every((code: EffectCode) => !initialCodes.has(code));
+                const hasReplaceable = Object.keys(replace as Record<EffectCode, EffectCode>).some((oldCode: string) =>
+                    initialCodes.has(oldCode as EffectCode)
+                );
                 if (presentOK && notPresentOK && hasReplaceable) {
-                    for (const [oldCode, newCode] of Object.entries(replace) as [Effect['code'], Effect['code']][]) {
+                    for (const [oldCode, newCode] of Object.entries(replace) as [EffectCode, EffectCode][]) {
                         if (effectMap.has(oldCode) && !effectMap.has(newCode)) {
                             effectMap.delete(oldCode);
                             const newEff = findEffectByCode(newCode);
@@ -67,12 +74,14 @@ export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingred
             rules.forEach((rule, idx) => {
                 if (applied.has(idx)) return;
                 const { ifPresent, ifNotPresent, replace } = rule;
-                const presentOK = ifPresent.every((code) => initialCodes.has(code));
-                const forbiddenRemoved = ifNotPresent.some((code) => removed.has(code));
-                const forbiddenAbsentNow = ifNotPresent.every((code) => !effectMap.has(code));
-                const hasReplaceable = Object.keys(replace).some((oldCode) => effectMap.has(oldCode));
+                const presentOK = ifPresent.every((code: EffectCode) => initialCodes.has(code));
+                const forbiddenRemoved = ifNotPresent.some((code: EffectCode) => removed.has(code));
+                const forbiddenAbsentNow = ifNotPresent.every((code: EffectCode) => !effectMap.has(code));
+                const hasReplaceable = Object.keys(replace as Record<EffectCode, EffectCode>).some((oldCode: string) =>
+                    effectMap.has(oldCode as EffectCode)
+                );
                 if (presentOK && forbiddenRemoved && forbiddenAbsentNow && hasReplaceable) {
-                    for (const [oldCode, newCode] of Object.entries(replace) as [Effect['code'], Effect['code']][]) {
+                    for (const [oldCode, newCode] of Object.entries(replace) as [EffectCode, EffectCode][]) {
                         if (effectMap.has(oldCode) && !effectMap.has(newCode)) {
                             effectMap.delete(oldCode);
                             const newEff = findEffectByCode(newCode);
@@ -86,8 +95,8 @@ export const mixProduct = (productCode: Product['code'], ingredientCodes: Ingred
         }
 
         // 2b: add mixer's own effect if space & not already present
-        if (!effectMap.has(ingredient.defaultEffect) && effectMap.size < 8) {
-            const defaultEffect = findEffectByCode(ingredient.defaultEffect);
+        if (!effectMap.has(ingredient.defaultEffect as EffectCode) && effectMap.size < 8) {
+            const defaultEffect = findEffectByCode(ingredient.defaultEffect as EffectCode);
             effectMap.set(defaultEffect.code, defaultEffect);
         }
     }

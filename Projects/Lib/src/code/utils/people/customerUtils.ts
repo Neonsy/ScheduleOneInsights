@@ -5,6 +5,7 @@ import { customers } from '@/code/data/people/customers';
 import { findEffectByName, findEffectByCode } from '@/code/utils/effects/effectUtils';
 import type { Customer } from '@/code/types/people/Customer';
 import type { Effect } from '@/code/types/effects/Effect';
+import type { EffectCode } from '@/code/types/effects/Effect';
 
 /**
  * Find customers by effect name.
@@ -21,7 +22,7 @@ export const findCustomersByEffectName = (name: Effect['name']): Customer[] => {
  * @param code The effect code to search for.
  * @returns Array of customers whose preferredEffects include the effect code.
  */
-export const findCustomersByEffectCode = (code: Effect['code']): Customer[] => {
+export const findCustomersByEffectCode = (code: EffectCode): Customer[] => {
     findEffectByCode(code);
     return customers.filter((customer) => customer.preferredEffects.includes(code));
 };

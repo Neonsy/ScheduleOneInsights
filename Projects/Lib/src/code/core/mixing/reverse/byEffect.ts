@@ -1,3 +1,4 @@
+/* global console */
 import type { Effect } from '@/code/types/effects/Effect';
 import type { Product } from '@/code/types/products/Product';
 import type { Ingredient } from '@/code/types/products/Ingredient';
@@ -6,15 +7,22 @@ import { ingredients as allIngredientsData } from '@/code/data/products/ingredie
 import { findProductByCode } from '@/code/utils/products/productUtils';
 import { findEffectByName } from '@/code/utils/effects/effectUtils';
 import { mixProduct } from '@/code/core/mixing/normal/algorithm';
+import type { ProductCode } from '@/code/types/products/Product';
+import type { EffectCode } from '@/code/types/effects/Effect';
 
 interface ReverseSolution {
     ingredients: Ingredient['code'][];
     // finalMixResult?: MixResult; // Optional: Uncomment if full mix details are needed per solution
 }
 
+/**
+ * The result of reversing a product by target effect codes.
+ */
 export interface ReverseByEffectResult {
-    productCode: Product['code'];
-    desiredEffectCodes: Effect['code'][];
+    /** The product code for which solutions were found */
+    productCode: ProductCode;
+    /** The desired effect codes being targeted */
+    desiredEffectCodes: EffectCode[];
     solutions: ReverseSolution[];
     searchStats: {
         maxDepthSearched: number;
@@ -27,9 +35,17 @@ const ALL_AVAILABLE_INGREDIENT_CODES: ReadonlyArray<Ingredient['code']> = allIng
     (ing: Ingredient) => ing.code
 );
 
+/**
+ * Finds ingredient combinations that yield the specified effects for a given product.
+ *
+ * @param productCode - The code of the product to reverse.
+ * @param targetEffectCodes - The target effect codes to match.
+ * @param maxIngredientsToTry - Maximum ingredients length to explore.
+ * @returns A ReverseByEffectResult with possible ingredient combinations and stats.
+ */
 export function reverseByEffect(
-    productCode: Product['code'],
-    targetEffectCodes: Effect['code'][],
+    productCode: ProductCode,
+    targetEffectCodes: EffectCode[],
     maxIngredientsToTry: number = 3
 ): ReverseByEffectResult {
     let product: Product;
@@ -55,22 +71,11 @@ export function reverseByEffect(
     let pathsExplored = 0;
     const foundSolutionSequences = new Set<string>();
 
-    function getSortedEffectCodesFromNames(effectNames: Effect['name'][]): Effect['code'][] {
-        return effectNames
-            .map((name) => {
-                try {
-                    return findEffectByName(name);
-                } catch (e) {
-                    console.warn(
-                        `[reverseByEffect] Effect name "${name}" from mixProduct result could not be converted to code: ${e}`
-                    );
-                    return `INVALID_EFFECT_NAME_TO_CODE_${name}`;
-                }
-            })
-            .sort();
+    function getSortedEffectCodesFromNames(effectNames: Effect['name'][]): EffectCode[] {
+        return effectNames.map((name) => findEffectByName(name)).sort() as EffectCode[];
     }
 
-    function doEffectsMatchTarget(actualSortedCodes: Effect['code'][], targetSet: Set<Effect['code']>): boolean {
+    function doEffectsMatchTarget(actualSortedCodes: EffectCode[], targetSet: Set<EffectCode>): boolean {
         if (actualSortedCodes.length !== targetSet.size) {
             return false;
         }
@@ -120,7 +125,7 @@ export function reverseByEffect(
     }
 
     return {
-        productCode: product.code,
+        productCode,
         desiredEffectCodes: sortedTargetEffectCodes,
         solutions,
         searchStats: {

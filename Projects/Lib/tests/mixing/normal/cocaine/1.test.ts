@@ -1,12 +1,13 @@
 /* eslint-env node, vitest */
 import { test, expect } from 'vitest';
 import { mixProduct } from '@/exports/core/mixing/normal';
+import type { IngredientCode } from '@/code/types/products/Ingredient';
 
 /**
  * Verifies mixProduct produces the known optimal mix for Cocaine
  */
 test('mixProduct for Cocaine with specific ingredients sequence', () => {
-    const ingredientCodes: string[] = ['MO', 'MB', 'C', 'PRCTM', 'BTY', 'AD', 'DN', 'DN', 'HS'];
+    const ingredientCodes = ['MO', 'MB', 'C', 'PRCTM', 'BTY', 'AD', 'DN', 'DN', 'HS'] as IngredientCode[];
     const result = mixProduct('CC', ingredientCodes);
 
     // Should have exactly the 8 desired effects (order doesn't matter)

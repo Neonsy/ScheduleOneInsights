@@ -1,21 +1,25 @@
 import type { EffectType } from '@/code/types/consts/effectTypes';
+import { effects } from '@/code/data/effects/effects';
 
 /**
  * Explicit interface for effect objects
  */
 export interface Effect {
     /** Human-readable effect name */
-    name: string;
+    readonly name: string;
     /** Unique effect code */
-    code: string;
+    readonly code: EffectCode;
     /** Description of the effect */
-    description: string;
+    readonly description: string;
     /** Ability or cosmetic type */
-    type: EffectType;
+    readonly type: EffectType;
     /** Multiplier value for effect strength */
-    multiplier: number;
+    readonly multiplier: number;
     /** Tier level of the effect */
-    tier: number;
+    readonly tier: number;
     /** How addictive the effect is */
-    addictiveness: number;
+    readonly addictiveness: number;
 }
+
+/** Literal union type of all effect codes */
+export type EffectCode = (typeof effects)[number]['code'];

@@ -1,8 +1,10 @@
 import { findEffectByName } from '@/code/utils/effects/effectUtils';
-import type { Product } from '@/code/types/products/Product';
 import { Rank } from '@/code/types/consts/ranks';
 
-export const products: Product[] = [
+/**
+ * Source of truth for all product definitions.
+ */
+export const products = [
     {
         name: 'OG Kush',
         code: 'OK',
@@ -49,4 +51,4 @@ export const products: Product[] = [
         rank: Rank.EnforcerI,
         type: 'Cocaine',
     },
-];
+] as const;

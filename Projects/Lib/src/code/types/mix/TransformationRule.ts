@@ -1,15 +1,15 @@
-import type { Effect } from '@/code/types/effects/Effect';
+import type { EffectCode } from '@/code/types/effects/Effect';
 
 /**
  * Single transformation rule applied by ingredient codes.
  */
 export interface TransformationRule {
     /** Effect codes that trigger the rule if present */
-    ifPresent: Effect['code'][];
+    readonly ifPresent: EffectCode[];
     /** Effect codes that trigger the rule if not present */
-    ifNotPresent: Effect['code'][];
+    readonly ifNotPresent: EffectCode[];
     /** Mapping of effect codes to their replacements */
-    replace: Record<Effect['code'], Effect['code']>;
+    readonly replace: Partial<Record<EffectCode, EffectCode>>;
 }
 
 /**
