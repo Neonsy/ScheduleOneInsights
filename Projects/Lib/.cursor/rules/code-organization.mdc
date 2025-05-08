@@ -3,28 +3,46 @@ description:
 globs: 
 alwaysApply: true
 ---
-Code Organization & Exports
+# Code Organization & Exports
 
-Directory Structure
+## Directory Structure Rules
 
-src/code: Contains all core implementation logic, types, data, and utilities. This code is considered internal to the library unless explicitly exposed via src/exports. The primary top-level directories within src/code should be:
-core: For main business logic, algorithms, and core functionalities (e.g., mixing, seedManager).
-data: For static data definitions, constants, and lookup tables (e.g., effects, products, transformationRules). Type definitions derived from this data belong in src/code/types.
-lib: For strictly internal helper functions, classes, or modules that are implementation details of other code modules and must never be exposed as part of the library's public API via src/exports. Code within lib should only be imported by other modules within src/code.
-types: All custom type aliases (type) and interface definitions (interface) must reside within this directory, mirroring the feature structure where appropriate (e.g., src/code/types/products/Product.ts, src/code/types/effects/EffectCode.ts).
-utils: For reusable helper functions and utilities that don't belong to a specific core feature and might be shared across different parts of the code directory (e.g., effectUtils, productUtils). Some utils might eventually be exposed via src/exports.
-src/exports: Defines the public API surface of the library. Files and folders here mirror the intended public structure of the code being exported from src/code. No file within src/exports should ever import directly from src/code/lib.
-Feature-Based Subdirectories: Within the primary directories (core, data, lib, types, utils), organize further into subdirectories by feature or domain (e.g., mixing, products, effects).
-Single Responsibility: Aim for one primary class, interface, function, component, etc., per file. Name the file after that primary export (e.g., ProductUtils.ts exports functions related to products). Use subfolders if a feature grows complex.
+Organize all source code within the `src/` directory as follows:
 
-Export Strategy
+1.  **`src/code/`**: Contains ALL internal implementation logic, type definitions, static data, and utility functions.
+    *   Code here is considered **internal** unless explicitly re-exported via `src/exports/`.
+    *   **Primary Subdirectories (Required):**
+        *   `core/`: Main business logic, algorithms, core features (e.g., `mixing/`, `seedManager/`).
+        *   `data/`: Static data definitions, constants, lookup tables (e.g., `effects/`, `products/`, `mix/transformationRules.ts`). Type definitions derived from this data belong in `src/code/types/`.
+        *   `lib/`: **Strictly Internal Helpers.** Contains implementation details (functions, classes) used ONLY by other modules within `src/code/`. **NEVER export code from `src/code/lib/` via `src/exports/`. Code in `lib/` MUST NOT be imported by files in `src/exports/`.**
+        *   `types/`: Contains ALL custom `interface` and `type` definitions. Structure should mirror feature directories where applicable (e.g., `types/products/Product.ts`, `types/effects/EffectCode.ts`).
+        *   `utils/`: Reusable helper functions/classes not tied to a single core feature. May be shared across `src/code/`. Some utilities might be suitable for public export via `src/exports/`.
+    *   **Feature Subdirectories:** Within `core`, `data`, `lib`, `types`, `utils`, further organize code into subdirectories based on feature or domain (e.g., `mixing/`, `products/`, `effects/`).
 
-Public API via src/exports: Only code intended for public use should be exposed through the src/exports directory.
-Explicit Re-exports: Files within src/exports (that are not barrel files) must explicitly import members from their corresponding files in src/code/... (but never from src/code/lib/...) and re-export only the intended public members using named exports. Do not use export * from '@/code/...' in these files.
-For example, a file like src/exports/core/mixing/reverse/byEffect.ts would import a function, perhaps aliasing it (e.g., internalReverse from  '@/code/core/mixing/reverse/byEffect'), and then export it under its public name (e.g., export const reverseByEffect = internalReverse;). Similarly, types needed for the public API would be imported (possibly aliased) and then re-exported.
-Barrel Files (index.ts) in src/exports: Barrel files (index.ts) within the src/exports directory are used only to aggregate and re-export members from other files or sub-barrels within src/exports. They use wildcard exports (export * from './fileName'; or export * from './subDirectory';). Barrel files must never export directly from src/code.
-Alias Paths: Always use the @/* alias for local project imports (pointing to src/).
+2.  **`src/exports/`**: Defines the **public API surface** of the library.
+    *   Directory structure mirrors the intended public API structure, re-exporting elements from `src/code/`.
+    *   **NO direct imports from `src/code/lib/` are allowed in ANY file within `src/exports/`.**
 
-Up-to-Date Exports
+3.  **Single Responsibility Principle:**
+    *   Aim for one primary logical unit (class, interface, function group, constant group) per file.
+    *   Name the file descriptively after its primary export (e.g., `ProductUtils.ts` for product utility functions, `Product.ts` for the Product type).
+    *   Use subfolders if a feature becomes too complex for a single file or flat directory.
 
-Ensure that when code in src/code is created or modified, the corresponding exports in src/exports are added or updated accordingly to reflect the intended public API, respecting the restriction on exporting from src/code/lib.
+## Export Strategy Rules
+
+1.  **Public API Definition:** Only code intended for public use MUST be exposed through `src/exports/`.
+2.  **Explicit Re-exports (in `src/exports/` files):**
+    *   Files within `src/exports/` (that are NOT `index.ts` barrel files) MUST explicitly import members from their corresponding files in `src/code/` (e.g., `import { internalMixProduct } from '@/code/core/mixing/normal/algorithm';`).
+    *   Re-export ONLY the intended public members using named exports (`export const mixProduct = internalMixProduct;`).
+    *   Aliasing imports is acceptable (`import { internalReverse as reverseByEffect } from '...'; export { reverseByEffect };`).
+    *   **DO NOT use wildcard exports (`export * from '@/code/...'`) in these non-barrel files.**
+    *   Remember: Imports from `src/code/lib/` are FORBIDDEN here.
+3.  **Barrel Files (`index.ts` in `src/exports/`):**
+    *   Purpose: ONLY to aggregate and re-export members from *other files or sub-barrels within `src/exports/`*.
+    *   Usage: MUST use wildcard exports (`export * from './fileName';` or `export * from './subDirectory';`).
+    *   **MUST NOT export directly from `src/code/`.**
+4.  **Alias Paths:** ALWAYS use the `@/*` alias (points to `src/`) for local project imports within TypeScript files.
+
+## Maintenance
+
+*   **Keep Exports Updated:** When creating or modifying code in `src/code/`, ensure the corresponding exports in `src/exports/` are added or updated to accurately reflect the intended public API, respecting all rules above (especially the `src/code/lib/` restriction).
