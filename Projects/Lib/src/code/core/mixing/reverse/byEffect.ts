@@ -63,15 +63,11 @@ export function reverseByEffect(productCode: ProductCode, targetEffectCodes: Eff
     try {
         product = findProductByCode(productCode);
     } catch (error) {
-        // console.error is acceptable for unrecoverable issues per some style guides,
-        // but ensure this aligns with overall project logging strategy.
-        console.error(`[reverseByEffect] Failed to find product: ${productCode}`, error);
-        return {
-            found: false,
-            productCode,
-            desiredEffectCodes: targetEffectCodes,
-            stats: { maxDepthSearched: 0, pathsExplored: 0, solutionsFound: 0 },
-        };
+        // Let the consumer handle the error if the product cannot be found.
+        // It's a precondition failure for this function.
+        throw new Error(
+            `[reverseByEffect] Prerequisite failed: Could not find product with code "${productCode}". Original error: ${error instanceof Error ? error.message : String(error)}`
+        );
     }
 
     // Pre-process target effects for efficient lookup
