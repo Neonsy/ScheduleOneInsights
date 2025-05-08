@@ -39,5 +39,5 @@ export default tseslint.config(
         rules: {
             'linebreak-style': 'off', // Good, as Prettier handles line endings
         },
-    },
+    }
 );

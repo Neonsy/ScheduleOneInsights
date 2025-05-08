@@ -1,4 +1,3 @@
-import type { EffectCode } from '@/code/types/effects/Effect';
 import type { MixResult } from '@/code/types/mixing/MixResult'; // Corrected to alias path
 import type { ProductCode } from '@/code/types/products/Product';
 
@@ -14,27 +13,18 @@ export interface CheapestReverseMixResult extends MixResult {
 }
 
 /**
- * Represents the statistics of the reverse search operation.
+ * Represents a successful result from the reverseMixByEffect function.
+ * Contains the cheapest mix result and search statistics.
  */
-export interface ReverseSearchStats {
-    readonly maxDepthSearched: number;
-    readonly pathsExplored: number;
-    readonly solutionsFound: number; // Total valid solutions found before picking cheapest
+export interface ReverseMixSuccess {
+    readonly result: CheapestReverseMixResult;
+    readonly stats: ReverseSearchStats;
 }
 
 /**
- * The overall result structure for reverseByEffect, which might contain
- * the cheapest solution or indicate that none was found.
+ * Represents the statistics of the reverse search operation.
  */
-export type ReverseByEffectOutcome =
-    | {
-          readonly found: true;
-          readonly result: CheapestReverseMixResult;
-          readonly stats: ReverseSearchStats;
-      }
-    | {
-          readonly found: false;
-          readonly productCode: ProductCode;
-          readonly desiredEffectCodes: EffectCode[];
-          readonly stats: ReverseSearchStats;
-      };
+export interface ReverseSearchStats {
+    readonly pathsExplored: number; // Nodes visited / states explored
+    readonly solutionsFound: number; // Should be 1 if successful with Dijkstra
+}

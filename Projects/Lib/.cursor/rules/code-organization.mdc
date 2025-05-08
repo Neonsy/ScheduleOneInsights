@@ -32,14 +32,13 @@ Organize all source code within the `src/` directory as follows:
 
 1.  **Public API Definition:** Only code intended for public use MUST be exposed through `src/exports/`.
 2.  **Explicit Re-exports (in `src/exports/` files):**
-    *   Files within `src/exports/` (that are NOT `index.ts` barrel files) MUST explicitly import members from their corresponding files in `src/code/` (e.g., `import { internalMixProduct } from '@/code/core/mixing/normal/algorithm';`).
-    *   Re-export ONLY the intended public members using named exports (`export const mixProduct = internalMixProduct;`).
-    *   Aliasing imports is acceptable (`import { internalReverse as reverseByEffect } from '...'; export { reverseByEffect };`).
+    *   Files within `src/exports/` (that are NOT `index.ts` barrel files) MUST explicitly export members from their corresponding files in `src/code/`.
+    *   Re-export ONLY the intended public members.
     *   **DO NOT use wildcard exports (`export * from '@/code/...'`) in these non-barrel files.**
     *   Remember: Imports from `src/code/lib/` are FORBIDDEN here.
 3.  **Barrel Files (`index.ts` in `src/exports/`):**
     *   Purpose: ONLY to aggregate and re-export members from *other files or sub-barrels within `src/exports/`*.
-    *   Usage: MUST use wildcard exports (`export * from './fileName';` or `export * from './subDirectory';`).
+    *   Usage: MUST use wildcard exports (`export * from '@/exports/fileName';` or `export * from '@/exports/subDirectory';`).
     *   **MUST NOT export directly from `src/code/`.**
 4.  **Alias Paths:** ALWAYS use the `@/*` alias (points to `src/`) for local project imports within TypeScript files.
 
