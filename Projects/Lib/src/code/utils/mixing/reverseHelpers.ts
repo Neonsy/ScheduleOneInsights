@@ -3,36 +3,30 @@ import { findEffectByName } from '@/code/utils/effects/effectUtils';
 import type { Ingredient } from '@/code/types/products/Ingredient';
 import type { Effect, EffectCode } from '@/code/types/effects/Effect';
 import { type EffectNameNotFoundUtilError, type IngredientNotFoundUtilError } from '@/code/types/errors/UtilError';
-import { Result, err, ok } from 'neverthrow';
+import { Result } from 'neverthrow';
 
 export function calculateIngredientCost(
     ingredientCodes: Ingredient['code'][]
 ): Result<number, IngredientNotFoundUtilError> {
-    let totalCost = 0;
-    for (const code of ingredientCodes) {
-        const ingredientResult = findIngredientByCode(code);
+    const ingredientResults: Result<Ingredient, IngredientNotFoundUtilError>[] =
+        ingredientCodes.map(findIngredientByCode);
 
-        if (ingredientResult.isErr()) {
-            return err(ingredientResult.error);
-        }
-        totalCost += ingredientResult.value.price;
-    }
-    return ok(totalCost);
+    // Combine results. If any error, return the first error.
+    return Result.combine(ingredientResults).map((ingredients) => {
+        // ingredients is Ingredient[]
+        return ingredients.reduce((sum, ing) => sum + ing.price, 0);
+    });
 }
 
 export function getSortedEffectCodesFromNames(
     effectNames: Effect['name'][]
 ): Result<EffectCode[], EffectNameNotFoundUtilError> {
-    const codes: EffectCode[] = [];
-    for (const name of effectNames) {
-        const effectCodeResult = findEffectByName(name);
+    const effectCodeResults: Result<EffectCode, EffectNameNotFoundUtilError>[] = effectNames.map(findEffectByName);
 
-        if (effectCodeResult.isErr()) {
-            return err(effectCodeResult.error);
-        }
-        codes.push(effectCodeResult.value);
-    }
-    return ok(codes.sort());
+    return Result.combine(effectCodeResults).map((codes) => {
+        // codes is EffectCode[]
+        return codes.sort();
+    });
 }
 
 export function doEffectsMatchTarget(actualSortedCodes: EffectCode[], targetSet: Set<EffectCode>): boolean {

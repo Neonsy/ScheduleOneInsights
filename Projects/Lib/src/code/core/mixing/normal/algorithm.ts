@@ -23,10 +23,12 @@ export const mixProduct = (
 ): MixResult => {
     // Lookup product
     const productResult = findProductByCode(productCode);
-    if (productResult.isErr()) {
-        throw new Error(`Product not found: ${productCode}. Error: ${productResult.error.message}`);
-    }
-    const product: Product = productResult.value;
+    const product: Product = productResult.match(
+        (p) => p,
+        (err) => {
+            throw new Error(`Product not found: ${productCode}. Error: ${err.message}`);
+        }
+    );
     const basePrice = product.basePrice;
 
     // Accumulate cost and effects
@@ -36,28 +38,28 @@ export const mixProduct = (
 
     // Step 1: add default effect for marijuana
     if (isMarijuanaProduct(product)) {
-        if (product.defaultEffect.isErr()) {
-            throw new Error(
-                `Invalid default effect for product ${product.name}: ${product.defaultEffect.error.message}`
-            );
-        }
-        const baseEffectResult = findEffectByCode(product.defaultEffect.value);
-        if (baseEffectResult.isErr()) {
-            throw new Error(
-                `Could not find base effect ${product.defaultEffect.value} for product ${product.name}: ${baseEffectResult.error.message}`
-            );
-        }
-        const baseEffect = baseEffectResult.value;
+        const baseEffectCode = product.defaultEffect;
+        const baseEffectResult = findEffectByCode(baseEffectCode);
+        const baseEffect: Effect = baseEffectResult.match(
+            (eff) => eff,
+            (err) => {
+                throw new Error(
+                    `Could not find base effect ${baseEffectCode} for product ${product.name}: ${err.message}`
+                );
+            }
+        );
         effectMap.set(baseEffect.code, baseEffect);
     }
 
     // Step 2: process each mixer in order
     for (const ingCode of ingredientCodes) {
         const ingredientResult = findIngredientByCode(ingCode);
-        if (ingredientResult.isErr()) {
-            throw new Error(`Ingredient not found: ${ingCode}. Error: ${ingredientResult.error.message}`);
-        }
-        const ingredient = ingredientResult.value;
+        const ingredient = ingredientResult.match(
+            (ing) => ing,
+            (err) => {
+                throw new Error(`Ingredient not found: ${ingCode}. Error: ${err.message}`);
+            }
+        );
         totalCost += ingredient.price;
 
         // 2a: apply two-phase cascading transforms
@@ -81,12 +83,12 @@ export const mixProduct = (
                         if (effectMap.has(oldCode) && !effectMap.has(newCode)) {
                             effectMap.delete(oldCode);
                             const newEffResult = findEffectByCode(newCode);
-                            if (newEffResult.isErr()) {
-                                throw new Error(
-                                    `New effect not found: ${newCode}. Error: ${newEffResult.error.message}`
-                                );
-                            }
-                            const newEff = newEffResult.value;
+                            const newEff: Effect = newEffResult.match(
+                                (eff) => eff,
+                                (err) => {
+                                    throw new Error(`New effect not found: ${newCode}. Error: ${err.message}`);
+                                }
+                            );
                             effectMap.set(newEff.code, newEff);
                             removed.add(oldCode);
                         }
@@ -110,12 +112,12 @@ export const mixProduct = (
                         if (effectMap.has(oldCode) && !effectMap.has(newCode)) {
                             effectMap.delete(oldCode);
                             const newEffResult = findEffectByCode(newCode);
-                            if (newEffResult.isErr()) {
-                                throw new Error(
-                                    `New effect not found: ${newCode}. Error: ${newEffResult.error.message}`
-                                );
-                            }
-                            const newEff = newEffResult.value;
+                            const newEff: Effect = newEffResult.match(
+                                (eff) => eff,
+                                (err) => {
+                                    throw new Error(`New effect not found: ${newCode}. Error: ${err.message}`);
+                                }
+                            );
                             effectMap.set(newEff.code, newEff);
                             removed.add(oldCode);
                         }
@@ -126,21 +128,18 @@ export const mixProduct = (
         }
 
         // 2b: add mixer's own effect if space & not already present
-        if (ingredient.defaultEffect.isErr()) {
-            throw new Error(
-                `Invalid default effect for ingredient ${ingredient.name}: ${ingredient.defaultEffect.error.message}`
-            );
-        }
-        const ingredientDefaultEffectCode = ingredient.defaultEffect.value;
+        const ingredientDefaultEffectCode = ingredient.defaultEffect;
 
         if (!effectMap.has(ingredientDefaultEffectCode) && effectMap.size < 8) {
             const defaultEffectResult = findEffectByCode(ingredientDefaultEffectCode);
-            if (defaultEffectResult.isErr()) {
-                throw new Error(
-                    `Default effect ${ingredientDefaultEffectCode} for ingredient ${ingredient.name} not found: ${defaultEffectResult.error.message}`
-                );
-            }
-            const defaultEffect = defaultEffectResult.value;
+            const defaultEffect: Effect = defaultEffectResult.match(
+                (eff) => eff,
+                (err) => {
+                    throw new Error(
+                        `Default effect ${ingredientDefaultEffectCode} for ingredient ${ingredient.name} not found: ${err.message}`
+                    );
+                }
+            );
             effectMap.set(defaultEffect.code, defaultEffect);
         }
     }

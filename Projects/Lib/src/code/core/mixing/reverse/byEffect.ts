@@ -1,9 +1,9 @@
 import type { EffectCode } from '@/code/types/effects/Effect';
 import { NO_SOLUTION_FOUND_ERROR, type NoSolutionFoundError } from '@/code/types/errors/MixingError';
 import { type ProductNotFoundProdError } from '@/code/types/errors/ProductError';
-import { type UtilError } from '@/code/types/errors/UtilError';
+import { type UtilError, type EffectNameNotFoundUtilError } from '@/code/types/errors/UtilError';
 import type { Ingredient } from '@/code/types/products/Ingredient';
-import type { ProductCode } from '@/code/types/products/Product';
+import type { Product, ProductCode } from '@/code/types/products/Product';
 import { Result, err, ok } from 'neverthrow';
 
 import { mixProduct } from '@/code/core/mixing/normal/algorithm';
@@ -47,133 +47,152 @@ export function reverseByEffect(
     productCode: ProductCode,
     targetEffectCodes: EffectCode[]
 ): Result<ReverseByEffectSuccess, ProductNotFoundProdError | NoSolutionFoundError | UtilError> {
-    const productResult = findProductByCode(productCode);
-
-    if (productResult.isErr()) {
-        return err(productResult.error);
-    }
-    const product = productResult.value;
-
-    const sortedTargetEffectCodes = [...targetEffectCodes].sort();
-    const desiredEffectsSet = new Set(sortedTargetEffectCodes);
-    const ingredientDataMap = new Map<Ingredient['code'], Ingredient>(allIngredientsData.map((ing) => [ing.code, ing]));
-
     let pathsExplored = 0;
     let solutionsFound = 0;
     let cheapestCost = Infinity;
     let cheapestSequence: Ingredient['code'][] | null = null;
     const foundSolutionSequencesAtDepth = new Set<string>();
-    let actualMaxDepthSearched = 0;
 
-    function findSequencesOfLengthK(
+    function findSequencesRecursive(
+        currentProd: Product,
         currentSequence: Ingredient['code'][],
-        targetSequenceLength: number
+        targetSequenceLength: number,
+        desiredEffectsSet: Set<EffectCode>
     ): Result<void, UtilError> {
         pathsExplored++;
 
-        const costResult = calculateIngredientCost(currentSequence);
-        if (costResult.isErr()) {
-            return err(costResult.error);
-        }
-        const currentCost = costResult.value;
-
-        if (currentCost >= cheapestCost) {
-            return ok(undefined);
-        }
-
-        if (currentSequence.length === targetSequenceLength) {
-            const solutionKey = currentSequence.join(',');
-            if (foundSolutionSequencesAtDepth.has(solutionKey)) {
-                return ok(undefined);
+        return calculateIngredientCost(currentSequence).andThen((currentCost) => {
+            if (currentCost >= cheapestCost) {
+                return ok<void, never>(undefined);
             }
 
-            const mixResult = mixProduct(product.code, currentSequence);
-            const actualEffectCodesSortedResult = getSortedEffectCodesFromNames(mixResult.effects);
-
-            if (actualEffectCodesSortedResult.isErr()) {
-                return err(actualEffectCodesSortedResult.error);
-            }
-            const actualEffectCodesSorted = actualEffectCodesSortedResult.value;
-
-            if (doEffectsMatchTarget(actualEffectCodesSorted, desiredEffectsSet)) {
-                solutionsFound++;
-                if (targetSequenceLength > 0) {
-                    foundSolutionSequencesAtDepth.add(solutionKey);
+            if (currentSequence.length === targetSequenceLength) {
+                const solutionKey = currentSequence.join(',');
+                if (foundSolutionSequencesAtDepth.has(solutionKey)) {
+                    return ok<void, never>(undefined);
                 }
-                cheapestCost = currentCost;
-                cheapestSequence = [...currentSequence];
-            }
-            return ok(undefined);
-        }
 
-        if (currentSequence.length < targetSequenceLength) {
+                const mixResult = mixProduct(currentProd.code, currentSequence);
+                return getSortedEffectCodesFromNames(mixResult.effects).andThen<void, EffectNameNotFoundUtilError>(
+                    (actualEffectCodesSorted) => {
+                        if (doEffectsMatchTarget(actualEffectCodesSorted, desiredEffectsSet)) {
+                            solutionsFound++;
+                            if (targetSequenceLength > 0) {
+                                foundSolutionSequencesAtDepth.add(solutionKey);
+                            }
+                            cheapestCost = currentCost;
+                            cheapestSequence = [...currentSequence];
+                        }
+                        return ok<void, never>(undefined);
+                    }
+                );
+            }
+
+            let overallLoopError: UtilError | null = null;
             for (const nextIngredientCode of ALL_AVAILABLE_INGREDIENT_CODES) {
                 currentSequence.push(nextIngredientCode);
 
-                const nextCostResult = calculateIngredientCost(currentSequence);
-                if (nextCostResult.isErr()) {
-                    currentSequence.pop();
-                    return err(nextCostResult.error);
-                }
-                if (nextCostResult.value < cheapestCost) {
-                    const searchResult = findSequencesOfLengthK(currentSequence, targetSequenceLength);
-                    if (searchResult.isErr()) {
-                        currentSequence.pop();
-                        return err(searchResult.error);
-                    }
-                }
+                calculateIngredientCost(currentSequence)
+                    .andThen((nextCost) => {
+                        if (nextCost < cheapestCost) {
+                            return findSequencesRecursive(
+                                currentProd,
+                                currentSequence,
+                                targetSequenceLength,
+                                desiredEffectsSet
+                            );
+                        }
+                        return ok<void, never>(undefined);
+                    })
+                    .match(
+                        () => {
+                            /* OK, loop continues */
+                        },
+                        (iterationErr: UtilError) => {
+                            overallLoopError = iterationErr;
+                        }
+                    );
+
                 currentSequence.pop();
+
+                if (overallLoopError) {
+                    break;
+                }
+            }
+            if (overallLoopError) {
+                return err<never, UtilError>(overallLoopError);
+            }
+            return ok<void, never>(undefined);
+        });
+    }
+
+    return findProductByCode(productCode).andThen((product: Product) => {
+        const sortedTargetEffectCodes = [...targetEffectCodes].sort();
+        const desiredEffectsSet = new Set(sortedTargetEffectCodes);
+        let actualMaxDepthSearched = 0;
+
+        for (let currentSearchDepth = 0; currentSearchDepth <= MAX_SEARCH_DEPTH_SAFEGUARD; currentSearchDepth++) {
+            actualMaxDepthSearched = currentSearchDepth;
+            foundSolutionSequencesAtDepth.clear();
+
+            const iterationResult = findSequencesRecursive(product, [], currentSearchDepth, desiredEffectsSet);
+            let loopShouldReturnError: UtilError | null = null;
+            iterationResult.match(
+                () => {
+                    if (cheapestSequence !== null) {
+                        // Break outer for-loop: achieved by returning a specific non-error signal, or setting a flag.
+                        // For simplicity, we'll rely on the cheapestSequence !== null check below loop.
+                    }
+                },
+                (iterErr) => {
+                    loopShouldReturnError = iterErr;
+                }
+            );
+
+            if (loopShouldReturnError) {
+                return err(loopShouldReturnError);
+            }
+            if (cheapestSequence !== null) {
+                break;
             }
         }
-        return ok(undefined);
-    }
 
-    for (let currentSearchDepth = 0; currentSearchDepth <= MAX_SEARCH_DEPTH_SAFEGUARD; currentSearchDepth++) {
-        actualMaxDepthSearched = currentSearchDepth;
-        foundSolutionSequencesAtDepth.clear();
-
-        const searchIterationResult = findSequencesOfLengthK([], currentSearchDepth);
-        if (searchIterationResult.isErr()) {
-            return err(searchIterationResult.error);
-        }
+        const stats: ReverseSearchStats = {
+            maxDepthSearched: actualMaxDepthSearched,
+            pathsExplored,
+            solutionsFound,
+        };
 
         if (cheapestSequence !== null) {
-            break;
-        }
-    }
+            const ingredientDataMap = new Map<Ingredient['code'], Ingredient>(
+                allIngredientsData.map((ing) => [ing.code, ing])
+            );
+            const finalMixResult = mixProduct(productCode, cheapestSequence);
+            const codes = cheapestSequence;
+            const ingredientNames = codes.map((code: Ingredient['code']) => {
+                const ing = ingredientDataMap.get(code);
+                return ing ? ing.name : `Unknown Ingredient (${code})`;
+            });
 
-    const stats: ReverseSearchStats = {
-        maxDepthSearched: actualMaxDepthSearched,
-        pathsExplored,
-        solutionsFound,
-    };
-
-    if (cheapestSequence !== null) {
-        const finalMixResult = mixProduct(productCode, cheapestSequence);
-        const codes = cheapestSequence as Ingredient['code'][];
-        const ingredientNames = codes.map((code: Ingredient['code']) => {
-            const ing = ingredientDataMap.get(code);
-            return ing ? ing.name : `Unknown Ingredient (${code})`;
-        });
-
-        const cheapestResultData: CheapestReverseMixResult = {
-            ...finalMixResult,
-            productCode: productCode,
-            ingredientNames: ingredientNames,
-        };
-        return ok({
-            result: cheapestResultData,
-            stats: stats,
-        });
-    } else {
-        const errorDetail: NoSolutionFoundError = {
-            type: NO_SOLUTION_FOUND_ERROR,
-            message: `No solution found for product "${productCode}" with desired effects.`,
-            context: {
+            const cheapestResultData: CheapestReverseMixResult = {
+                ...finalMixResult,
                 productCode: productCode,
-                desiredEffectCodes: sortedTargetEffectCodes,
-            },
-        };
-        return err(errorDetail);
-    }
+                ingredientNames: ingredientNames,
+            };
+            return ok({
+                result: cheapestResultData,
+                stats: stats,
+            });
+        } else {
+            const errorDetail: NoSolutionFoundError = {
+                type: NO_SOLUTION_FOUND_ERROR,
+                message: `No solution found for product "${productCode}" with desired effects.`,
+                context: {
+                    productCode: productCode,
+                    desiredEffectCodes: sortedTargetEffectCodes,
+                },
+            };
+            return err(errorDetail);
+        }
+    });
 }
