@@ -49,6 +49,5 @@ export type Product = MarijuanaProduct | NonMarijuanaProduct;
 export const isMarijuanaProduct = (product: Product): product is MarijuanaProduct => {
     return product.type === 'Marijuana';
 };
-
 /** Literal union type of all effect codes */
 export type ProductCode = (typeof products)[number]['code'];

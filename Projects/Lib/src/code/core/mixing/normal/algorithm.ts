@@ -3,7 +3,7 @@
  * Provides functions for mixing products with ingredients
  */
 import { Effect } from '@/code/types/effects/Effect';
-import { MixResult } from '@/code/types/mix/MixResult';
+import { MixResult } from '@/code/types/mixing/MixResult';
 import { transformationRules } from '@/code/data/mix/transformationRules';
 import { findProductByCode } from '@/code/utils/products/productUtils';
 import { findIngredientByCode } from '@/code/utils/products/ingredientUtils';
@@ -11,7 +11,7 @@ import { findEffectByCode } from '@/code/utils/effects/effectUtils';
 import { isMarijuanaProduct } from '@/code/types/products/Product';
 import type { Product } from '@/code/types/products/Product';
 import type { EffectCode } from '@/code/types/effects/Effect';
-import type { RecipePayload } from '@/code/types/mix/RecipePayload';
+import type { RecipePayload } from '@/code/types/mixing/RecipePayload';
 
 /**
  * Mix a product with ingredients according to game rules (snapshot reactions, default effect, limits).
