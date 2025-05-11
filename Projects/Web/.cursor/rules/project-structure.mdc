@@ -1,0 +1,117 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Defines the project's directory structure, import conventions, and usage of boundary-enforcing packages like server-only and client-only. This rule helps the AI understand where to place new files, how to organize code, and how to manage module boundaries according to our project standards."
+globs: ["src/**/*.{ts,tsx,js,jsx}"] # Apply this rule when working with relevant files in the src directory
+type: "auto-attached"
+---
+
+# Project Structure and Coding Conventions
+
+This document outlines the standard project structure and coding conventions to be followed. The AI should adhere to these guidelines when generating or modifying code.
+
+## General Import Conventions
+
+*   **Path Aliases:** All internal imports within the `src` directory **must** use the `@/` alias.
+    *   **Example:** Instead of `import MyComponent from '../../components/MyComponent'`, use `import MyComponent from '@/components/MyComponent'`.
+    *   This assumes your `tsconfig.json` or `jsconfig.json` is configured with `paths: { "@/*": ["./src/*"] }`.
+
+## Components
+
+There are two types of components:
+
+1.  **Page-Specific Components:**
+    *   These components are used by a single page.
+    *   **Location:** They **must** be placed in a directory named `components` directly inside the directory of the page they belong to.
+    *   **Example:** If a page is `src/app/dashboard/page.tsx`, its specific components should be in `src/app/dashboard/components/`.
+
+2.  **Project-Specific (Reusable) Components:**
+    *   These components are designed to be reused across multiple pages or parts of the application.
+    *   **Location:** They **must** be located in a directory named `components` directly inside the `src` folder.
+    *   **Example:** `src/components/Button.tsx`, `src/components/Modal.tsx`.
+
+## Hooks
+
+*   **Custom React Hooks:**
+    *   **Purpose:** To encapsulate reusable stateful logic or side effects.
+    *   **Naming Convention:** Must start with `use` (e.g., `useUserData.ts`, `useFormValidation.ts`).
+    *   **Location:**
+        *   If a hook is specific to a particular page or a closely related set of components within a page's directory, it can reside in a `hooks` subdirectory within that page's folder (e.g., `src/app/settings/hooks/useSettingsForm.ts`).
+        *   If a hook is generally reusable across the project, it **must** be placed in a dedicated `hooks` directory inside the `src` folder (e.g., `src/hooks/useLocalStorage.ts`).
+
+## Providers
+
+*   **React Context Providers:**
+    *   **Purpose:** To manage global or shared state that needs to be accessible by many components at different levels of the component tree.
+    *   **Naming Convention:** Should clearly indicate the context they provide (e.g., `UserProvider.tsx`, `ThemeProvider.tsx`).
+    *   **Location:**
+        *   Providers that are closely tied to a specific section of the application can be co-located with that section if it makes sense for organization.
+        *   Generally, project-wide providers **must** be placed in a dedicated `providers` directory inside the `src` folder (e.g., `src/providers/AuthProvider.tsx`).
+    *   **Structure:** Each provider should typically define its context, the provider component itself, and a custom hook to consume the context (e.g., `useAuth`).
+
+## Server (Functions) Actions
+
+*   **Next.js Server Actions or similar backend functions:**
+    *   **Purpose:** To handle server-side logic, data fetching, mutations, etc., that can be called from client or server components.
+    *   **Naming Convention:** Should be descriptive of the action they perform (e.g., `createUserAction.ts`, `updateUserSettingsAction.ts`). Use `verbNounAction.ts` or similar clear patterns.
+    *   **Location:**
+        *   If an action is tightly coupled to a specific page or feature, it can be located within that feature's directory, possibly in an `actions` subfolder (e.g., `src/app/products/actions/addProductAction.ts`).
+        *   For more general or reusable server actions, they **must** be placed in a dedicated `actions` or `server-actions` directory inside the `src` folder, or potentially within a `lib` or `utils` folder if they are more utility-like backend functions. A common pattern is `src/lib/actions/`.
+    *   **Security:** Always ensure proper authentication, authorization, and input validation for all server actions.
+    *   **Directive:** Functions intended as Server Actions should use the `"use server"` directive, either at the top of the file or within the function itself.
+
+## Custom Functions (Utilities)
+
+*   **General Utility Functions:**
+    *   **Purpose:** To house pure functions or utility logic that can be reused throughout the application (e.g., date formatting, string manipulation, calculations).
+    *   **Naming Convention:** Files should be named descriptively based on their content or purpose (e.g., `dateUtils.ts`, `stringHelpers.ts`, `validationUtils.ts`). Functions within these files should also have clear, descriptive names.
+    *   **Location:**
+        *   If a utility is specific to a component or page, it can be co-located or placed in a `utils` subfolder within that page/component directory.
+        *   Project-wide utility functions **must** be placed in a dedicated `lib` or `utils` directory inside the `src` folder (e.g., `src/lib/utils.ts` or `src/utils/formatters.ts`).
+    *   **Purity:** Strive to keep utility functions pure (i.e., given the same input, they always return the same output and have no side effects).
+
+## Module Boundary Enforcement
+
+To prevent accidental misuse of server-only or client-only code in the wrong environments, we use the following packages:
+
+1.  **`server-only` Package:**
+    *   **Purpose:** To ensure a module's code is *never* bundled into the client-side JavaScript. This is critical for modules containing sensitive data, direct database access, or server-specific APIs.
+    *   **Usage:** Import `server-only` at the very top of any file that should exclusively run on the server.
+        ```typescript
+        // Example: src/lib/server-exclusive-logic.ts
+        import 'server-only';
+
+        export async function getSecretKey() {
+          // This code will cause a build error if imported by a Client Component.
+          return process.env.MY_SECRET_API_KEY;
+        }
+        ```
+    *   **AI Action:** When creating modules that handle sensitive server-side operations or use server-only environment variables, the AI **must** include `import 'server-only';` at the top of the file.
+
+2.  **`client-only` Package:**
+    *   **Purpose:** To ensure a module's code, which relies on browser-specific APIs (e.g., `window`, `document`, `localStorage`), is *not* accidentally executed during server-side rendering where these APIs are unavailable.
+    *   **Usage:** Import `client-only` at the very top of any file that exclusively contains client-side logic.
+        ```typescript
+        // Example: src/utils/browser-storage.ts
+        import 'client-only';
+
+        export function saveToLocalStorage(key: string, value: string) {
+          // This code will cause a build error if imported directly by a Server Component.
+          window.localStorage.setItem(key, value);
+        }
+        ```
+    *   **AI Action:** When creating utility modules that directly interact with browser APIs, the AI **must** include `import 'client-only';` at the top of the file. Note that components needing such utilities should typically be Client Components (`"use client"`) or use dynamic imports (`next/dynamic` with `ssr: false`).
+
+---
+
+**General Guidelines for the AI:**
+
+*   When creating new files, strictly follow the location rules defined above.
+*   When referencing existing modules, ensure the import paths are correct based on this structure, **always using the `@/` alias for paths within `src/`**.
+*   If unsure about the placement of a new piece of logic, or the necessity of `server-only`/`client-only`, ask for clarification based on these rules.
+*   Prioritize placing reusable logic in the top-level `src/components`, `src/hooks`, `src/providers`, `src/lib/actions`, or `src/utils` directories as appropriate.
+*   Page-specific logic should remain encapsulated within the respective page's directory structure.
+*   Adhere to the usage of `"use client"`, `"use server"`, `server-only`, and `client-only` as specified to maintain clear boundaries between server and client code.
