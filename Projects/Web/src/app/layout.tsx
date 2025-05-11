@@ -1,4 +1,6 @@
 import { rootMetadata } from '@/meta/root';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 
@@ -20,6 +22,8 @@ export default function RootLayout({
             <body className={`${montserrat.className} antialiased bg-body-main text-slate-50`}>
                 <Header />
                 {children}
+                <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     );
