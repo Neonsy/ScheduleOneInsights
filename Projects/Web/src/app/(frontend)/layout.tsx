@@ -1,13 +1,14 @@
+import Header from '@/layout/header';
+
 import { rootMetadata } from '@/meta/root';
-import '@/styles/globals.css';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import '@/styles/globals.css';
+
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-    ...rootMetadata,
-};
+export const metadata: Metadata = rootMetadata;
 
 export default function RootLayout({
     children,
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={`${inter.className} antialiased`}>{children}</body>
+            <body className={`${inter.className} antialiased bg-body-main text-slate-50`}>
+                <Header />
+                {children}
+            </body>
         </html>
     );
 }

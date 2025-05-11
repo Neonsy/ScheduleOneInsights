@@ -1,10 +1,12 @@
 @import 'tailwindcss';
 
 :root {
-    --bg-color: #09090B;
-    --primary-color: #1A73E8;
-    --secondary-color: #D946EF;
-    --npc-color: #22C55E;
-    --guide-color: #F59E0B;
-    ---community-color: #EF4444;
+    @theme {
+        --color-body-main: #09090b;
+        --color-primary: #1a73e8;
+        --color-secondary: #d946ef;
+        --color-npc: #22c55e;
+        --color-guide: #f59e0b;
+        --color-community: #ef4444;
+    }
 }

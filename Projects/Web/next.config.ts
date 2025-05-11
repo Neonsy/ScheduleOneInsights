@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
         reactCompiler: true,
         viewTransition: true,
     },
-    allowedDevOrigins: ['http://localhost:3000', 'next.neonsy.space'],
+    allowedDevOrigins: ['http://localhost:3000', 'next.scheduleoneinsights.space'],
 };
 
 export default nextConfig;
