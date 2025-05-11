@@ -29,12 +29,23 @@ export function getSortedEffectCodesFromNames(
     });
 }
 
-export function doEffectsMatchTarget(actualSortedCodes: EffectCode[], targetSet: Set<EffectCode>): boolean {
-    if (targetSet.size === 0) return true;
-    if (actualSortedCodes.length < targetSet.size) return false;
-    const actualCodesSet = new Set(actualSortedCodes);
-    for (const targetCode of targetSet) {
-        if (!actualCodesSet.has(targetCode)) return false;
+export function doEffectsMatchTarget(
+    actualSortedCodes: ReadonlyArray<EffectCode>,
+    targetSet: Set<EffectCode>
+): boolean {
+    // Check if the number of actual effects exactly matches the number of target effects
+    if (actualSortedCodes.length !== targetSet.size) {
+        return false;
     }
+    // If sizes match, proceed to check if all target effects are present
+    // (no need to create actualCodesSet if sizes match, we can iterate)
+    const actualCodesSet = new Set(actualSortedCodes); // Still efficient to use Set for lookups
+    for (const targetCode of targetSet) {
+        if (!actualCodesSet.has(targetCode)) {
+            // Should not happen if sizes match and all targets are unique, but safe check
+            return false;
+        }
+    }
+    // If sizes match and all target codes are present, it's an exact match
     return true;
 }
