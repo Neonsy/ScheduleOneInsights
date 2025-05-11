@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Latest possibilities
+
+## React 19
+
+You have the bells and whistles available in this project, of what React in V19 offers. Make use of it when appropriate.
+
+## NextJS 15
+
+Make use of the fact that we have the ReactCompiler, React Transitions and the other things that came with the much needed update for NextJS V15.
+
+## Tailwind V4
+
+1. Always use Tailwindcss, and therefore never resort to styles like using a style object.
+2. When using Tailwind, make sure to use the latest ways, as couple of things have changed significantly.

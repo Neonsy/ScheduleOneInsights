@@ -1,8 +1,8 @@
-import Header from '@/layout/header';
-
 import { rootMetadata } from '@/meta/root';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+
+import Header from '@/layout/header';
 
 import '@/styles/globals.css';
 
