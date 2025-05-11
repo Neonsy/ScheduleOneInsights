@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Latest possibilities
+
+## React 19
+
+You have the bells and whistles available in this project, of what React in V19 offers. Make use of it when appropriate.
+
+## NextJS 15
+
+Make use of the fact that we have the ReactCompiler, React Transitions and the other things that came with the much needed update for NextJS V15.
