@@ -24,14 +24,6 @@ export const rootMetadata: Metadata = {
             },
         ],
 
-        // For Apple devices (uses src/app/apple-icon.png)
-        // Next.js automatically detects src/app/apple-icon.png.
-        // Explicitly listing it is fine for clarity or if you need specific attributes.
-        apple: {
-            url: '/apple-icon.png', // Served from src/app/apple-icon.png
-            sizes: '180x180', // Optional: if you know the size and want to be explicit
-        },
-
         // For legacy browsers and as a general fallback (uses src/app/favicon.ico)
         // Next.js automatically detects src/app/favicon.ico.
         shortcut: {
