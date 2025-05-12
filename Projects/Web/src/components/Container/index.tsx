@@ -1,5 +1,9 @@
 import { ReactNode } from 'react';
 
-export default function Container({ children }: { children: ReactNode }) {
+interface ContainerProps {
+    children: ReactNode;
+}
+
+export default function Container({ children }: ContainerProps) {
     return <div className='container mx-auto'>{children}</div>;
 }

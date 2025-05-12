@@ -1,57 +1,56 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 import { siteLinks } from '@/lib/navigation/links';
+import { clerkMiddleware } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+
+const WIP_PATH = '/wip';
 
 // Extract all hrefs from mainNav to be rewritten
 const pathsToRewrite: string[] = [];
 siteLinks.mainNav.forEach((item) => {
-    if (item.href && !item.href.startsWith('http')) {
-        // Ensure we only rewrite internal paths
+    if (item.href) {
         pathsToRewrite.push(item.href);
     }
     if (item.subPaths) {
         item.subPaths.forEach((subItem) => {
-            if (subItem.href && !subItem.href.startsWith('http')) {
+            if (subItem.href) {
                 pathsToRewrite.push(subItem.href);
             }
         });
     }
 });
 
-// Add other specific paths if needed, e.g., siteLinks.home.href if it's not '/'
-// For this specific request, we only care about mainNav items.
-
-const REWRITTEN_TO_WIP_HEADER = 'x-rewritten-to-wip';
-const WIP_PATH = '/wip';
-
-export function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+export default clerkMiddleware(async (auth, req) => {
+    const { pathname } = req.nextUrl;
+    const { sessionClaims } = await auth();
+    const isLoggedIn = !!sessionClaims?.sub;
+    const publicMetadata = sessionClaims?.publicMetadata ?? {};
+    const isAdmin = (publicMetadata as Record<string, unknown>).wip_bypass === true;
 
     // 1. Handle direct access to /wip
-    if (pathname === WIP_PATH && !request.headers.has(REWRITTEN_TO_WIP_HEADER)) {
-        const url = request.nextUrl.clone();
-        url.pathname = '/'; // Redirect to home for direct /wip access
+    if (pathname === WIP_PATH) {
+        const url = req.nextUrl.clone();
+        url.pathname = '/';
         return NextResponse.redirect(url);
     }
 
-    // 2. Check if the current path needs to be rewritten to /wip
+    // 2. Check if the current path needs to be rewritten to /wip for non-admins
     if (pathsToRewrite.includes(pathname)) {
-        const url = request.nextUrl.clone();
-        url.pathname = WIP_PATH;
-
-        const rewriteHeaders = new Headers(request.headers);
-        rewriteHeaders.set(REWRITTEN_TO_WIP_HEADER, 'true');
-
-        return NextResponse.rewrite(url, {
-            request: {
-                headers: rewriteHeaders,
-            },
-        });
+        if (!isLoggedIn || !isAdmin) {
+            const url = req.nextUrl.clone();
+            url.pathname = WIP_PATH;
+            return NextResponse.rewrite(url);
+        }
     }
 
     return NextResponse.next();
-}
+});
 
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico|_vercel/speed-insights|_vercel/analytics).*)', '/wip'],
+    matcher: [
+        // Skip Next.js internals and all static files, unless found in search params
+        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        // Always run for API routes
+        '/(api|trpc)(.*)',
+        '/wip',
+    ],
 };
