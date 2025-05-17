@@ -1,0 +1,62 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# TypeScript Style Guide
+
+## Strictness & Clarity
+
+1.  **Explicit Types:** Annotate ALL function parameters, return values, and variable declarations with explicit types. 
+    *   **Exception:** Implicit inference is allowed ONLY for simple, immediately assigned primitives or literals (e.g., `const name = 'foo';`, `const count = 0;`).
+    *   **Goal:** Improve clarity and prevent unexpected type issues.
+2.  **No `any`:** Strictly FORBIDDEN. 
+    *   Do not use explicit `any`.
+    *   Configure ESLint/TypeScript to disallow implicit `any`.
+    *   Use `unknown` for values with truly unknown types and perform necessary type checks/narrowing before use.
+    *   Model complex types accurately rather than resorting to `any`.
+3.  **`readonly` by Default:**
+    *   Mark properties in `interface` and `type` definitions as `readonly` by default.
+    *   This applies especially to data structures, configuration objects, and state representations.
+    *   Make properties mutable (remove `readonly`) ONLY if mutation is an intended and necessary part of their design.
+4.  **Use `as const` for Static Data:**
+    *   Apply `as const` assertion to arrays or objects defined in `src/code/data/` that represent static, unchanging data (e.g., lookup tables, configurations, fixed lists).
+    *   **Benefit:** Allows TypeScript to infer the most specific literal types and `readonly` status, improving type safety and enabling literal type unions.
+    *   **Example:** `export const myData = [{ code: 'A', value: 1 }, { code: 'B', value: 2 }] as const;`
+
+## `interface` vs. `type`
+
+1.  **Use `interface` for:**
+    *   Defining the shape of objects.
+    *   Defining the shape of classes (implementation structure).
+    *   Defining public API contracts (expected object shapes).
+    *   **Example:** `interface User { readonly id: number; readonly name: string; }`
+2.  **Use `type` for:**
+    *   Union types (`string | number`).
+    *   Intersection types (`TypeA & TypeB`).
+    *   Tuples (`[string, number]`).
+    *   Aliases for primitive types (`type UserID = string;`).
+    *   Aliases for complex non-object types (e.g., function signatures `type Callback = () => void;`).
+    *   Mapped types.
+    *   Conditional types.
+    *   **Literal Unions (for IntelliSense):** When a variable/parameter should only accept specific string/number literals derived from `as const` data, create a `type` alias for this literal union. 
+        *   **Process:** Import the `as const` data *only for type derivation* (e.g., `import type { internalData } from '@/code/data/codes'`). Define the type alias (e.g., `type SpecificCode = typeof internalData[number]['code'];`). Use this alias in annotations (e.g., `function processCode(code: SpecificCode)`).
+        *   **Benefit:** Provides auto-completion for allowed literal values.
+
+## Type Reusability
+
+1.  **Reuse Defined Types:** ALWAYS use existing, imported `interface` or `type` aliases. DO NOT redefine object shapes inline if a suitable type already exists.
+2.  **Check Before Creating:** Before defining a new type for function parameters or complex return objects, verify if a suitable type already exists within the project (e.g., `RecipePayload`). AVOID creating redundant or duplicate types.
+
+## Documentation
+
+1.  **JSDoc for Exports:** Add JSDoc comments (`/** ... */`) to ALL exported members (`interface`, `type`, `class`, `function`, `const`) in `src/exports/*`. Explain the purpose and usage of the exported member clearly.
+2.  **Inline Comments for "Why":** Use inline comments (`//`) SPARINGLY. Focus on explaining the *reasoning* behind complex, non-obvious, or potentially confusing code sections, not just restating *what* the code does.
+3.  **Keep Docs Updated:** Ensure JSDoc and inline comments are updated or removed when refactoring code to maintain accuracy.
+
+
+## Placesment of types and interfaces
+Types and interfaces go in src/types. Create subdirs to keeps things orderly.
+
+### Expection
+Component props are defined as (ComponentName)Props above the export default component function.

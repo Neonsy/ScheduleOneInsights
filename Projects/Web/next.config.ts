@@ -5,6 +5,16 @@ const nextConfig: NextConfig = {
         reactCompiler: true,
         viewTransition: true,
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'img.clerk.com',
+                port: '',
+                pathname: '/**',
+            },
+        ],
+    },
     allowedDevOrigins: ['http://localhost:3000', 'next.scheduleoneinsights.space'],
 };
 

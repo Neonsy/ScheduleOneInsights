@@ -19,15 +19,17 @@ export const viewport: Viewport = {
 
 interface RootLayoutProps {
     children: ReactNode;
+    authModal: ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children, authModal }: RootLayoutProps) {
     return (
         <Providers>
             <html lang='en'>
-                <body className={`${montserrat.className} antialiased bg-body-main text-slate-50`}>
+                <body className={`${montserrat.className} bg-body-main text-slate-50 antialiased`}>
                     <Header />
                     {children}
+                    {authModal}
                     <Analytics />
                     <SpeedInsights />
                 </body>

@@ -1,18 +1,21 @@
 import { siteLinks } from '@/lib/navigation/links';
+import type { NavItem, NavSubItem } from '@/types/navigation/index';
 import { clerkMiddleware } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 const WIP_PATH = '/wip';
 
-// Extract all hrefs from mainNav to be rewritten
+// Extract all hrefs from mainNav that are marked as WIP
 const pathsToRewrite: string[] = [];
-siteLinks.mainNav.forEach((item) => {
-    if (item.href) {
+siteLinks.mainNav.forEach((item: NavItem) => {
+    // Check if the main item itself is WIP and has an href
+    if (item.isWip && item.href) {
         pathsToRewrite.push(item.href);
     }
+    // Check subPaths for WIP items
     if (item.subPaths) {
-        item.subPaths.forEach((subItem) => {
-            if (subItem.href) {
+        item.subPaths.forEach((subItem: NavSubItem) => {
+            if (subItem.isWip && subItem.href) {
                 pathsToRewrite.push(subItem.href);
             }
         });
@@ -51,6 +54,5 @@ export const config = {
         '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
         // Always run for API routes
         '/(api|trpc)(.*)',
-        '/wip',
     ],
 };

@@ -17,3 +17,32 @@ Make use of the fact that we have the ReactCompiler, React Transitions and the o
 
 1. Always use Tailwindcss, and therefore never resort to styles like using a style object.
 2. When using Tailwind, make sure to use the latest ways, as couple of things have changed significantly.
+
+### Use Tailwind Clamp everywhere where it is applicable
+
+This project makes use of the [tailwind clamp plugin](mdc:https:/nicolas-cusan.github.io/tailwind-clamp), so make sure to use that for things like text size, margin, paddings and so on.
+
+## Client Components ("use client")
+
+1.  Apply the `"use client";` directive primarily to top-level components that need to be client-side (e.g., components using hooks, event handlers, or client-side state).
+2.  Child components imported and used exclusively within a parent component already marked with `"use client";` will automatically be part of the client bundle and generally do not need their own redundant `"use client";` directive. This helps keep the codebase cleaner and avoids unnecessary declarations.
+*   **Exception:** If a child component might also be imported and used directly by a Server Component elsewhere, it would then require its own `"use client";` directive to ensure it correctly transitions to a client component in that context.
+
+
+## ShadCN
+
+- Use ShadCN components if they already exist-
+  - This means that if you want to use one and that hasn't been installed already, either ask the user if you can add it or work without it.
+
+
+## Code cration
+When creating code always make sure that:
+
+- It's in the right place
+- Components are not too big
+  - That might mean you need to split it up
+  - Only one component per file
+  - Keeping things readable
+  - Making sure to allow for good DX
+  - Things shouldN't be to cumbersome
+  - React 19 and ReactCompiler are being taking into consideration when creating or modifying code to keep things optimal and clean
