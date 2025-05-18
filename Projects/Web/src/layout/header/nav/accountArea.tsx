@@ -22,7 +22,7 @@ interface AccountAreaProps {
 }
 
 export default function AccountArea({ isMobile = false, closeMobileNav }: AccountAreaProps) {
-    const { openUserProfile, signOut, loaded } = useClerk();
+    const { openUserProfile, signOut, loaded, openSignIn, openSignUp } = useClerk();
     const { user } = useUser();
 
     const baseButtonClasses =
@@ -47,15 +47,15 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
 
     const handleSignIn = () => {
         if (closeMobileNav && isMobile) closeMobileNav();
-        if (typeof window !== 'undefined') {
-            window.location.href = '/sign-in';
+        if (loaded && typeof openSignIn === 'function') {
+            openSignIn();
         }
     };
 
     const handleSignUp = () => {
         if (closeMobileNav && isMobile) closeMobileNav();
-        if (typeof window !== 'undefined') {
-            window.location.href = '/sign-up';
+        if (loaded && typeof openSignUp === 'function') {
+            openSignUp();
         }
     };
 
@@ -98,18 +98,18 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                 <hr className='mt-2 mb-4 w-3/4 border-white/80' />
                 {/* SignedOut: Sign In, Sign Up buttons */}
                 <SignedOut>
-                    <Link
-                        href='/sign-in'
+                    <button
+                        type='button'
                         className={`${primaryButtonClasses} px-3 py-2 text-center`}
                         onClick={handleSignIn}>
                         Sign In
-                    </Link>
-                    <Link
-                        href='/sign-up'
+                    </button>
+                    <button
+                        type='button'
                         className={`${secondaryButtonClasses} px-3 py-2 text-center`}
                         onClick={handleSignUp}>
                         Sign Up
-                    </Link>
+                    </button>
                 </SignedOut>
                 {/* SignedIn: Settings, Sign Out buttons */}
                 <SignedIn>
@@ -124,18 +124,18 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                         />
                     )}
                     <div className={`flex w-full ${isMobile ? 'flex-col gap-2' : ''}`}>
-                        <Link
-                            href='/sign-in'
+                        <button
+                            type='button'
                             className={`${primaryButtonClasses} w-full px-3 py-2 text-center`}
                             onClick={handleManageAccountClick}>
                             Settings
-                        </Link>
-                        <Link
-                            href='/'
+                        </button>
+                        <button
+                            type='button'
                             className={`${secondaryButtonClasses} w-full px-3 py-2 text-center`}
                             onClick={handleSignOut}>
                             Sign Out
-                        </Link>
+                        </button>
                     </div>
                 </SignedIn>
             </ClerkLoaded>
@@ -199,16 +199,18 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                 </div>
                                 <hr className='my-2 border-white/80' />
                                 <SignedOut>
-                                    <Link
-                                        href='/sign-in'
+                                    <button
+                                        type='button'
+                                        onClick={handleSignIn}
                                         className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 block w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
                                         Sign In
-                                    </Link>
-                                    <Link
-                                        href='/sign-up'
+                                    </button>
+                                    <button
+                                        type='button'
+                                        onClick={handleSignUp}
                                         className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 block w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
                                         Sign Up
-                                    </Link>
+                                    </button>
                                 </SignedOut>
                                 <SignedIn>
                                     <button
