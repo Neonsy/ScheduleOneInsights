@@ -147,7 +147,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
             <ClerkLoaded>
                 <NavigationMenu className='relative' viewport={false}>
                     <NavigationMenuList>
-                        <NavigationMenuItem>
+                        <NavigationMenuItem className='relative'>
                             <NavigationMenuTrigger asChild>
                                 <button
                                     aria-label='Account menu'
@@ -165,7 +165,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                     )}
                                 </button>
                             </NavigationMenuTrigger>
-                            <NavigationMenuContent className='bg-header-main-darker z-50 w-max min-w-[12rem] rounded-xl border border-slate-700 p-2 shadow-xl'>
+                            <NavigationMenuContent className='bg-header-main-darker z-50 w-max min-w-[12rem] rounded-xl border border-slate-700 p-2 shadow-xl md:right-0 md:left-auto'>
                                 <div className='mb-2 flex items-center justify-center gap-x-3'>
                                     {siteLinks.connectLinks.map((link) => {
                                         let Icon;
