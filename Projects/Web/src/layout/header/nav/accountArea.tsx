@@ -15,6 +15,7 @@ import {
     NavigationMenuContent,
     NavigationMenuTrigger,
 } from '@/components/shadcn/navigation-menu';
+import { useRouter } from 'next/navigation';
 
 interface AccountAreaProps {
     readonly isMobile?: boolean;
@@ -22,8 +23,9 @@ interface AccountAreaProps {
 }
 
 export default function AccountArea({ isMobile = false, closeMobileNav }: AccountAreaProps) {
-    const { openUserProfile, signOut, loaded, openSignIn, openSignUp } = useClerk();
+    const { openUserProfile, loaded, openSignIn, openSignUp } = useClerk();
     const { user } = useUser();
+    const router = useRouter();
 
     const baseButtonClasses =
         'group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-xl font-semibold transition-all duration-300 ease-out active:scale-[0.97] focus-visible:outline-none clamp-[py,1,1.5] clamp-[px,3,4] clamp-[text,1rem,1.5rem,@md,@2xl] tracking-wide leading-snug min-h-0';
@@ -35,13 +37,6 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
         if (closeMobileNav && isMobile) closeMobileNav();
         if (loaded && typeof openUserProfile === 'function') {
             openUserProfile();
-        }
-    };
-
-    const handleSignOut = async () => {
-        if (closeMobileNav && isMobile) closeMobileNav();
-        if (typeof signOut === 'function') {
-            await signOut();
         }
     };
 
@@ -100,13 +95,13 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                 <SignedOut>
                     <button
                         type='button'
-                        className={`${primaryButtonClasses} px-3 py-2 text-center`}
+                        className={`${primaryButtonClasses} cursor-pointer px-3 py-2 text-center`}
                         onClick={handleSignIn}>
                         Sign In
                     </button>
                     <button
                         type='button'
-                        className={`${secondaryButtonClasses} px-3 py-2 text-center`}
+                        className={`${secondaryButtonClasses} cursor-pointer px-3 py-2 text-center`}
                         onClick={handleSignUp}>
                         Sign Up
                     </button>
@@ -126,14 +121,14 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                     <div className={`flex w-full ${isMobile ? 'flex-col gap-2' : ''}`}>
                         <button
                             type='button'
-                            className={`${primaryButtonClasses} w-full px-3 py-2 text-center`}
+                            className={`${primaryButtonClasses} w-full cursor-pointer px-3 py-2 text-center`}
                             onClick={handleManageAccountClick}>
                             Settings
                         </button>
                         <button
                             type='button'
-                            className={`${secondaryButtonClasses} w-full px-3 py-2 text-center`}
-                            onClick={handleSignOut}>
+                            className={`${secondaryButtonClasses} w-full cursor-pointer px-3 py-2 text-center`}
+                            onClick={() => router.push('/sign-out')}>
                             Sign Out
                         </button>
                     </div>
@@ -202,13 +197,13 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                     <button
                                         type='button'
                                         onClick={handleSignIn}
-                                        className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 block w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
+                                        className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 block w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
                                         Sign In
                                     </button>
                                     <button
                                         type='button'
                                         onClick={handleSignUp}
-                                        className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 block w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
+                                        className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 block w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
                                         Sign Up
                                     </button>
                                 </SignedOut>
@@ -216,13 +211,13 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                     <button
                                         type='button'
                                         onClick={handleManageAccountClick}
-                                        className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
+                                        className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
                                         Settings
                                     </button>
                                     <button
                                         type='button'
-                                        onClick={handleSignOut}
-                                        className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
+                                        className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'
+                                        onClick={() => router.push('/sign-out')}>
                                         Sign Out
                                     </button>
                                 </SignedIn>
