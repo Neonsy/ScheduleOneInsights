@@ -69,7 +69,7 @@ export const siteLinks = {
         },
         {
             name: 'Discord Server',
-            href: 'https://discord.gg/yourserverplaceholder',
+            href: 'https://discord.gg/aK3B9QyGU4',
         },
         {
             name: 'Ko-fi Support',

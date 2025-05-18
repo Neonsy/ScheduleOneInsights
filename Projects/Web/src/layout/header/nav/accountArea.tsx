@@ -27,12 +27,6 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
     const { user } = useUser();
     const router = useRouter();
 
-    const baseButtonClasses =
-        'group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-xl font-semibold transition-all duration-300 ease-out active:scale-[0.97] focus-visible:outline-none clamp-[py,1,1.5] clamp-[px,3,4] clamp-[text,1rem,1.5rem,@md,@2xl] tracking-wide leading-snug min-h-0';
-
-    const primaryButtonClasses = `${baseButtonClasses} border border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:text-white hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-4 focus-visible:ring-primary/50 hover:[transform:perspective(500px)_rotateX(5deg)]`;
-    const secondaryButtonClasses = `${baseButtonClasses} border border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:text-white hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-4 focus-visible:ring-secondary/50 hover:[transform:perspective(500px)_rotateX(5deg)]`;
-
     const handleManageAccountClick = () => {
         if (closeMobileNav && isMobile) closeMobileNav();
         if (loaded && typeof openUserProfile === 'function') {
@@ -57,30 +51,30 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
     return isMobile ? (
         <div className='clamp-[px,2,4] flex flex-col items-center space-y-3'>
             <ClerkLoading>
-                <div className="w-[48px] h-[48px] flex items-center justify-center">
-                    <Spinner size="small" className="w-8 h-8" />
+                <div className='flex h-[48px] w-[48px] items-center justify-center'>
+                    <Spinner size='small' className='h-8 w-8' />
                 </div>
             </ClerkLoading>
             <ClerkLoaded>
-                <div className="w-[48px] h-[48px] flex items-center justify-center">
-                    <NavigationMenu className="w-full h-full flex items-center justify-center" viewport={false}>
+                <div className='flex h-[48px] w-[48px] items-center justify-center'>
+                    <NavigationMenu className='flex h-full w-full items-center justify-center' viewport={false}>
                         <NavigationMenuList>
                             <NavigationMenuItem className='relative'>
                                 <NavigationMenuTrigger asChild>
                                     <button
                                         aria-label='Account menu'
-                                        className='w-10 h-10 flex items-center justify-center rounded-full p-0 m-0 border-0 bg-transparent'>
+                                        className='m-0 flex h-10 w-10 items-center justify-center rounded-full border-0 bg-transparent p-0'>
                                         {user?.imageUrl ? (
                                             <Image
                                                 src={user.imageUrl}
                                                 alt={user.fullName || 'User profile picture'}
                                                 width={40}
                                                 height={40}
-                                                className='w-10 h-10 rounded-full object-cover'
+                                                className='h-10 w-10 rounded-full object-cover'
                                                 priority
                                             />
                                         ) : (
-                                            <FiMoreVertical className='w-8 h-8 text-slate-300' />
+                                            <FiMoreVertical className='h-8 w-8 text-slate-300' />
                                         )}
                                     </button>
                                 </NavigationMenuTrigger>
@@ -153,34 +147,34 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
     ) : (
         <>
             <ClerkLoading>
-                <div className="w-[48px] h-[48px] flex items-center justify-center">
-                    <Spinner size="small" className="w-8 h-8" />
+                <div className='flex h-[48px] w-[48px] items-center justify-center'>
+                    <Spinner size='small' className='h-8 w-8' />
                 </div>
             </ClerkLoading>
             <ClerkLoaded>
-                <div className="w-[48px] h-[48px] flex items-center justify-center">
-                    <NavigationMenu className="w-full h-full flex items-center justify-center" viewport={false}>
+                <div className='flex h-[48px] w-[48px] items-center justify-center px-4'>
+                    <NavigationMenu className='flex h-full w-full items-center justify-center' viewport={false}>
                         <NavigationMenuList>
-                            <NavigationMenuItem className='relative'>
+                            <NavigationMenuItem>
                                 <NavigationMenuTrigger asChild>
                                     <button
                                         aria-label='Account menu'
-                                        className='w-10 h-10 flex items-center justify-center rounded-full p-0 m-0 border-0 bg-transparent'>
+                                        className='m-0 flex h-10 w-10 items-center justify-center rounded-full border-0 bg-transparent p-0'>
                                         {user?.imageUrl ? (
                                             <Image
                                                 src={user.imageUrl}
                                                 alt={user.fullName || 'User profile picture'}
                                                 width={40}
                                                 height={40}
-                                                className='w-10 h-10 rounded-full object-cover'
+                                                className='h-10 w-10 rounded-full object-cover'
                                                 priority
                                             />
                                         ) : (
-                                            <FiMoreVertical className='w-8 h-8 text-slate-300' />
+                                            <FiMoreVertical className='h-8 w-8 text-slate-300' />
                                         )}
                                     </button>
                                 </NavigationMenuTrigger>
-                                <NavigationMenuContent className='bg-header-main-darker z-50 w-max min-w-[12rem] rounded-xl border border-slate-700 p-2 shadow-xl md:right-0 md:left-auto'>
+                                <NavigationMenuContent className='bg-header-main-darker z-50 w-max min-w-[12rem] rounded-xl border border-slate-700 p-2 px-4 shadow-xl md:right-0 md:left-auto'>
                                     <div className='mb-2 flex items-center justify-center gap-x-3'>
                                         {siteLinks.connectLinks.map((link) => {
                                             let Icon;

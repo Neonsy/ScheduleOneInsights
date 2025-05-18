@@ -51,7 +51,7 @@ export default function Nav() {
                     <div className='flex-shrink-0 md:flex md:items-center md:gap-x-4 lg:gap-x-8'>
                         <NavArea />
                     </div>
-                    <div className='flex-shrink-0 md:flex md:items-center'>
+                    <div className='flex-shrink-0 px-4 md:flex md:items-center'>
                         <AccountArea />
                     </div>
                 </nav>

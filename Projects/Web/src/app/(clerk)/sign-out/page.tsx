@@ -2,7 +2,6 @@ import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import SignOutClient from '@/app/(clerk)/sign-out/SignOutClient';
 
-
 export default async function SignOutPage() {
     const user = await currentUser();
     if (!user) {
@@ -13,5 +12,3 @@ export default async function SignOutPage() {
     // Instead, render a minimal client component to trigger signOut
     return <SignOutClient />;
 }
-
-
