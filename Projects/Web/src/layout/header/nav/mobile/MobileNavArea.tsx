@@ -58,19 +58,21 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
-                            className='text-text-primary fixed top-0 right-0 z-50 flex h-full w-[220px] flex-col border-l-0 bg-slate-900/80 pt-12 shadow-2xl backdrop-blur-lg outline-none md:hidden'
+                            className='text-text-primary fixed top-0 right-0 z-50 flex h-svh min-h-0 w-max flex-col border-l-0 bg-slate-900/80 pt-0 shadow-2xl backdrop-blur-lg outline-none md:hidden'
                             role='dialog'
                             aria-modal='true'>
-                            {/* X Close Button */}
-                            <button
-                                type='button'
-                                onClick={() => onOpenChange(false)}
-                                className='absolute top-3 right-3 rounded-full p-2 hover:bg-slate-800'
-                                aria-label='Close navigation menu'>
-                                <X className='h-5 w-5 text-slate-300' />
-                            </button>
+                            {/* X Close Button absolutely positioned and vertically centered */}
+                            <div className='mb-6 flex w-full items-center justify-end pt-4 pr-[0.1rem]'>
+                                <button
+                                    type='button'
+                                    onClick={() => onOpenChange(false)}
+                                    className='flex items-center justify-center rounded-full p-2 hover:bg-slate-800'
+                                    aria-label='Close navigation menu'>
+                                    <X className='h-5 w-5 text-slate-300' />
+                                </button>
+                            </div>
                             <span className='sr-only'>Mobile Navigation Menu</span>
-                            <div className='clamp-[px,1,2] flex-grow space-y-2 overflow-y-auto'>
+                            <div className='clamp-[px,1,2] min-h-0 flex-1 space-y-2 overflow-y-auto'>
                                 <LayoutGroup>
                                     {siteLinks.mainNav.map((section: NavItem) => (
                                         <div key={section.name}>
@@ -78,7 +80,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                                 <Link
                                                     href={section.href}
                                                     onClick={() => onOpenChange(false)}
-                                                    className='clamp-[py,2,3] clamp-[px,2,3] hover:bg-primary/20 hover:text-primary clamp-[text,xl,3xl] block rounded-md font-semibold transition-colors'>
+                                                    className='clamp-[py,2,3] clamp-[px,2,3] hover:bg-primary/20 hover:text-primary clamp-[text,xl,2xl] block rounded-md font-semibold transition-colors'>
                                                     {section.name}
                                                 </Link>
                                             ) : section.subPaths && section.subPaths.length > 0 ? (
@@ -91,8 +93,8 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                                     }
                                                     className='w-full'>
                                                     <AccordionItem value={section.name} className='border-b-0'>
-                                                        <AccordionTrigger className='clamp-[py,2,3] clamp-[px,2,3] clamp-[text,xl,3xl] w-full justify-start gap-x-2 rounded-md font-semibold transition-colors hover:bg-primary/20 hover:text-primary hover:no-underline data-[state=open]:bg-transparent data-[state=open]:text-inherit'>
-                                                            {section.name}
+                                                        <AccordionTrigger className='clamp-[py,2,3] clamp-[px,2,3] clamp-[text,xl,2xl] hover:bg-primary/20 hover:text-primary flex w-full items-center justify-between gap-x-2 rounded-md font-semibold transition-colors hover:no-underline data-[state=open]:bg-transparent data-[state=open]:text-inherit'>
+                                                            <span className='pl-2'>{section.name}</span>
                                                         </AccordionTrigger>
                                                         <AccordionContent className='clamp-[mt,1,2] pb-1'>
                                                             <ul className='clamp-[pl,4,5] flex flex-col space-y-1'>
@@ -101,7 +103,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                                                         <Link
                                                                             href={item.href}
                                                                             onClick={() => onOpenChange(false)}
-                                                                            className='clamp-[py,1.5,2] clamp-[px,2,3] hover:bg-primary/10 hover:text-primary-light clamp-[text,lg,2xl] block rounded-md text-slate-300 transition-colors'>
+                                                                            className='clamp-[py,1.5,2] clamp-[px,2,3] hover:bg-primary/10 hover:text-primary-light clamp-[text,lg,xl] block rounded-md text-slate-300 transition-colors'>
                                                                             {item.name}
                                                                         </Link>
                                                                     </li>
@@ -111,7 +113,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                                     </AccordionItem>
                                                 </Accordion>
                                             ) : (
-                                                <h3 className='clamp-[py,2,3] clamp-[px,2,3] clamp-[text,xl,3xl] font-semibold'>
+                                                <h3 className='clamp-[py,2,3] clamp-[px,2,3] clamp-[text,xl,2xl] font-semibold'>
                                                     {section.name}
                                                 </h3>
                                             )}
@@ -119,7 +121,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                     ))}
                                 </LayoutGroup>
                             </div>
-                            <div className='clamp-[mt,4,6] clamp-[pt,4,6] clamp-[px,1,2] clamp-[py,3,4] border-t border-slate-800'>
+                            <div className='clamp-[mt,4,6] clamp-[pt,4,6] clamp-[px,1,2] clamp-[py,3,4] shrink-0 border-t border-slate-800'>
                                 <AccountArea isMobile={true} closeMobileNav={() => onOpenChange(false)} />
                             </div>
                         </motion.div>

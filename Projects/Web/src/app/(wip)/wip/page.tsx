@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Wip() {
     return (
-        <main className='flex h-svh flex-col items-center justify-center bg-neutral-950 px-4 text-neutral-100'>
+        <main className='flex h-[90svh] flex-col items-center justify-center bg-neutral-950 px-4 text-neutral-100'>
             <div className='flex w-full max-w-3xl flex-col items-center gap-6'>
                 <Image
                     src={wipImage}

@@ -64,12 +64,12 @@ export const siteLinks = {
     ],
     connectLinks: [
         {
-            name: 'Discord Server',
-            href: 'https://discord.gg/yourserverplaceholder',
-        },
-        {
             name: 'GitHub Repository',
             href: 'https://github.com/Neonsy/ScheduleOneInsights',
+        },
+        {
+            name: 'Discord Server',
+            href: 'https://discord.gg/yourserverplaceholder',
         },
         {
             name: 'Ko-fi Support',

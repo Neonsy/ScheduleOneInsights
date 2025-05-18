@@ -15,56 +15,47 @@ export default function Nav() {
 
     return (
         <>
-            <nav className='clamp-[py,0.5,1] flex items-center justify-between md:justify-around'>
-                {/* Mobile: Logo Icon Link (Left) */}
-                {/* <Link href={siteLinks.home.href} className='p-1 md:hidden'> */}
-                {/* <Image */}
-                {/* src={Logo} */}
-                {/* alt='ScheduleOne Insights Logo Icon' */}
-                {/* width={48} */}
-                {/* height={48} */}
-                {/* className='clamp-[w,12,16] clamp-[h,12,16] drop-shadow-[0_0_9px_theme(colors.primary.DEFAULT)]/35' */}
-                {/* /> */}
-                {/* </Link> */}
+            {/* Mobile Header: full width, no container */}
+            <div className='w-full md:hidden'>
+                <nav className='clamp-[py,0.5,1] relative flex items-center justify-between'>
+                    {/* Mobile Nav Header */}
+                    <div className='relative flex h-16 w-full items-center md:hidden'>
+                        {/* Logo on the left */}
+                        <div className='flex h-full items-center justify-start pl-2'>
+                            <LogoArea onlyLogo />
+                        </div>
+                        {/* Centered logo text */}
+                        <div className='flex flex-1 items-center justify-center'>
+                            <LogoArea onlyText />
+                        </div>
+                        {/* Hamburger on the right */}
+                        <div className='flex h-full items-center justify-end pr-2'>
+                            <button
+                                type='button'
+                                onClick={toggleMobileMenu}
+                                className='clamp-[text,2xl,3xl] text-white focus:outline-none'
+                                aria-label='Toggle navigation menu'>
+                                {isMobileMenuOpen ? <MdClose /> : <MdMenu />}
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
 
-                {/* Mobile: Text Link - Now a direct child for testing, not in flex-grow div */}
-                <div className='md:hidden'>
-                    {' '}
-                    {/* Simple wrapper to apply md:hidden */}
-                    <LogoArea />
-                </div>
-
-                {/* Original flex-grow container - now empty for mobile testing */}
-                <div className='flex flex-grow items-center justify-center md:hidden'>
-                    {/* <LogoArea /> was here */}
-                </div>
-
-                {/* Desktop: Combined Logo and Text (Placeholder - to be refined) */}
-                <div className='hidden md:flex md:items-center md:clamp-[gap-x,9,12]'>
-                    <LogoArea />
-                </div>
-
-                {/* Desktop Navigation */}
-                <div className='hidden md:flex'>
-                    <NavArea />
-                </div>
-
-                <div className='clamp-[gap-x,3,4] flex items-center'>
-                    {/* Desktop Account Area */}
-                    <div className='hidden md:block'>
+            {/* Desktop Nav: constrained in Container */}
+            <div className='hidden w-full md:block'>
+                <nav className='clamp-[py,0.5,1] relative flex items-center justify-between md:gap-x-4 lg:gap-x-8'>
+                    <div className='flex-shrink-0 md:flex md:items-center'>
+                        <LogoArea />
+                    </div>
+                    <div className='flex-shrink-0 md:flex md:items-center md:gap-x-4 lg:gap-x-8'>
+                        <NavArea />
+                    </div>
+                    <div className='flex-shrink-0 md:flex md:items-center'>
                         <AccountArea />
                     </div>
-
-                    {/* Mobile Menu Toggle Button */}
-                    <button
-                        type='button'
-                        onClick={toggleMobileMenu}
-                        className='clamp-[text,2xl,3xl] text-white focus:outline-none md:hidden'
-                        aria-label='Toggle navigation menu'>
-                        {isMobileMenuOpen ? <MdClose /> : <MdMenu />}
-                    </button>
-                </div>
-            </nav>
+                </nav>
+            </div>
 
             {/* Mobile Menu */}
             <div className='bg-header-main-darker clamp-[py,3,4] clamp-[px,1,2] absolute top-full right-0 left-0 z-50 shadow-lg md:hidden'>

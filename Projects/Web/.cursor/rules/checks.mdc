@@ -15,3 +15,6 @@ Execute the following checks frequently. Address any reported errors or warnings
 2.  **`pnpm lint`**
     *   **Purpose:** Runs ESLint to check for code style and potential logical errors.
     *   **Requirement:** Must pass with no errors or warnings (configured to fail on warnings).
+3.  **`pnpm typecheck`**
+    *   **Purpose:** Runs TypeScript type checking to catch type errors and ensure type safety.
+    *   **Requirement:** Must pass with no errors.

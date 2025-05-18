@@ -24,18 +24,21 @@ const ListItem = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithout
         return (
             <li className='w-full'>
                 <NavigationMenuLink asChild>
-                    <a
+                    <Link
                         ref={ref}
+                        href={props.href || '/'}
                         className={cn(
-                            'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block w-full space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none',
+                            'focus-visible:border-primary block w-full space-y-1 rounded-md border-2 border-transparent p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-slate-800 focus:outline-none focus-visible:outline-none',
                             className
                         )}
                         {...props}>
-                        <div className='clamp-[text,lg,xl] text-center font-semibold'>{title}</div>
-                        <p className='text-muted-foreground clamp-[text,base,lg] line-clamp-2 text-center'>
-                            {children}
-                        </p>
-                    </a>
+                        <span>
+                            <div className='clamp-[text,lg,xl] text-center font-semibold'>{title}</div>
+                            <p className='text-muted-foreground clamp-[text,base,lg] line-clamp-2 text-center'>
+                                {children}
+                            </p>
+                        </span>
+                    </Link>
                 </NavigationMenuLink>
             </li>
         );
@@ -60,7 +63,7 @@ export default function NavArea({
                         return (
                             <NavigationMenuItem key={section.name}>
                                 <Link href={section.href} passHref>
-                                    <NavigationMenuLink className='clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground inline-flex h-auto items-center justify-center rounded-md text-3xl font-semibold transition-colors'>
+                                    <NavigationMenuLink className='clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground clamp-[text,md,lg,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
                                         {section.name}
                                     </NavigationMenuLink>
                                 </Link>
@@ -70,8 +73,8 @@ export default function NavArea({
                     if (section.subPaths && section.subPaths.length > 0) {
                         return (
                             <NavigationMenuItem key={section.name}>
-                                <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 inline-flex h-auto items-center justify-center rounded-md text-3xl font-semibold transition-colors'>
-                                    {section.name}
+                                <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 clamp-[text,md,lg,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
+                                    <span>{section.name}</span>
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent className='w-full'>
                                     <ul className='flex w-full flex-col items-center gap-3 p-4'>

@@ -59,11 +59,11 @@ export const rootMetadata: Metadata = {
             },
         ],
 
-        apple: {
-            url: '/meta/apple-icon.png',
-            type: 'image/png',
-            sizes: '180x180',
-        },
+        // apple: {
+        //     url: '/meta/apple-icon.png',
+        //     type: 'image/png',
+        //     sizes: '180x180',
+        // },
 
         // For legacy browsers and as a general fallback (uses src/app/favicon.ico)
         // Next.js automatically detects src/app/favicon.ico.
