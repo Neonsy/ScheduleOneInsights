@@ -26,7 +26,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
     const { user } = useUser();
 
     const baseButtonClasses =
-        'group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-xl font-semibold transition-all duration-300 ease-out active:scale-[0.97] focus-visible:outline-none clamp-[py,1,1.5] clamp-[px,3,4] clamp-[text,base,lg] tracking-wide leading-snug min-h-0';
+        'group relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-xl font-semibold transition-all duration-300 ease-out active:scale-[0.97] focus-visible:outline-none clamp-[py,1,1.5] clamp-[px,3,4] clamp-[text,1rem,1.5rem,@md,@2xl] tracking-wide leading-snug min-h-0';
 
     const primaryButtonClasses = `${baseButtonClasses} border border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:text-white hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-4 focus-visible:ring-primary/50 hover:[transform:perspective(500px)_rotateX(5deg)]`;
     const secondaryButtonClasses = `${baseButtonClasses} border border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:text-white hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-4 focus-visible:ring-secondary/50 hover:[transform:perspective(500px)_rotateX(5deg)]`;

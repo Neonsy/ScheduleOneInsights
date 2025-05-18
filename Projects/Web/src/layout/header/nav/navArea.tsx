@@ -33,7 +33,7 @@ const ListItem = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithout
                         )}
                         {...props}>
                         <span>
-                            <div className='clamp-[text,lg,xl] text-center font-semibold'>{title}</div>
+                            <div className='clamp-[text,1rem,1.5rem,@md,@2xl] text-center font-semibold'>{title}</div>
                             <p className='text-muted-foreground clamp-[text,base,lg] line-clamp-2 text-center'>
                                 {children}
                             </p>
@@ -63,7 +63,7 @@ export default function NavArea({
                         return (
                             <NavigationMenuItem key={section.name}>
                                 <Link href={section.href} passHref>
-                                    <NavigationMenuLink className='clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground clamp-[text,md,lg,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
+                                    <NavigationMenuLink className='clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground clamp-[text,1rem,1.5rem,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
                                         {section.name}
                                     </NavigationMenuLink>
                                 </Link>
@@ -73,7 +73,7 @@ export default function NavArea({
                     if (section.subPaths && section.subPaths.length > 0) {
                         return (
                             <NavigationMenuItem key={section.name}>
-                                <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 clamp-[text,md,lg,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
+                                <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 clamp-[text,1rem,1.5rem,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
                                     <span>{section.name}</span>
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent className='w-full'>
