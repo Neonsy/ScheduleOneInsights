@@ -120,6 +120,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                             width={40}
                             height={40}
                             className='clamp-[w,14,16] clamp-[h,14,16] ring-primary/70 mb-4 rounded-full shadow-md ring-2'
+                            priority
                         />
                     )}
                     <div className={`flex w-full ${isMobile ? 'flex-col gap-2' : ''}`}>
@@ -159,6 +160,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                             width={32}
                                             height={32}
                                             className='clamp-[w,8,10] clamp-[h,8,10] rounded-full object-cover'
+                                            priority
                                         />
                                     ) : (
                                         <FiMoreVertical className='size-6 text-slate-300' />
