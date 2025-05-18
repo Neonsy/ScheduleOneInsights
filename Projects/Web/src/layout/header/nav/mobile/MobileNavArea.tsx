@@ -58,7 +58,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
-                            className='text-text-primary fixed top-0 right-0 z-50 flex h-svh min-h-0 w-max flex-col border-l-0 bg-slate-900/80 pt-0 shadow-2xl backdrop-blur-lg outline-none md:hidden'
+                            className='text-text-primary fixed top-0 right-0 z-50 flex h-svh min-h-0 w-1/2 max-w-full min-w-0 flex-col border-l-0 bg-slate-900/80 pt-0 shadow-2xl backdrop-blur-lg outline-none md:hidden'
                             role='dialog'
                             aria-modal='true'>
                             {/* X Close Button absolutely positioned and vertically centered */}
@@ -80,7 +80,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                                 <Link
                                                     href={section.href}
                                                     onClick={() => onOpenChange(false)}
-                                                    className='clamp-[py,2,3] clamp-[px,2,3] hover:bg-primary/20 hover:text-primary clamp-[text,xl,2xl] block rounded-md font-semibold transition-colors'>
+                                                    className='clamp-[py,2,3] clamp-[px,2,3] hover:bg-primary/20 hover:text-primary clamp-[text,xl,2xl] block w-full rounded-md font-semibold break-words transition-colors'>
                                                     {section.name}
                                                 </Link>
                                             ) : section.subPaths && section.subPaths.length > 0 ? (
@@ -97,13 +97,13 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                                             <span className='pl-2'>{section.name}</span>
                                                         </AccordionTrigger>
                                                         <AccordionContent className='clamp-[mt,1,2] pb-1'>
-                                                            <ul className='clamp-[pl,4,5] flex flex-col space-y-1'>
+                                                            <ul className='clamp-[pl,4,5] flex w-full flex-col space-y-1'>
                                                                 {section.subPaths.map((item: NavSubItem) => (
                                                                     <li key={item.name}>
                                                                         <Link
                                                                             href={item.href}
                                                                             onClick={() => onOpenChange(false)}
-                                                                            className='clamp-[py,1.5,2] clamp-[px,2,3] hover:bg-primary/10 hover:text-primary-light clamp-[text,lg,xl] block rounded-md text-slate-300 transition-colors'>
+                                                                            className='clamp-[py,1.5,2] clamp-[px,2,3] hover:bg-primary/10 hover:text-primary-light clamp-[text,lg,xl] block w-full rounded-md break-words text-slate-300 transition-colors'>
                                                                             {item.name}
                                                                         </Link>
                                                                     </li>

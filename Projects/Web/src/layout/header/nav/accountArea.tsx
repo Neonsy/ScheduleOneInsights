@@ -129,7 +129,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                         Manage Account
                     </Link>
                     <Link
-                        href='/sign-out'
+                        href='/'
                         className={`${secondaryButtonClasses} px-3 py-2 text-center`}
                         onClick={handleSignOut}>
                         Sign Out

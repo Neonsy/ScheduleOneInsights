@@ -48,7 +48,7 @@ export const siteLinks = {
             isWip: true,
             subPaths: [
                 {
-                    name: 'Community Mixes',
+                    name: 'Mixes',
                     href: '/community/seeds',
                     description: 'See what the community is mixing.',
                     isWip: true,
