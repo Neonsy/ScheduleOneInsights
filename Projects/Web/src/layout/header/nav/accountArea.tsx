@@ -111,7 +111,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                         Sign Up
                     </Link>
                 </SignedOut>
-                {/* SignedIn: Manage Account, Sign Out buttons */}
+                {/* SignedIn: Settings, Sign Out buttons */}
                 <SignedIn>
                     {user?.imageUrl && (
                         <Image
@@ -122,18 +122,20 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                             className='clamp-[w,14,16] clamp-[h,14,16] ring-primary/70 mb-4 rounded-full shadow-md ring-2'
                         />
                     )}
-                    <Link
-                        href='/sign-in'
-                        className={`${primaryButtonClasses} px-3 py-2 text-center`}
-                        onClick={handleManageAccountClick}>
-                        Manage Account
-                    </Link>
-                    <Link
-                        href='/'
-                        className={`${secondaryButtonClasses} px-3 py-2 text-center`}
-                        onClick={handleSignOut}>
-                        Sign Out
-                    </Link>
+                    <div className={`flex w-full ${isMobile ? 'flex-col gap-2' : ''}`}>
+                        <Link
+                            href='/sign-in'
+                            className={`${primaryButtonClasses} w-full px-3 py-2 text-center`}
+                            onClick={handleManageAccountClick}>
+                            Settings
+                        </Link>
+                        <Link
+                            href='/'
+                            className={`${secondaryButtonClasses} w-full px-3 py-2 text-center`}
+                            onClick={handleSignOut}>
+                            Sign Out
+                        </Link>
+                    </div>
                 </SignedIn>
             </ClerkLoaded>
         </div>
@@ -211,7 +213,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                         type='button'
                                         onClick={handleManageAccountClick}
                                         className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 w-full rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'>
-                                        Manage Account
+                                        Settings
                                     </button>
                                     <button
                                         type='button'
