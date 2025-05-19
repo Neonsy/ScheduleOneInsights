@@ -10,7 +10,9 @@
         "preview": "pnpm build && pnpm start",
         "lint": "next lint",
         "format": "prettier --write .",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "deploy:preview": "vercel pull && vercel build && vercel deploy --prebuilt",
+        "deploy:prod": "vercel pull && vercel build --prod && vercel deploy --prod --prebuilt"
     },
     "dependencies": {
         "@clerk/nextjs": "^6.19.2",
