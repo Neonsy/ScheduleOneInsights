@@ -89,18 +89,18 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                 <hr className='mt-2 mb-4 w-3/4 border-white/80' />
                 {/* SignedOut: Sign In, Sign Up buttons */}
                 <SignedOut>
-                    <Link
-                        href='/sign-in'
+                    <button
+                        type='button'
                         className='border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.primary.DEFAULT)/50,0_0_35px_theme(colors.primary.DEFAULT)/30,inset_0_0_8px_theme(colors.primary.DEFAULT)/40] focus-visible:ring-primary/50 mb-2 block w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'
                         onClick={handleSignIn}>
                         Sign In
-                    </Link>
-                    <Link
-                        href='/sign-up'
+                    </button>
+                    <button
+                        type='button'
                         className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 block w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'
                         onClick={handleSignUp}>
                         Sign Up
-                    </Link>
+                    </button>
                 </SignedOut>
                 {/* SignedIn: Profile, Settings, Sign Out buttons */}
                 <SignedIn>
@@ -185,12 +185,12 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                                     target='_blank'
                                                     rel='noopener noreferrer'
                                                     title={link.name.replace(/ (Repository|Server|Support)$/, '')}
-                                                    className={`hover:text-${
+                                                    className={`${
                                                         link.name === 'GitHub Repository'
-                                                            ? 'github'
+                                                            ? 'hover:text-github'
                                                             : link.name === 'Discord Server'
-                                                              ? 'discord'
-                                                              : 'kofi'
+                                                              ? 'hover:text-discord'
+                                                              : 'hover:text-kofi'
                                                     } text-slate-300 transition-colors`}>
                                                     {Icon && <Icon className='size-5' />}
                                                 </Link>
