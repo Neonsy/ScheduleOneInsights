@@ -1,21 +1,22 @@
 'use client';
 
-import { SignedIn, SignedOut, useClerk, useUser, ClerkLoading, ClerkLoaded } from '@clerk/nextjs';
-import Image from 'next/image';
-import Link from 'next/link';
-import { FiGithub, FiMoreVertical } from 'react-icons/fi';
-import { FaDiscord } from 'react-icons/fa';
-import { SiKofi } from 'react-icons/si';
-import { siteLinks } from '@/lib/navigation/links';
 import { Spinner } from '@/components/LoadingSpinner';
 import {
     NavigationMenu,
-    NavigationMenuList,
-    NavigationMenuItem,
     NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuList,
     NavigationMenuTrigger,
 } from '@/components/shadcn/navigation-menu';
+import { siteLinks } from '@/lib/navigation/links';
+import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, useClerk, useUser } from '@clerk/nextjs';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FaDiscord } from 'react-icons/fa';
+import { FiGithub, FiMoreVertical } from 'react-icons/fi';
+import { SiKofi } from 'react-icons/si';
 
 interface AccountAreaProps {
     readonly isMobile?: boolean;
@@ -26,6 +27,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
     const { openUserProfile, loaded, openSignIn, openSignUp } = useClerk();
     const { user } = useUser();
     const router = useRouter();
+    const [signingOut, setSigningOut] = useState(false);
 
     const handleManageAccountClick = () => {
         if (closeMobileNav && isMobile) closeMobileNav();
@@ -78,7 +80,7 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 title={link.name.replace(/ (Repository|Server|Support)$/, '')}
-                                className={`hover:text-${link.name === 'Ko-fi Support' ? 'secondary' : 'primary'} text-slate-300 transition-colors`}>
+                                className='text-slate-300 transition-colors'>
                                 {Icon && <Icon className='size-6' />}
                             </Link>
                         );
@@ -183,7 +185,13 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                                     target='_blank'
                                                     rel='noopener noreferrer'
                                                     title={link.name.replace(/ (Repository|Server|Support)$/, '')}
-                                                    className={`hover:text-${link.name === 'Ko-fi Support' ? 'secondary' : 'primary'} text-slate-300 transition-colors`}>
+                                                    className={`hover:text-${
+                                                        link.name === 'GitHub Repository'
+                                                            ? 'github'
+                                                            : link.name === 'Discord Server'
+                                                              ? 'discord'
+                                                              : 'kofi'
+                                                    } text-slate-300 transition-colors`}>
                                                     {Icon && <Icon className='size-5' />}
                                                 </Link>
                                             );
@@ -214,8 +222,12 @@ export default function AccountArea({ isMobile = false, closeMobileNav }: Accoun
                                         <button
                                             type='button'
                                             className='border-secondary/50 bg-secondary/20 text-secondary shadow-[0_0_10px_theme(colors.secondary.DEFAULT)/30] hover:shadow-[0_0_20px_theme(colors.secondary.DEFAULT)/50,0_0_35px_theme(colors.secondary.DEFAULT)/30,inset_0_0_8px_theme(colors.secondary.DEFAULT)/40] focus-visible:ring-secondary/50 w-full cursor-pointer rounded-xl border px-3 py-2 text-center hover:[transform:perspective(500px)_rotateX(5deg)] hover:text-white focus-visible:ring-4'
-                                            onClick={() => router.push('/sign-out')}>
-                                            Sign Out
+                                            disabled={signingOut}
+                                            onClick={() => {
+                                                setSigningOut(true);
+                                                router.push('/sign-out');
+                                            }}>
+                                            {signingOut ? <Spinner size='small' /> : 'Sign Out'}
                                         </button>
                                     </SignedIn>
                                 </NavigationMenuContent>

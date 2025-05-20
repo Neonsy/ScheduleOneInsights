@@ -11,6 +11,10 @@
         --color-npc: #22c55e;
         --color-guide: #f59e0b;
         --color-community: #ef4444;
+
+        --color-github: #8b6cb3;
+        --color-discord: #5865f2;
+        --color-kofi: #ff5e5b;
     }
 
     @theme {

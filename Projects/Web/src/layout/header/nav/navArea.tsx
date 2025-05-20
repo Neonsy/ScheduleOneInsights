@@ -73,8 +73,8 @@ export default function NavArea({
                     if (section.subPaths && section.subPaths.length > 0) {
                         return (
                             <NavigationMenuItem key={section.name}>
-                                <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 clamp-[text,1rem,1.5rem,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
-                                    <span>{section.name}</span>
+                                <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
+                                    <span className='clamp-[text,base,3xl,768px,1536px]'>{section.name}</span>
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent className='w-full'>
                                     <ul className='flex w-full flex-col items-center gap-3 p-4'>
