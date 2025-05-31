@@ -20,11 +20,12 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
     const drawerRef = useRef<HTMLDivElement>(null);
     const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
+    // Ensure component is only rendered after mounting (avoids SSR/DOM mismatches)
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    // Focus trap for accessibility
+    // Focus the drawer when it opens (accessibility)
     useEffect(() => {
         if (open && drawerRef.current) {
             drawerRef.current.focus();
