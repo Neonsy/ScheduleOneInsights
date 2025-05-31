@@ -36,6 +36,7 @@ This project makes use of the [tailwind clamp plugin](mdc:https:/nicolas-cusan.g
 
 
 ## Code cration
+
 When creating code always make sure that:
 
 - It's in the right place
@@ -45,4 +46,8 @@ When creating code always make sure that:
   - Keeping things readable
   - Making sure to allow for good DX
   - Things shouldN't be to cumbersome
-  - React 19 and ReactCompiler are being taking into consideration when creating or modifying code to keep things optimal and clean
+  - React 19 and ReactCompiler are being taking into consideration when creating or modifying code to keep things optimal and clean  - 
+
+## Neverthrow Package
+
+This project uses https://github.com/supermacro/neverthrow so make sure to use that when working with errors.
