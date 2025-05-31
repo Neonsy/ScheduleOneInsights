@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { MdMenu, MdClose } from 'react-icons/md';
-import AccountArea from '@/layout/header/nav/accountArea';
 import LogoArea from '@/layout/header/nav/logoArea';
-import NavArea from '@/layout/header/nav/navArea';
+import DesktopNavArea from '@/layout/header/nav/desktop/DesktopNavArea';
+import MobileNavArea from '@/layout/header/nav/mobile/MobileNavArea';
+import DesktopAccountArea from '@/layout/header/nav/desktop/DesktopAccountArea';
 
 export default function Nav() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -44,26 +45,16 @@ export default function Nav() {
 
             {/* Desktop Nav: constrained in Container */}
             <div className='hidden w-full md:block'>
-                <nav className='clamp-[py,0.5,1] relative flex items-center justify-between md:gap-x-4 lg:gap-x-8'>
-                    <div className='flex-shrink-0 md:flex md:items-center'>
-                        <LogoArea />
-                    </div>
-                    <div className='flex-shrink-0 md:flex md:items-center md:gap-x-4 lg:gap-x-8'>
-                        <NavArea />
-                    </div>
-                    <div className='flex-shrink-0 px-4 md:flex md:items-center'>
-                        <AccountArea />
-                    </div>
+                <nav className='clamp-[py,0.5,1] flex items-center justify-between md:gap-x-4 lg:gap-x-8'>
+                    <LogoArea />
+                    <DesktopNavArea />
+                    <DesktopAccountArea />
                 </nav>
             </div>
 
             {/* Mobile Menu */}
             <div className='bg-header-main-darker clamp-[py,3,4] clamp-[px,1,2] absolute top-full right-0 left-0 z-50 shadow-lg md:hidden'>
-                <NavArea
-                    isMobile={true}
-                    isMobileMenuOpen={isMobileMenuOpen}
-                    setIsMobileMenuOpen={setIsMobileMenuOpen}
-                />
+                <MobileNavArea open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} />
             </div>
         </>
     );

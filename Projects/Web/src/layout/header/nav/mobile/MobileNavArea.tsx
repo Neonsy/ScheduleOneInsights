@@ -4,11 +4,11 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { siteLinks } from '@/lib/navigation/links';
 import { NavItem, NavSubItem } from '@/types/navigation';
 import Link from 'next/link';
-import AccountArea from '@/layout/header/nav/accountArea';
 import { AnimatePresence, motion, LayoutGroup } from 'motion/react';
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import MobileAccountArea from '@/layout/header/nav/mobile/MobileAccountArea';
 
 interface MobileNavAreaProps {
     readonly open: boolean;
@@ -137,7 +137,7 @@ export default function MobileNavArea({ open, onOpenChange }: MobileNavAreaProps
                                 </LayoutGroup>
                             </div>
                             <div className='clamp-[mt,4,6] clamp-[pt,4,6] clamp-[px,1,2] clamp-[py,3,4] shrink-0 border-t border-slate-800'>
-                                <AccountArea isMobile={true} closeMobileNav={() => onOpenChange(false)} />
+                                <MobileAccountArea closeMobileNav={() => onOpenChange(false)} />
                             </div>
                         </motion.div>
                     </>

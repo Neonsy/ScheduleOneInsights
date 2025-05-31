@@ -43,6 +43,7 @@ export default [
             'linebreak-style': 'off',
             'no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': ['error'],
+            'react/react-in-jsx-scope': 'off',
             // Add more strict rules, neverthrow, next, react, jsx-a11y, etc. as needed
         },
         settings: {

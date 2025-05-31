@@ -1,3 +1,9 @@
+// DesktopNavArea: Handles the navigation menu for desktop screens only.
+// ---
+// Why: This file only handles desktop navigation. For mobile, see MobileNavArea. This separation keeps code focused and maintainable.
+// If you need to change desktop nav logic, do it here. For account area, use DesktopAccountArea.
+// ---
+
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -9,56 +15,16 @@ import {
 import { siteLinks } from '@/lib/navigation/links';
 import { NavItem, NavSubItem } from '@/types/navigation';
 import Link from 'next/link';
-import { cn } from '@/lib/utils/shadcn';
-import React from 'react';
-import MobileNavArea from './mobile/MobileNavArea';
+import { Fragment } from 'react';
+import ListItem from '@/layout/header/nav/desktop/ListItem';
 
-interface NavAreaProps {
-    readonly isMobile?: boolean;
-    readonly isMobileMenuOpen?: boolean;
-    readonly setIsMobileMenuOpen?: (open: boolean) => void;
-}
-
-const ListItem = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<'a'> & { readonly title: string }>(
-    ({ className, title, children, ...props }, ref) => {
-        return (
-            <li className='w-full'>
-                <NavigationMenuLink asChild>
-                    <Link
-                        ref={ref}
-                        href={props.href || '/'}
-                        className={cn(
-                            'focus-visible:border-primary block w-full space-y-1 rounded-md border-2 border-transparent p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-slate-800 focus:outline-none focus-visible:outline-none',
-                            className
-                        )}
-                        {...props}>
-                        <span>
-                            <div className='clamp-[text,1rem,1.5rem,@md,@2xl] text-center font-semibold'>{title}</div>
-                            <p className='text-muted-foreground clamp-[text,base,lg] line-clamp-2 text-center'>
-                                {children}
-                            </p>
-                        </span>
-                    </Link>
-                </NavigationMenuLink>
-            </li>
-        );
-    }
-);
-ListItem.displayName = 'ListItem';
-
-export default function NavArea({
-    isMobile = false,
-    isMobileMenuOpen = false,
-    setIsMobileMenuOpen = () => {},
-}: NavAreaProps) {
-    if (isMobile) {
-        return <MobileNavArea open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} />;
-    }
-
+export default function DesktopNavArea() {
     return (
         <NavigationMenu className='hidden md:flex'>
             <NavigationMenuList className='clamp-[gap-x,3,5]'>
+                {/* Loop through main nav sections */}
                 {siteLinks.mainNav.map((section: NavItem) => {
+                    // Simple link (no submenu)
                     if (section.href && (!section.subPaths || section.subPaths.length === 0)) {
                         return (
                             <NavigationMenuItem key={section.name}>
@@ -70,6 +36,7 @@ export default function NavArea({
                             </NavigationMenuItem>
                         );
                     }
+                    // Dropdown menu for sections with subPaths
                     if (section.subPaths && section.subPaths.length > 0) {
                         return (
                             <NavigationMenuItem key={section.name}>
@@ -79,14 +46,15 @@ export default function NavArea({
                                 <NavigationMenuContent className='w-full'>
                                     <ul className='flex w-full flex-col items-center gap-3 p-4'>
                                         {section.subPaths?.map((item: NavSubItem, index: number) => (
-                                            <React.Fragment key={item.name}>
+                                            <Fragment key={item.name}>
                                                 <ListItem href={item.href} title={item.name}>
                                                     {item.description}
                                                 </ListItem>
+                                                {/* Divider between submenu items */}
                                                 {section.subPaths && index < section.subPaths.length - 1 && (
                                                     <hr className='w-3/4 border-slate-50' />
                                                 )}
-                                            </React.Fragment>
+                                            </Fragment>
                                         ))}
                                     </ul>
                                 </NavigationMenuContent>
