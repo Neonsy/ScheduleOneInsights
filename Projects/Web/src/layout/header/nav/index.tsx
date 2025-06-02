@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { MdMenu, MdClose } from 'react-icons/md';
-import LogoArea from '@/layout/header/nav/logoArea';
+import LogoArea from './logoArea';
 import DesktopNavArea from '@/layout/header/nav/desktop/DesktopNavArea';
 import MobileNavArea from '@/layout/header/nav/mobile/MobileNavArea';
 import DesktopAccountArea from '@/layout/header/nav/desktop/DesktopAccountArea';

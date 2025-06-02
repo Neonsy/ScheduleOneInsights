@@ -25,7 +25,7 @@ export default function ListItem({ className, title, children, ...props }: ListI
                     )}
                     {...props}>
                     <span>
-                        <div className='clamp-[text,1rem,1.5rem,@md,@2xl] text-center font-semibold'>{title}</div>
+                        <div className='clamp-[text,1rem,1.5rem,md,2xl] text-center font-semibold'>{title}</div>
                         <p className='text-muted-foreground clamp-[text,base,lg] line-clamp-2 text-center'>
                             {children}
                         </p>

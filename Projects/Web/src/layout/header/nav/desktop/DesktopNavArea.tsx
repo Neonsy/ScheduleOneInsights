@@ -29,7 +29,7 @@ export default function DesktopNavArea() {
                         return (
                             <NavigationMenuItem key={section.name}>
                                 <Link href={section.href} passHref>
-                                    <NavigationMenuLink className='clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground clamp-[text,1rem,1.5rem,@md,@2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
+                                    <NavigationMenuLink className='clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground clamp-[text,1rem,1.5rem,md,2xl] inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
                                         {section.name}
                                     </NavigationMenuLink>
                                 </Link>
@@ -43,7 +43,7 @@ export default function DesktopNavArea() {
                                 <NavigationMenuTrigger className='group clamp-[px,3,4] clamp-[py,1,2] hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 inline-flex h-auto items-center justify-center rounded-md font-semibold transition-colors'>
                                     <span className='clamp-[text,base,3xl,768px,1536px]'>{section.name}</span>
                                 </NavigationMenuTrigger>
-                                <NavigationMenuContent className='w-full'>
+                                <NavigationMenuContent className='w-full mt-5'>
                                     <ul className='flex w-full flex-col items-center gap-3 p-4'>
                                         {section.subPaths?.map((item: NavSubItem, index: number) => (
                                             <Fragment key={item.name}>
