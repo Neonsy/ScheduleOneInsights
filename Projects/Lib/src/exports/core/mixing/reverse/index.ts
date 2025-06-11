@@ -1,4 +1,4 @@
 /**
- * @file Barrel file for re-exporting reverse mixing functionalities.
+ * @file Barrel file for reverse mixing exports.
  */
 export * from '@/exports/core/mixing/reverse/byEffect';
