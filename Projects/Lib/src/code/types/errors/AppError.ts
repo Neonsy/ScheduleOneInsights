@@ -9,9 +9,10 @@ export interface AppError {
 }
 
 /**
- * Type guard to check if an object is an AppError.
- * @param DTO - The object to check.
- * @returns True if the object conforms to the AppError interface.
+ * Determines whether a given value conforms to the {@link AppError} interface.
+ *
+ * @param dto - The value to test.
+ * @returns True if {@link dto} is an object with string `type` and `message` properties; otherwise, false.
  */
 export function isAppError(dto: unknown): dto is AppError {
     if (dto === null || typeof dto !== 'object') {

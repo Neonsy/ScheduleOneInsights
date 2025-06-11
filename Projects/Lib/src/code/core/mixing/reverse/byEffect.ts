@@ -37,7 +37,13 @@ const allIngredients: ReadonlyArray<Ingredient> = allIngredientsData;
 
 // --- Helper – rule application -------------------------------------------
 /**
- * Applies all transformation rules exhaustively, mutating the provided effects Set.
+ * Applies all applicable transformation rules to the given set of effects, mutating it in place until no further changes occur.
+ *
+ * @param pathIngredients - The sequence of ingredients whose transformation rules are considered.
+ * @param effects - The set of effects to be transformed.
+ *
+ * @remark
+ * The function repeatedly applies transformation rules triggered by the provided ingredients, updating the effects set until no more rules can be applied.
  */
 function applyTransformations(pathIngredients: ReadonlyArray<Ingredient>, effects: Set<EffectCode>): void {
     let changed = true;
@@ -62,6 +68,13 @@ function applyTransformations(pathIngredients: ReadonlyArray<Ingredient>, effect
     }
 }
 
+/**
+ * Computes the set of effects resulting from combining the base effects with the default effects of the given ingredient path, applying all applicable transformation rules.
+ *
+ * @param path - The ordered list of ingredients to include.
+ * @param baseEffects - The initial set of effects to start from.
+ * @returns A set of effects after adding ingredient defaults and applying transformations.
+ */
 function calcCombinedEffects(path: ReadonlyArray<Ingredient>, baseEffects: ReadonlySet<EffectCode>): Set<EffectCode> {
     const effects = new Set<EffectCode>(baseEffects);
     for (const ing of path) {
@@ -92,8 +105,12 @@ for (const ing of allIngredients) {
 }
 
 /**
- * Admissible lower bound: assume every future ingredient will cover the maximum
- * number of *still-missing* effects that ANY single ingredient could cover.
+ * Estimates the minimum number of additional ingredients needed to cover all missing effects.
+ *
+ * Calculates an admissible lower bound by assuming each future ingredient can provide the maximum number of missing effects that any single ingredient can cover.
+ *
+ * @param missingCnt - The number of effects still missing from the current state.
+ * @returns The estimated minimum number of additional ingredients required.
  */
 function heuristic(missingCnt: number): number {
     return Math.ceil(missingCnt / globalMaxCoverage);
@@ -145,9 +162,14 @@ class MinHeap<T extends { f: number }> {
 
 // --- Main search ----------------------------------------------------------
 /**
- * Finds a sequence of ingredients that gives the desired effects.  Returns the
- * ingredient list in the order they should be added, or null if no solution
- * within `maxDepth` is found.
+ * Searches for a sequence of ingredients that, when combined, produce all specified target effects, optionally starting from a given base product.
+ *
+ * Returns the ordered list of ingredients to use, or `null` if no solution is found within the allowed maximum ingredient count.
+ *
+ * @param params - Search parameters including the set of target effects, optional base product code, maximum ingredient count, and debug flag.
+ * @returns An array of ingredients in the order they should be added to achieve the target effects, or `null` if no valid combination is found within the maximum depth.
+ *
+ * @remark The order of ingredients affects the resulting effects due to transformation rules. The search uses ingredient count as the cost metric and may return any minimal-length solution.
  */
 export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
     const { targetEffects, baseProductCode, maxDepth = 8, debug = false } = params;
@@ -194,6 +216,11 @@ export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
 
     let iter = 0;
 
+    /**
+     * Builds a map from each effect code to the set of ingredient codes that can produce it via transformation rules.
+     *
+     * @returns A map where each key is an effect code and the value is a set of ingredient codes capable of generating that effect through transformations.
+     */
     function buildEffectToIngredientMap(): Map<EffectCode, Set<string>> {
         const map = new Map<EffectCode, Set<string>>();
         for (const [ingCode, rules] of Object.entries(transformationRules)) {
