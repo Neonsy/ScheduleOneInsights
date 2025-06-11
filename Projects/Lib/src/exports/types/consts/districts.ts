@@ -1,4 +1,4 @@
 /**
- * District exports
+ * @file Re-exports District enum from the core codebase.
  */
-export type { District } from '@/code/types/consts/districts';
+export { District } from '@/code/types/consts/districts';

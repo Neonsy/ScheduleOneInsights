@@ -1,12 +1,12 @@
 // tests/seedManager/seedManager.test.ts
 import { describe, it, expect } from 'vitest';
-import { encodeRecipe } from '@/code/core/seedManager/encode';
-import { decodeRecipe } from '@/code/core/seedManager/decode';
+import type { IngredientCode } from '@/code/types/products/Ingredient';
+import { encodeRecipe, decodeRecipe } from '@/exports/core/seedManager';
 
 describe('seedManager encode/decode', () => {
     const productCode = 'OK';
-    const ingredientsA = ['C', 'CL', 'BNN'];
-    const ingredientsB = ['BNN', 'CL', 'C'];
+    const ingredientsA = ['C', 'CL', 'BNN'] as IngredientCode[];
+    const ingredientsB = ['BNN', 'CL', 'C'] as IngredientCode[];
 
     it('should produce different seeds for the same ingredients with different order', () => {
         const seedA = encodeRecipe(productCode, ingredientsA);

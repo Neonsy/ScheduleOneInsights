@@ -1,8 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-jsdoc-exports: Add JSDoc (/** … */) to all exported types, interfaces, classes, and functions.
-inline-why-not-what: Inline comments should explain “why,” not restate “what.”
-keep-docs-updated: Remove or update outdated comments during refactors.

@@ -1,13 +1,20 @@
 import { findEffectByName } from '@/code/utils/effects/effectUtils';
-import type { Product } from '@/code/types/products/Product';
 import { Rank } from '@/code/types/consts/ranks';
 
-export const products: Product[] = [
+/**
+ * Source of truth for all product definitions.
+ */
+export const products = [
     {
         name: 'OG Kush',
         code: 'OK',
         basePrice: 35,
-        defaultEffect: findEffectByName('Calming'),
+        defaultEffect: findEffectByName('Calming').match(
+            (code) => code,
+            (err) => {
+                throw new Error(`Static data init failed for product 'OG Kush', effect 'Calming': ${err.message}`);
+            }
+        ),
         rank: Rank.StreetRatI,
         type: 'Marijuana',
     },
@@ -15,7 +22,14 @@ export const products: Product[] = [
         name: 'Sour Diesel',
         code: 'SD',
         basePrice: 35,
-        defaultEffect: findEffectByName('Refreshing'),
+        defaultEffect: findEffectByName('Refreshing').match(
+            (code) => code,
+            (err) => {
+                throw new Error(
+                    `Static data init failed for product 'Sour Diesel', effect 'Refreshing': ${err.message}`
+                );
+            }
+        ),
         rank: Rank.StreetRatIV,
         type: 'Marijuana',
     },
@@ -23,7 +37,14 @@ export const products: Product[] = [
         name: 'Green Crack',
         code: 'GC',
         basePrice: 35,
-        defaultEffect: findEffectByName('Energizing'),
+        defaultEffect: findEffectByName('Energizing').match(
+            (code) => code,
+            (err) => {
+                throw new Error(
+                    `Static data init failed for product 'Green Crack', effect 'Energizing': ${err.message}`
+                );
+            }
+        ),
         rank: Rank.HoodlumII,
         type: 'Marijuana',
     },
@@ -31,7 +52,14 @@ export const products: Product[] = [
         name: 'Granddaddy Purple',
         code: 'GP',
         basePrice: 35,
-        defaultEffect: findEffectByName('Sedating'),
+        defaultEffect: findEffectByName('Sedating').match(
+            (code) => code,
+            (err) => {
+                throw new Error(
+                    `Static data init failed for product 'Granddaddy Purple', effect 'Sedating': ${err.message}`
+                );
+            }
+        ),
         rank: Rank.HoodlumIV,
         type: 'Marijuana',
     },
@@ -49,4 +77,4 @@ export const products: Product[] = [
         rank: Rank.EnforcerI,
         type: 'Cocaine',
     },
-];
+] as const;

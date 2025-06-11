@@ -2,9 +2,8 @@
  * Effects data - single source of truth
  * All effect types and properties are inferred from this data
  */
-import type { Effect } from '@/code/types/effects/Effect';
 
-export const effects: readonly Effect[] = [
+export const effects = [
     {
         name: 'Anti-Gravity',
         code: 'AG',

@@ -1,7 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-use-pnpm: Always use pnpm for installing, adding, and removing dependencies.
-update-lockfile: After adding/removing deps, run pnpm install to update the lockfile.

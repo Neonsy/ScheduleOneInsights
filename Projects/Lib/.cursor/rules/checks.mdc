@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Code Quality Checks
+
+## Required Checks
+
+Execute the following checks frequently. Address any reported errors or warnings before proceeding.
+
+1.  **`pnpm typecheck`**
+    *   **Purpose:** Checks for TypeScript compiler errors (`tsc`).
+    *   **Requirement:** Must pass with no errors.
+2.  **`pnpm lint`**
+    *   **Purpose:** Runs ESLint to check for code style and potential logical errors.
+    *   **Requirement:** Must pass with no errors or warnings (configured to fail on warnings).
+3.  **`pnpm test`**
+    *   **Purpose:** Runs unit and integration tests (using Vitest).
+    *   **Requirement:** All tests must pass.
+4.  **`pnpm build`**
+    *   **Purpose:** Compiles the TypeScript project for production.
+    *   **Requirement:** Must compile successfully with no errors.

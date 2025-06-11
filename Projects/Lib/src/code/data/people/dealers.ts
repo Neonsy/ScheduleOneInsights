@@ -2,7 +2,7 @@ import type { Dealer } from '@/code/types/people/Dealer';
 import { Rank } from '@/code/types/consts/ranks';
 import { District } from '@/code/types/consts/districts';
 
-export const dealers: Dealer[] = [
+export const dealers: readonly Dealer[] = [
     {
         name: 'Benji Coleman',
         code: 'BC',

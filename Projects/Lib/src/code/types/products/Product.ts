@@ -1,16 +1,17 @@
 import { products } from '@/code/data/products/products';
 import { ProductType } from '@/code/types/consts/productTypes';
-import type { Effect } from '@/code/types/effects/Effect';
+import type { EffectCode } from '@/code/types/effects/Effect';
 
 /**
  * Base product interface with common properties
  */
 interface BaseProduct {
-    name: string;
-    code: string;
-    basePrice: number;
-    rank: number;
-    type: ProductType;
+    readonly name: string;
+    /** Specific product code */
+    readonly code: ProductCode;
+    readonly basePrice: number;
+    readonly rank: number;
+    readonly type: ProductType;
     /**
      * This field is needed because non-marijuana products like Meth and Cocaine have inherent addictiveness (0 to 1).
      */
@@ -20,16 +21,17 @@ interface BaseProduct {
 /**
  * Marijuana product interface - requires defaultEffect
  */
-interface MarijuanaProduct extends BaseProduct {
-    type: 'Marijuana';
-    defaultEffect: Effect['code'];
+export interface MarijuanaProduct extends BaseProduct {
+    readonly type: 'Marijuana';
+    /** Default effect code literal */
+    readonly defaultEffect: EffectCode;
 }
 
 /**
  * Non-marijuana product interface - no defaultEffect allowed
  */
 interface NonMarijuanaProduct extends BaseProduct {
-    type: Exclude<ProductType, 'Marijuana'>;
+    readonly type: Exclude<ProductType, 'Marijuana'>;
 }
 
 /**
@@ -47,9 +49,5 @@ export type Product = MarijuanaProduct | NonMarijuanaProduct;
 export const isMarijuanaProduct = (product: Product): product is MarijuanaProduct => {
     return product.type === 'Marijuana';
 };
-
-/**
- * Inferred product type from data - for reference only
- * The explicit interfaces above should be used for type checking
- */
-export type InferredProduct = (typeof products)[number];
+/** Literal union type of all effect codes */
+export type ProductCode = (typeof products)[number]['code'];

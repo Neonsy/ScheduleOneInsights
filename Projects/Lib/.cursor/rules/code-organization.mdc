@@ -3,8 +3,45 @@ description:
 globs: 
 alwaysApply: true
 ---
-feature-based-structure: Organize code by feature/domain, not by artifact type.
-single-responsibility: One component, service, hook, or util per file.
-filename-matches-export: Name files after their default export (e.g. UserService.ts).
-subfolder-on-growth: Create subfolders when a features codebase grows.
-respect-folder-structure: Make sure to place thing where they belong (e.g. type and shape related stuff in the types directory).
+# Code Organization & Exports
+
+## Directory Structure Rules
+
+Organize all source code within the `src/` directory as follows:
+
+1.  **`src/code/`**: Contains ALL internal implementation logic, type definitions, static data, and utility functions.
+    *   Code here is considered **internal** unless explicitly re-exported via `src/exports/`.
+    *   **Primary Subdirectories (Required):**
+        *   `core/`: Main business logic, algorithms, core features (e.g., `mixing/`, `seedManager/`).
+        *   `data/`: Static data definitions, constants, lookup tables (e.g., `effects/`, `products/`, `mix/transformationRules.ts`). Type definitions derived from this data belong in `src/code/types/`.
+        *   `lib/`: **Strictly Internal Helpers.** Contains implementation details (functions, classes) used ONLY by other modules within `src/code/`. **NEVER export code from `src/code/lib/` via `src/exports/`. Code in `lib/` MUST NOT be imported by files in `src/exports/`.**
+        *   `types/`: Contains ALL custom `interface` and `type` definitions. Structure should mirror feature directories where applicable (e.g., `types/products/Product.ts`, `types/effects/EffectCode.ts`).
+        *   `utils/`: Reusable helper functions/classes not tied to a single core feature. May be shared across `src/code/`. Some utilities might be suitable for public export via `src/exports/`.
+    *   **Feature Subdirectories:** Within `core`, `data`, `lib`, `types`, `utils`, further organize code into subdirectories based on feature or domain (e.g., `mixing/`, `products/`, `effects/`).
+
+2.  **`src/exports/`**: Defines the **public API surface** of the library.
+    *   Directory structure mirrors the intended public API structure, re-exporting elements from `src/code/`.
+    *   **NO direct imports from `src/code/lib/` are allowed in ANY file within `src/exports/`.**
+
+3.  **Single Responsibility Principle:**
+    *   Aim for one primary logical unit (class, interface, function group, constant group) per file.
+    *   Name the file descriptively after its primary export (e.g., `ProductUtils.ts` for product utility functions, `Product.ts` for the Product type).
+    *   Use subfolders if a feature becomes too complex for a single file or flat directory.
+
+## Export Strategy Rules
+
+1.  **Public API Definition:** Only code intended for public use MUST be exposed through `src/exports/`.
+2.  **Explicit Re-exports (in `src/exports/` files):**
+    *   Files within `src/exports/` (that are NOT `index.ts` barrel files) MUST explicitly export members from their corresponding files in `src/code/`.
+    *   Re-export ONLY the intended public members.
+    *   **DO NOT use wildcard exports (`export * from '@/code/...'`) in these non-barrel files.**
+    *   Remember: Imports from `src/code/lib/` are FORBIDDEN here.
+3.  **Barrel Files (`index.ts` in `src/exports/`):**
+    *   Purpose: ONLY to aggregate and re-export members from *other files or sub-barrels within `src/exports/`*.
+    *   Usage: MUST use wildcard exports (`export * from '@/exports/fileName';` or `export * from '@/exports/subDirectory';`).
+    *   **MUST NOT export directly from `src/code/`.**
+4.  **Alias Paths:** ALWAYS use the `@/*` alias (points to `src/`) for local project imports within TypeScript files.
+
+## Maintenance
+
+*   **Keep Exports Updated:** When creating or modifying code in `src/code/`, ensure the corresponding exports in `src/exports/` are added or updated to accurately reflect the intended public API, respecting all rules above (especially the `src/code/lib/` restriction).

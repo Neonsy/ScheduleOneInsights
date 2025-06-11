@@ -1,28 +1,28 @@
 /* eslint-env node, vitest */
 import { test, expect } from 'vitest';
 import { mixProduct } from '@/exports/core/mixing/normal';
+import type { IngredientCode } from '@/code/types/products/Ingredient';
 
 /**
  * Verifies mixProduct produces the known optimal mix for Sour Diesel
  */
 test('mixProduct for Sour Diesel with specific ingredients sequence', () => {
-    const ingredientCodes: string[] = ['C', 'MW', 'DN', 'DN', 'BTY', 'AD', 'PRCTM', 'VAR'];
+    const ingredientCodes = ['C', 'MW', 'DN', 'DN', 'BTY', 'AD', 'PRCTM', 'VAR'] as IngredientCode[];
     const result = mixProduct('SD', ingredientCodes);
 
     // Should have exactly the 8 desired effects (order doesn't matter)
-    expect(result.effects).toHaveLength(8);
-    expect(result.effects).toEqual(
-        expect.arrayContaining([
-            'Refreshing',
-            'Paranoia',
-            'Sneaky',
-            'Euphoric',
-            'Calorie-Dense',
-            'Bright-Eyed',
-            'Thought-Provoking',
-            'Tropic Thunder',
-        ])
-    );
+    const expectedEffects = [
+        'Refreshing',
+        'Paranoia',
+        'Sneaky',
+        'Euphoric',
+        'Calorie-Dense',
+        'Bright-Eyed',
+        'Thought-Provoking',
+        'Tropic Thunder',
+    ];
+    // Sort both arrays to ensure order-independent comparison
+    expect(result.effects.sort()).toEqual(expectedEffects.sort());
 
     // Cost, sale price, profit, and maximal addiction
     expect(result.totalCost).toBe(36);

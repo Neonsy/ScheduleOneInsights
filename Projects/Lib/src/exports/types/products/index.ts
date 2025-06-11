@@ -1,5 +1,5 @@
 /**
- * Products types barrel export
+ * @file Barrel file for re-exporting all product-related types.
  */
-export * from '@/exports/types/products/Ingredient';
 export * from '@/exports/types/products/Product';
+export * from '@/exports/types/products/Ingredient';

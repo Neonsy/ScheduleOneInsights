@@ -3,22 +3,27 @@
  */
 import { products } from '@/code/data/products/products';
 import type { Product } from '@/code/types/products/Product';
+import type { ProductCode } from '@/code/types/products/Product';
+import { Result, ok, err } from 'neverthrow';
+import { type ProductNotFoundProdError, PRODUCT_NOT_FOUND_PROD_ERROR } from '@/code/types/errors/ProductError';
 
 // Performance: Precompute product lookup map for constant-time access
-const productByCodeMap: Map<Product['code'], Product> = new Map(products.map((p: Product) => [p.code, p]));
+// Use ProductCode for the key, Product for the value
+const productByCodeMap: Map<ProductCode, Product> = new Map(products.map((p: Product) => [p.code, p]));
 
 /**
  * Find a product by its code
  * @param code The product code to find
- * @returns The product with the matching code
- * @throws Error if the product is not found
+ * @returns A Result containing the Product if found, or a ProductNotFoundProdError if not.
  */
-export const findProductByCode = (code: Product['code']): Product => {
+export const findProductByCode = (code: ProductCode): Result<Product, ProductNotFoundProdError> => {
     const product = productByCodeMap.get(code);
     if (!product) {
-        throw new Error(`Product not found: ${code}`);
+        return err({
+            type: PRODUCT_NOT_FOUND_PROD_ERROR,
+            message: `Product not found with code: ${code}`,
+            context: { productCode: code },
+        });
     }
-    // The products data is defined in our codebase and we know it conforms to our Product interface
-    // TypeScript just can't verify this automatically due to the readonly constraints from 'as const'
-    return product;
+    return ok(product);
 };

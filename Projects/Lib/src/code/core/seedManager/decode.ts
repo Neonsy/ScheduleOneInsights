@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { RecipePayload } from '@/code/types/mix/RecipePayload';
+import { RecipePayload } from '@/code/types/mixing/RecipePayload';
 
 /**
  * Decode a deterministic Base64-encoded recipe string back into its original product

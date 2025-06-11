@@ -1,4 +1,4 @@
-import type { TransformationRules } from '@/code/types/mix/TransformationRule';
+import type { TransformationRules } from '@/code/types/mixing/TransformationRule';
 
 export const transformationRules: TransformationRules = {
     // Addy
