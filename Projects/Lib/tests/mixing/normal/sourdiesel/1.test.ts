@@ -1,14 +1,14 @@
 /* eslint-env node, vitest */
 import { test, expect } from 'vitest';
 import { mixProduct } from '@/exports/core/mixing/normal';
-import type { IngredientCode } from '@/code/types/products/Ingredient';
+import type { IngredientCode } from '@/exports/types/products';
 
 /**
  * Verifies mixProduct produces the known optimal mix for Sour Diesel
  */
 test('mixProduct for Sour Diesel with specific ingredients sequence', () => {
     const ingredientCodes = ['C', 'MW', 'DN', 'DN', 'BTY', 'AD', 'PRCTM', 'VAR'] as IngredientCode[];
-    const result = mixProduct('SD', ingredientCodes);
+    const result = mixProduct('SD', ingredientCodes)._unsafeUnwrap();
 
     // Should have exactly the 8 desired effects (order doesn't matter)
     const expectedEffects = [

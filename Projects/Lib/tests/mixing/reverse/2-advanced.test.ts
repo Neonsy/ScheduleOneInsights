@@ -1,24 +1,28 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import { reverseMix } from '@/exports/core/mixing/reverse';
 import { findEffectByCode } from '@/exports/utils/effects';
 import type { EffectCode } from '@/exports/types/effects';
 
-describe('reverseMix basic', () => {
-    it('finds ingredient sequence for Bright-Eyed + Focused + Refreshing on OG Kush', () => {
-        const codes: EffectCode[] = ['BE', 'FCE', 'RFI'];
-        const planResult = reverseMix('OK', codes);
+// Desired effect codes derived from effects data
+const desired: ReadonlyArray<EffectCode> = ['AG', 'GI', 'LF', 'ZBFI', 'EPS'];
+
+describe('reverseMix OG Kush – advanced set', () => {
+    it('finds ingredient sequence for Anti-Gravity + Glowing + Long Faced + Zombifying + Explosive', () => {
+        const planResult = reverseMix('OK', desired, { maxDepth: 32 });
+
         planResult.match(
             (plan) => {
-                // Convert desired codes to effect names for comparison
-                const desiredNames = codes.map((code) =>
+                // Verify each desired effect name is present in the resulting mix
+                const desiredNames = desired.map((code) =>
                     findEffectByCode(code).match(
                         (eff) => eff.name,
                         () => ''
                     )
                 );
                 desiredNames.forEach((name) => expect(plan.mixResult.effects).toEqual(expect.arrayContaining([name])));
-                // Ingredient sequence should be within search depth (default 32)
+
+                // Ingredient sequence length should respect depth limit (<=32)
                 expect(plan.ingredientCodes.length).toBeGreaterThan(0);
                 expect(plan.ingredientCodes.length).toBeLessThanOrEqual(32);
             },

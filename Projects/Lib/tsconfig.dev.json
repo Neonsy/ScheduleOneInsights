@@ -1,22 +1,9 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "esModuleInterop": true,
-        "strict": true,
-        "declaration": true,
-        "declarationMap": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "types": ["node", "vitest"],
-        "rootDir": ".",
-        "baseUrl": "src",
-        "paths": {
-            "@/*": ["*"]
-        },
-        "isolatedModules": true
+        "rootDir": "."
     },
     "include": ["src/**/*", "tests/**/*", "vite.config.ts"],
     "exclude": ["node_modules", "dist"]

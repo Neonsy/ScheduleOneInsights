@@ -1,4 +1,7 @@
 /**
- * @file Re-exports the reverseMixByEffect algorithm implemented in core.
+ * @file Public API: neverthrow reverseMix helper and its associated types.
  */
-export { reverseMixByEffect } from '@/code/core/mixing/reverse/byEffect';
+export type { ReverseMixOutcome } from '@/code/types/mixing/ReverseMixOutcome';
+export type { ReverseMixError } from '@/code/types/errors/ReverseMixError';
+
+export { reverseMix } from '@/code/core/mixing/reverse/byEffect';

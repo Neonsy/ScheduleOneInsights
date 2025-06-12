@@ -10,26 +10,21 @@ import type { ProductCode } from '@/code/types/products/Product';
 import { isMarijuanaProduct } from '@/code/types/products/Product';
 import { findProductByCode } from '@/code/utils/products/productUtils';
 import { simulateEffectSet } from '@/code/utils/mixing/mixSimulator';
-import { mixProduct } from '@/code/core/mixing/normal/algorithm';
+import { mixProductCore } from '@/code/core/mixing/normal/algorithm';
+import { Result, ok, err } from 'neverthrow';
+import type { ReverseMixError } from '@/code/types/errors/ReverseMixError';
+import { REVERSE_MIX_ERROR } from '@/code/types/errors/ReverseMixError';
+
+// NEW: externalised types & helpers
+import type { ReverseSearchParams } from '@/code/types/mixing/ReverseSearchParams';
+import type { SearchNode } from '@/code/lib/mixing/reverse/searchInternals';
+import { MinHeap } from '@/code/lib/mixing/reverse/searchInternals';
+import { reverseMixIddfs } from '@/code/core/mixing/reverse/iddfs';
+
+import type { ReverseMixOutcome } from '@/code/types/mixing/ReverseMixOutcome';
 import type { MixResult } from '@/code/types/mixing/MixResult';
 
-// --- Types & Constants ----------------------------------------------------
-
-interface SearchParams {
-    readonly targetEffects: ReadonlySet<EffectCode>;
-    readonly baseProductCode?: ProductCode;
-    /** Maximum number of ingredients allowed in the final mix (default 8) */
-    readonly maxDepth?: number;
-    /** Print verbose logs to console */
-    readonly debug?: boolean;
-}
-
-interface SearchNode {
-    readonly ingredients: Ingredient[]; // path so far (order matters for price etc.)
-    readonly effects: Set<EffectCode>; // closed under transformation rules
-    readonly g: number; // cost so far (ingredient count)
-    readonly f: number; // g + h
-}
+// --- Constants ------------------------------------------------------------
 
 const allIngredients: ReadonlyArray<Ingredient> = allIngredientsData;
 
@@ -65,50 +60,6 @@ function heuristic(missingCnt: number): number {
     return Math.ceil(missingCnt / globalMaxCoverage);
 }
 
-// --- Priority queue (binary heap) ----------------------------------------
-class MinHeap<T extends { f: number }> {
-    private data: T[] = [];
-    push(item: T): void {
-        this.data.push(item);
-        this.up(this.data.length - 1);
-    }
-    pop(): T | undefined {
-        const n = this.data.length;
-        if (!n) return undefined;
-        const top = this.data[0];
-        const last = this.data.pop()!;
-        if (n > 1) {
-            this.data[0] = last;
-            this.down(0);
-        }
-        return top;
-    }
-    get size(): number {
-        return this.data.length;
-    }
-    private up(i: number): void {
-        while (i > 0) {
-            const p = (i - 1) >> 1;
-            if (this.data[p].f <= this.data[i].f) break;
-            [this.data[p], this.data[i]] = [this.data[i], this.data[p]];
-            i = p;
-        }
-    }
-    private down(i: number): void {
-        const n = this.data.length;
-        while (true) {
-            const l = (i << 1) + 1;
-            const r = l + 1;
-            let smallest = i;
-            if (l < n && this.data[l].f < this.data[smallest].f) smallest = l;
-            if (r < n && this.data[r].f < this.data[smallest].f) smallest = r;
-            if (smallest === i) break;
-            [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];
-            i = smallest;
-        }
-    }
-}
-
 // --- Main search ----------------------------------------------------------
 /**
  * Searches for a sequence of ingredients that, when combined, produce all specified target effects, optionally starting from a given base product.
@@ -120,158 +71,24 @@ class MinHeap<T extends { f: number }> {
  *
  * @remark The order of ingredients affects the resulting effects due to transformation rules. The search uses ingredient count as the cost metric and may return any minimal-length solution.
  */
-export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
-    const { targetEffects, baseProductCode, maxDepth = 8, debug = false } = params;
-    const dbg = (...args: unknown[]): void => {
-        if (debug) console.log('[reverseMixByEffect]', ...args);
-    };
-    if (targetEffects.size === 0) return [];
-
-    // Gather base-product effects (only one default effect per product atm)
-    const baseEffects = new Set<EffectCode>();
-    if (baseProductCode) {
-        const prodRes = findProductByCode(baseProductCode);
-        prodRes.match(
-            (prod) => {
-                if (isMarijuanaProduct(prod) && prod.defaultEffect) {
-                    baseEffects.add(prod.defaultEffect);
-                }
-            },
-            () => {
-                /* ignore – base product not found */
-            }
-        );
-    }
-
-    // Early exit if base already satisfies the target
-    if ([...targetEffects].every((e) => baseEffects.has(e))) {
-        dbg('Base product already satisfies target effects.');
-        return [];
-    }
-
-    const startEffects = simulateEffectSet(baseProductCode, []);
-
-    const startNode: SearchNode = {
-        ingredients: [],
-        effects: startEffects,
-        g: 0,
-        f: heuristic(targetEffects.size),
-    };
-    dbg('Starting search. targetEffects=', [...targetEffects]);
-
-    const frontier = new MinHeap<SearchNode>();
-    frontier.push(startNode);
-
-    // visited key = stringified sorted effects + g  (we prune same state if cost higher)
-    const visited = new Map<string, number>();
-
-    let iter = 0;
-
-    /**
-     * Builds a map from each effect code to the set of ingredient codes that can produce it via transformation rules.
-     *
-     * @returns A map where each key is an effect code and the value is a set of ingredient codes capable of generating that effect through transformations.
-     */
-    function buildEffectToIngredientMap(): Map<EffectCode, Set<string>> {
-        const map = new Map<EffectCode, Set<string>>();
-        for (const [ingCode, rules] of Object.entries(transformationRules)) {
-            for (const rule of rules as ReadonlyArray<TransformationRule>) {
-                for (const out of Object.values(rule.replace)) {
-                    if (out === undefined) continue;
-                    if (!map.has(out)) map.set(out, new Set());
-                    map.get(out)!.add(ingCode);
-                }
-            }
-        }
-        return map;
-    }
-
-    const effectToIngredient = buildEffectToIngredientMap();
-
-    while (frontier.size > 0) {
-        const node = frontier.pop()!;
-        iter++;
-        if (debug && iter % 1000 === 0) dbg('Visited', iter, 'states. frontier=', frontier.size);
-
-        dbg(
-            `POP depth=${node.ingredients.length} g=${node.g} frontier=${frontier.size} effects=${Array.from(
-                node.effects
-            ).join(',')}`
-        );
-
-        // Goal test
-        const missing: EffectCode[] = [];
-        for (const eff of targetEffects) {
-            if (!node.effects.has(eff)) missing.push(eff);
-        }
-        if (missing.length === 0) {
-            dbg(
-                'Goal reached. Path=',
-                node.ingredients.map((i) => i.code)
-            );
-            return node.ingredients;
-        }
-
-        if (node.ingredients.length >= maxDepth) continue;
-
-        const stateKey = [...node.effects].sort().join(',') + '|' + missing.length;
-        if (visited.has(stateKey) && visited.get(stateKey)! <= node.g) continue;
-        visited.set(stateKey, node.g);
-
-        // Expand: try every unused ingredient, but only those that can
-        // plausibly help with remaining missing effects.
-        const relevantIngredients = allIngredients.filter((ing) => {
-            if (node.ingredients.some((i) => i.code === ing.code)) return false;
-            if (missing.includes(ing.defaultEffect)) return true;
-            // or if triggers rule producing any missing effect
-            return missing.some((eff) => effectToIngredient.get(eff)?.has(ing.code));
-        });
-
-        for (const ing of relevantIngredients) {
-            const newPath = [...node.ingredients, ing];
-            const ingredientCodes = newPath.map((i) => i.code);
-            const newEffects = simulateEffectSet(baseProductCode, ingredientCodes);
-            const newMissingCnt = [...targetEffects].filter((e) => !newEffects.has(e)).length;
-            const g = newPath.length; // ingredient count as cost
-            const h = heuristic(newMissingCnt);
-
-            // Determine if ingredient adds *any* new effect compared to current state
-            const addsNewEffect = [...newEffects].some((e) => !node.effects.has(e));
-
-            // Skip only if it neither adds a new effect nor changes missing count (truly useless)
-            if (!addsNewEffect && newMissingCnt === missing.length) {
-                if (debug) dbg(`  SKIP ingredient=${ing.code} (no change)`);
-                continue;
-            }
-
-            const child: SearchNode = {
-                ingredients: newPath,
-                effects: newEffects,
-                g,
-                f: g + h,
-            };
-            if (debug && (newMissingCnt < missing.length || addsNewEffect)) {
-                dbg(`  PUSH ingredient=${ing.code} depth=${child.ingredients.length} missing→${newMissingCnt}`);
-            }
-            frontier.push(child);
-        }
-    }
-
-    dbg('No solution found within depth', maxDepth);
-    return null; // no solution within depth
+export function reverseMixByEffect(params: ReverseSearchParams): Ingredient[] | null {
+    // Delegate to IDDFS implementation that is complete and depth-optimal.
+    return reverseMixIddfs(params);
 }
 
 /**
  * Convenience wrapper: returns both the ingredient list and the full MixResult (effects, price, profit, etc.).
  * Equivalent to running `reverseMixByEffect` and then feeding the result into `mixProduct`.
  */
-export function planReverseMix(params: SearchParams): { ingredientCodes: string[]; mixResult: MixResult } | null {
+export function planReverseMix(
+    params: ReverseSearchParams
+): { ingredientCodes: string[]; mixResult: MixResult } | null {
     const ingredients = reverseMixByEffect(params);
     if (ingredients === null) return null;
 
     const productCode: ProductCode = params.baseProductCode ?? ('M' as ProductCode); // Meth = no default effect
     const ingredientCodes = ingredients.map((i) => i.code);
-    const mixResult = mixProduct(productCode, ingredientCodes);
+    const mixResult = mixProductCore(productCode, ingredientCodes);
 
     return { ingredientCodes, mixResult };
 }
@@ -284,7 +101,7 @@ export function planReverseMix(params: SearchParams): { ingredientCodes: string[
  * @param opts             Optional search controls (maxDepth & debug).
  * @returns `{ ingredients, mixResult }` or `null` if impossible within the given depth.
  */
-export function reverseMix(
+export function reverseMixCore(
     baseProductCode: ProductCode | undefined,
     desiredEffects: ReadonlyArray<EffectCode>,
     opts?: { maxDepth?: number; debug?: boolean }
@@ -296,4 +113,29 @@ export function reverseMix(
         maxDepth: opts?.maxDepth,
         debug: opts?.debug,
     });
+}
+
+// ---------------------------------------------------------------------------
+/**
+ * neverthrow-safe wrapper around {@link reverseMixCore}.
+ */
+export function reverseMix(
+    baseProductCode: ProductCode | undefined,
+    desiredEffects: ReadonlyArray<EffectCode>,
+    opts?: { maxDepth?: number; debug?: boolean }
+): Result<ReverseMixOutcome, ReverseMixError> {
+    try {
+        const res = reverseMixCore(baseProductCode, desiredEffects, opts);
+        if (res === null) {
+            return err({
+                type: REVERSE_MIX_ERROR,
+                message: 'No plan found for desired effects',
+                context: { desiredEffects },
+            });
+        }
+        return ok(res);
+    } catch (e) {
+        const error = e as Error;
+        return err({ type: REVERSE_MIX_ERROR, message: error.message, context: {} });
+    }
 }

@@ -1,4 +1,4 @@
 /**
- * @file Re-exports Effect types from the core codebase.
+ * @file Public re-export for effect types.
  */
-export { type Effect, type EffectCode } from '@/code/types/effects/Effect';
+export type { Effect, EffectCode } from '@/code/types/effects/Effect';

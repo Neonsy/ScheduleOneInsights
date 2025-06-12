@@ -1,10 +1,11 @@
 // tests/mixing/normal/ogkush/4.test.ts
 import { describe, it, expect } from 'vitest';
-import { mixProduct } from '@/code/core/mixing/normal/algorithm';
+import { mixProduct } from '@/exports/core/mixing/normal';
 
 describe('OG Kush mixing (scenario #4): mix Banana → Cuke → Banana → Mega Bean → Donut → Donut', () => {
     it('should include all required effects regardless of order', () => {
-        const result = mixProduct('OK', ['BNN', 'C', 'BNN', 'MB', 'DN', 'DN']);
+        const res = mixProduct('OK', ['BNN', 'C', 'BNN', 'MB', 'DN', 'DN']);
+        const result = res._unsafeUnwrap();
 
         const expectedEffects = [
             'Paranoia',

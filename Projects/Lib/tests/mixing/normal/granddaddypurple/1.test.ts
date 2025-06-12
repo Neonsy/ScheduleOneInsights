@@ -1,10 +1,11 @@
 // tests/mixing/normal/granddaddypurple/1.test.ts
 import { describe, it, expect } from 'vitest';
-import { mixProduct } from '@/code/core/mixing/normal/algorithm';
+import { mixProduct } from '@/exports/core/mixing/normal';
+import type { IngredientCode } from '@/exports/types/products';
 
 describe('Granddaddy Purple mixing: mix Chili → Battery → Donut → Donut → Mouth Wash → Banana', () => {
     it('should include all required effects regardless of order', () => {
-        const result = mixProduct('GP', ['CL', 'BTY', 'DN', 'DN', 'MW', 'BNN']);
+        const result = mixProduct('GP', ['CL', 'BTY', 'DN', 'DN', 'MW', 'BNN'])._unsafeUnwrap();
 
         const expectedEffects = ['Sedating', 'Spicy', 'Bright-Eyed', 'Explosive', 'Sneaky', 'Balding', 'Gingeritis'];
 

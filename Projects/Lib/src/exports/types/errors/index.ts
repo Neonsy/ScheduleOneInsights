@@ -5,3 +5,5 @@ export * from '@/exports/types/errors/AppError';
 export * from '@/exports/types/errors/MixingError';
 export * from '@/exports/types/errors/ProductError';
 export * from '@/exports/types/errors/UtilError';
+export * from '@/exports/types/errors/MixError';
+export * from '@/exports/types/errors/ReverseMixError';

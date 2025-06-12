@@ -12,12 +12,15 @@ import { isMarijuanaProduct } from '@/code/types/products/Product';
 import type { Product } from '@/code/types/products/Product';
 import type { EffectCode } from '@/code/types/effects/Effect';
 import type { RecipePayload } from '@/code/types/mixing/RecipePayload';
+import { Result, ok, err } from 'neverthrow';
+import type { MixError } from '@/code/types/errors/MixError';
+import { MIX_ERROR } from '@/code/types/errors/MixError';
 
 /**
  * Mix a product with ingredients according to game rules (snapshot reactions, default effect, limits).
  * Implements price and addictiveness formulas from the Steam guide.
  */
-export const mixProduct = (
+export const mixProductCore = (
     productCode: RecipePayload['productCode'],
     ingredientCodes: RecipePayload['ingredientCodes']
 ): MixResult => {
@@ -189,4 +192,21 @@ export const mixProduct = (
         sellPrice,
         profit,
     };
+};
+
+// ---------------------------------------------------------------------------
+/**
+ * neverthrow-based wrapper around {@link mixProduct}. Should be the preferred
+ * entry-point for consumers because it eliminates runtime exceptions.
+ */
+export const mixProduct = (
+    productCode: RecipePayload['productCode'],
+    ingredientCodes: RecipePayload['ingredientCodes']
+): Result<MixResult, MixError> => {
+    try {
+        return ok(mixProductCore(productCode, ingredientCodes));
+    } catch (e) {
+        const error = e as Error;
+        return err({ type: MIX_ERROR, message: error.message, context: {} });
+    }
 };

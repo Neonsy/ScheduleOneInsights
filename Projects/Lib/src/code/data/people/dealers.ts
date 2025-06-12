@@ -21,7 +21,7 @@ export const dealers: readonly Dealer[] = [
     },
     {
         name: 'Brad Crosby',
-        code: 'BC',
+        code: 'BCR',
         cut: 0.2, // 20%
         district: District.Downtown,
         cost: 2000,

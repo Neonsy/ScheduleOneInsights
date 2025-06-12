@@ -1,4 +1,4 @@
 /**
- * @file Re-exports effect utility functions from the core codebase.
+ * @file Public re-export for effect utility helpers.
  */
-export { findEffectByName, findEffectByCode, findEffectByNameOrThrow } from '@/code/utils/effects/effectUtils';
+export { findEffectByCode, findEffectByName } from '@/code/utils/effects/effectUtils';

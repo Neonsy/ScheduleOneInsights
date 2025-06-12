@@ -1,14 +1,14 @@
 /* eslint-env node, vitest */
 import { test, expect } from 'vitest';
 import { mixProduct } from '@/exports/core/mixing/normal';
-import type { IngredientCode } from '@/code/types/products/Ingredient';
+import type { IngredientCode } from '@/exports/types/products';
 
 /**
  * Verifies mixProduct produces the known optimal mix for OG Kush
  */
 test('mixProduct for OG Kush with specific ingredients sequence', () => {
     const ingredientCodes = ['MB', 'BNN', 'C', 'ED', 'BNN', 'ED', 'DN', 'DN', 'PRCTM', 'MO'] as IngredientCode[];
-    const result = mixProduct('OK', ingredientCodes);
+    const result = mixProduct('OK', ingredientCodes)._unsafeUnwrap();
 
     const expectedEffects = [
         'Cyclopean',

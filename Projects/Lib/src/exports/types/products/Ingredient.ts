@@ -1,4 +1,5 @@
 /**
- * @file Re-exports Ingredient types from the core codebase.
+ * @file Public re-export for product Ingredient types.
  */
-export { type Ingredient, type IngredientCode } from '@/code/types/products/Ingredient';
+export type { Ingredient } from '@/code/types/products/Ingredient';
+export type { IngredientCode } from '@/code/types/products/Ingredient';
