@@ -9,6 +9,9 @@ import type { TransformationRule } from '@/code/types/mixing/TransformationRule'
 import type { ProductCode } from '@/code/types/products/Product';
 import { isMarijuanaProduct } from '@/code/types/products/Product';
 import { findProductByCode } from '@/code/utils/products/productUtils';
+import { simulateEffectSet } from '@/code/utils/mixing/mixSimulator';
+import { mixProduct } from '@/code/core/mixing/normal/algorithm';
+import type { MixResult } from '@/code/types/mixing/MixResult';
 
 // --- Types & Constants ----------------------------------------------------
 
@@ -28,61 +31,7 @@ interface SearchNode {
     readonly f: number; // g + h
 }
 
-interface RuleInfoSimple {
-    trigger: string; // ingredient code
-    output: EffectCode;
-}
-
 const allIngredients: ReadonlyArray<Ingredient> = allIngredientsData;
-
-// --- Helper – rule application -------------------------------------------
-/**
- * Applies all applicable transformation rules to the given set of effects, mutating it in place until no further changes occur.
- *
- * @param pathIngredients - The sequence of ingredients whose transformation rules are considered.
- * @param effects - The set of effects to be transformed.
- *
- * @remark
- * The function repeatedly applies transformation rules triggered by the provided ingredients, updating the effects set until no more rules can be applied.
- */
-function applyTransformations(pathIngredients: ReadonlyArray<Ingredient>, effects: Set<EffectCode>): void {
-    let changed = true;
-    while (changed) {
-        changed = false;
-        for (const ing of pathIngredients) {
-            const rules = transformationRules[ing.code] as ReadonlyArray<TransformationRule> | undefined;
-            if (!rules) continue;
-            for (const rule of rules) {
-                const preCondMet =
-                    rule.ifPresent.every((e) => effects.has(e)) && rule.ifNotPresent.every((e) => !effects.has(e));
-                if (!preCondMet) continue;
-                for (const oldEff of Object.keys(rule.replace) as EffectCode[]) {
-                    if (!effects.has(oldEff)) continue;
-                    const newEff = rule.replace[oldEff];
-                    effects.delete(oldEff);
-                    if (newEff !== undefined) effects.add(newEff);
-                    changed = true;
-                }
-            }
-        }
-    }
-}
-
-/**
- * Computes the set of effects resulting from combining the base effects with the default effects of the given ingredient path, applying all applicable transformation rules.
- *
- * @param path - The ordered list of ingredients to include.
- * @param baseEffects - The initial set of effects to start from.
- * @returns A set of effects after adding ingredient defaults and applying transformations.
- */
-function calcCombinedEffects(path: ReadonlyArray<Ingredient>, baseEffects: ReadonlySet<EffectCode>): Set<EffectCode> {
-    const effects = new Set<EffectCode>(baseEffects);
-    for (const ing of path) {
-        effects.add(ing.defaultEffect);
-    }
-    applyTransformations(path, effects);
-    return effects;
-}
 
 // --- Heuristic ------------------------------------------------------------
 /** Pre-compute, for each ingredient code, the full set of effects it can provide
@@ -200,9 +149,11 @@ export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
         return [];
     }
 
+    const startEffects = simulateEffectSet(baseProductCode, []);
+
     const startNode: SearchNode = {
         ingredients: [],
-        effects: new Set(baseEffects),
+        effects: startEffects,
         g: 0,
         f: heuristic(targetEffects.size),
     };
@@ -242,7 +193,11 @@ export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
         iter++;
         if (debug && iter % 1000 === 0) dbg('Visited', iter, 'states. frontier=', frontier.size);
 
-        dbg(`POP depth=${node.ingredients.length} g=${node.g} frontier=${frontier.size} effects=${[...node.effects]}`);
+        dbg(
+            `POP depth=${node.ingredients.length} g=${node.g} frontier=${frontier.size} effects=${Array.from(
+                node.effects
+            ).join(',')}`
+        );
 
         // Goal test
         const missing: EffectCode[] = [];
@@ -274,7 +229,8 @@ export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
 
         for (const ing of relevantIngredients) {
             const newPath = [...node.ingredients, ing];
-            const newEffects = calcCombinedEffects(newPath, baseEffects);
+            const ingredientCodes = newPath.map((i) => i.code);
+            const newEffects = simulateEffectSet(baseProductCode, ingredientCodes);
             const newMissingCnt = [...targetEffects].filter((e) => !newEffects.has(e)).length;
             const g = newPath.length; // ingredient count as cost
             const h = heuristic(newMissingCnt);
@@ -303,4 +259,41 @@ export function reverseMixByEffect(params: SearchParams): Ingredient[] | null {
 
     dbg('No solution found within depth', maxDepth);
     return null; // no solution within depth
+}
+
+/**
+ * Convenience wrapper: returns both the ingredient list and the full MixResult (effects, price, profit, etc.).
+ * Equivalent to running `reverseMixByEffect` and then feeding the result into `mixProduct`.
+ */
+export function planReverseMix(params: SearchParams): { ingredientCodes: string[]; mixResult: MixResult } | null {
+    const ingredients = reverseMixByEffect(params);
+    if (ingredients === null) return null;
+
+    const productCode: ProductCode = params.baseProductCode ?? ('M' as ProductCode); // Meth = no default effect
+    const ingredientCodes = ingredients.map((i) => i.code);
+    const mixResult = mixProduct(productCode, ingredientCodes);
+
+    return { ingredientCodes, mixResult };
+}
+
+/**
+ * Simplest ergonomic entry-point: mirror the normal `mixProduct` signature but in reverse.
+ *
+ * @param baseProductCode  Same as normal mixer – undefined means "no base product".
+ * @param desiredEffects   Ordered (or unordered) list of EffectCode literals you want to see in the final mix.
+ * @param opts             Optional search controls (maxDepth & debug).
+ * @returns `{ ingredients, mixResult }` or `null` if impossible within the given depth.
+ */
+export function reverseMix(
+    baseProductCode: ProductCode | undefined,
+    desiredEffects: ReadonlyArray<EffectCode>,
+    opts?: { maxDepth?: number; debug?: boolean }
+): { ingredientCodes: string[]; mixResult: MixResult } | null {
+    const set = new Set<EffectCode>(desiredEffects);
+    return planReverseMix({
+        targetEffects: set,
+        baseProductCode,
+        maxDepth: opts?.maxDepth,
+        debug: opts?.debug,
+    });
 }
