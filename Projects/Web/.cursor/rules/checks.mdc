@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Code Quality Checks
+
+## Required Checks
+
+Execute the following checks frequently. Address any reported errors or warnings before proceeding.
+
+1.  **`pnpm format`**
+    *   **Purpose:** Formats all files for consistency.
+    *   **Requirement:** Must pass with no errors.
+2.  **`pnpm typecheck`**
+    *   **Purpose:** Runs TypeScript type checking to catch type errors and ensure type safety.
+    *   **Requirement:** Must pass with no errors.
+3.  **`pnpm lint`**
+    *   **Purpose:** Runs ESLint to check for code style and potential logical errors.
+    *   **Requirement:** Must pass with no errors or warnings (configured to fail on warnings).
+    *   **IMPORTANT:** Only fix ESLint errors and warnings if the user explicitly tells you to. Do not auto-fix or suppress errors/warnings unless requested.

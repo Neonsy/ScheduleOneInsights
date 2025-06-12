@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# PNPM Usage Rules
+
+## Commands
+
+*   **Use `pnpm`:** ALWAYS use `pnpm` for Node.js package management tasks (install, add, remove dependencies) and running scripts defined in `package.json`. Do not use `npm` or `yarn`.
+
+### Required Commands
+
+- `pnpm format` — Format all files for consistency.
+- `pnpm lint` — Lint all files for code style and errors.
+- `pnpm typecheck` — Run TypeScript type checking to ensure type safety.
+
+## Lockfile Maintenance
+
+*   **Update Lockfile:** After adding or removing dependencies using `pnpm add` or `pnpm remove`, ALWAYS run `pnpm install` immediately afterward to ensure `pnpm-lock.yaml` is updated and consistent.

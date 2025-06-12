@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+@plugin "tailwind-clamp";
+
+:root {
+    @theme {
+        --color-body-main: #09090b;
+        --color-header-main: #1c1c2b;
+
+        --color-primary: #3493ff;
+        --color-secondary: #d946ef;
+        --color-npc: #22c55e;
+        --color-guide: #f59e0b;
+        --color-community: #ef4444;
+
+        --color-github: #8b6cb3;
+        --color-discord: #5865f2;
+        --color-kofi: #ff5e5b;
+    }
+
+    @theme {
+        /* Extra Small Devices (Portrait Phones) */
+        --breakpoint-xs: 20rem; /* 320px */
+
+        /* Small Devices (Landscape Phones, Small Tablets) */
+        --breakpoint-sm: 40rem; /* 640px - Tailwind Default */
+
+        /* Medium Devices (Tablets, Small Laptops) */
+        --breakpoint-md: 48rem; /* 768px - Tailwind Default */
+
+        /* Large Devices (Laptops, Desktops) */
+        --breakpoint-lg: 64rem; /* 1024px - Tailwind Default */
+
+        /* Extra Large Devices (Large Laptops, Desktops) */
+        --breakpoint-xl: 80rem; /* 1280px - Tailwind Default */
+
+        /* 2X Large Devices (Full HD Desktops) */
+        --breakpoint-2xl: 96rem; /* 1536px - Tailwind Default */
+
+        /* 3X Large Devices (QHD/2K Monitors) */
+        --breakpoint-3xl: 120rem; /* 1920px */
+
+        /* 4X Large Devices (WQHD/2K+ Monitors) */
+        --breakpoint-4xl: 160rem; /* 2560px */
+
+        /* 5X Large Devices (4K Monitors) */
+        --breakpoint-5xl: 240rem; /* 3840px */
+    }
+}

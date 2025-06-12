@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+    - '@clerk/shared'
+    - '@tailwindcss/oxide'
+    - '@vercel/speed-insights'
+    - sharp
+    - unrs-resolver
