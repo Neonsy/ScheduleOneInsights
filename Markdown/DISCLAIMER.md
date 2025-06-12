@@ -2,8 +2,10 @@
 
 ## Project Status
 
-ScheduleOneInsights is currently in active development.
-Features, functionality, and user interface are subject to change without prior notice.
+ScheduleOneInsights is **no longer actively developed** and has been **formally discontinued**.
+The existing codebase is provided **as-is**; there are **no planned future updates**.
+
+After discovering a modern alternative—[schedule-1-calculator.com](https://schedule-1-calculator.com)—which, despite some current bugs, is actively maintained by a larger team, the maintainer decided to discontinue personal development of ScheduleOneInsights due to limited available time.
 
 > [!CAUTION]
 > This project is provided "as is" without warranty of any kind, either expressed or implied.
@@ -26,7 +28,7 @@ This project is:
 
 ## Inspiration and Respect
 
-ScheduleOneInsights was inspired by the existing [Schedule One Calculator](https://schedule1-calculator.com), as well as several steam guides.
+ScheduleOneInsights was inspired by the existing [Schedule One Calculator](https://schedule1-calculator.com), the newer [Schedule-1 Calculator](https://schedule-1-calculator.com), and several Steam guides.
 Neonsy has a deep respect for their work and is not attempting to compete with them.
 Rather, the project maintainers aim to offer an alternative approach with different features and a different user experience.
 

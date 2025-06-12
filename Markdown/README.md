@@ -4,17 +4,24 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-![Status: In Development](https://img.shields.io/badge/Status-In%20Development-blue)
+![Status: Discontinued](https://img.shields.io/badge/Status-Discontinued-red)
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Neonsy/ScheduleOneInsights?utm_source=oss&utm_medium=github&utm_campaign=Neonsy%2FScheduleOneInsights&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 [![Ko-fi: Donate](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?style=flat&logo=ko-fi)](https://ko-fi.com/neonsy)
 
+## 🛑 Project Discontinued
+
+After much thought, I have decided to **formally discontinue further development** of ScheduleOneInsights. Discovering the actively maintained—and already quite advanced—[schedule-1-calculator.com](https://schedule-1-calculator.com) project made it clear that my limited spare time is better spent contributing elsewhere, where I can make a more meaningful impact.
+
+This repository will remain online as an archive. Feel free to fork, study, or build upon it under the terms of the MIT license.
+
+> **Personal Note**
+> Working on ScheduleOneInsights taught me a tremendous amount about TypeScript, modern React, algorithm design, CI/CD, and open-source collaboration. I've genuinely enjoyed every late-night debugging session and community conversation along the way. I'm excited to apply these lessons to whatever I dive into next—and I hope this code can still help others in their own projects.
+
+Thank you to everyone who provided feedback, encouragement, or simply followed the project's progress. ❤️
+
 ## 🚀 Introduction
 
-ScheduleOneInsights is a fan-made project designed to enhance your [Schedule One](https://www.scheduleonegame.com) gaming experience.
-Whether you're a casual player enjoying the silliness or a strategic mastermind optimizing your production chain, this toolkit provides everything you need to excel.
-
-> [!TIP]
-> Check out the [Roadmap](/Markdown/Roadmap.md) to see what's coming next!
+ScheduleOneInsights **was** a fan-made toolkit intended to enhance the [Schedule One](https://www.scheduleonegame.com) gaming experience. Whether you were a casual player seeking silliness or a strategic mastermind optimizing production chains, the goal was to provide everything you needed to excel.
 
 ## ✨ Features
 
@@ -49,11 +56,6 @@ If you want a web based documentation, you can find it [here](https://docs.sched
 
 I've recently discovered [Schedule One](https://www.scheduleonegame.com) and have come to enjoy the unique combination of silliness and casual relaxation, alongside the product management aspects and efficiency optimization.
 This project aims to enhance the gameplay experience in multiple dimensions, while also allowing me to learn and practice various skills, on something I'm motivated and passionate about.
-
-## 🌟 Roadmap
-
-> [!NOTE]
-> W.I.P
 
 > [!WARNING]
 > This project may cause extreme optimization satisfaction and potentially addictive gameplay sessions!

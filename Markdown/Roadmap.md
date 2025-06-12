@@ -40,7 +40,7 @@ While the nature of open-source development means timelines can be flexible, the
 -   Introduce core **"What-If" Reverse Mixing** capabilities for exploring desired outcomes.
 -   Create an initial presentation layer for basic **Targeted NPC Insights**.
 -   Lay the groundwork for an **Actionable Game Guide**.
--   Provide a multi-session-calculator, to allow you to keep track of different quantities.
+-   Provide a flexible calculator where users can create multiple calculators with independent state to track different calculations simultaneously.
 -   **Impact:** Provides users with interactive tools to immediately leverage the project's capabilities.
 
 #### Phase 3: Advanced Features & Community Ecosystem
@@ -50,6 +50,8 @@ While the nature of open-source development means timelines can be flexible, the
 -   Expand **Reverse Mixing** with more sophisticated criteria, filters, and analysis options.
 -   Grow the **Actionable Game Guide** to include advanced strategies and optimization techniques.
 -   Develop features to support a **Community-Driven Meta**, enabling sharing, and rating of mix strategies.
+-   Introduce a **Blueprint Planner** for designing and saving optimal production and workflow layouts.
+-   Integrate an **Interactive Map** to visualize in-game locations, resource points, and other relevant data, enhancing strategic planning.
 -   **Benefit:** Unlocks deeper strategic possibilities and facilitates learning from collective community expertise.
 
 #### Phase 4: Refinement, Adaptation & Future Exploration
